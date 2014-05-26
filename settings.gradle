@@ -1,1 +1,1 @@
-include ':dali'
+include ':dali', ':DaliTestApp'
