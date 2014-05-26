@@ -7,7 +7,10 @@ import android.support.v8.renderscript.RenderScript;
 import at.favre.lib.dali.ScriptC_contrast;
 
 /**
- * Created by PatrickF on 27.05.2014.
+ * This will change the contrast of a bitmap.
+ * It uses a renderscript (contrast.rs)
+ *
+ * contrast values are from -100 to +100
  */
 public class ContrastManipulator implements IManipulator {
 	private RenderScript rs;

@@ -50,10 +50,11 @@ public class BlurBuilder {
 	 * Set brightness to  eg. darken the resulting image for use as background
 	 *
 	 * @param brightness default is 0, pos values increase brightness, neg. values decrease contrast
+	 *                   min value is -100 (which is all black) and max value is 900 (which is all white)
 	 * @return
 	 */
 	public BlurBuilder brightness(float brightness) {
-		this.brightness = Math.max(Math.min(500.f,brightness),-500.f);
+		this.brightness = Math.max(Math.min(900.f,brightness),-100.f);
 		return this;
 	}
 
@@ -65,7 +66,7 @@ public class BlurBuilder {
 	 * @return
 	 */
 	public BlurBuilder contrast(float contrast) {
-		this.contrast = Math.max(Math.min(500.f,contrast),-500.f);
+		this.contrast = Math.max(Math.min(1500.f,contrast),-1500.f);
 		return this;
 	}
 

@@ -61,16 +61,16 @@ public class MainActivity extends Activity {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
 			ImageView iv = (ImageView) rootView.findViewById(R.id.image);
-			iv.setImageDrawable(new BitmapDrawable(getResources(),Dali.create(getActivity()).load(R.drawable.test_img1).blurRadius(16).brightness(-25.f).get()));
+			iv.setImageDrawable(new BitmapDrawable(getResources(),Dali.create(getActivity()).load(R.drawable.test_img1).blurRadius(16).contrast(100.f).brightness(-65).get()));
 
 			ImageView iv2 = (ImageView) rootView.findViewById(R.id.image2);
-			iv2.setImageDrawable(new BitmapDrawable(getResources(),Dali.create(getActivity()).load(R.drawable.test_img1).blurRadius(16).brightness(-50.f).get()));
+			iv2.setImageDrawable(new BitmapDrawable(getResources(),Dali.create(getActivity()).load(R.drawable.test_img1).blurRadius(8).get()));
 
 			ImageView iv3 = (ImageView) rootView.findViewById(R.id.image3);
-			iv3.setImageDrawable(new BitmapDrawable(getResources(),Dali.create(getActivity()).load(R.drawable.test_img1).blurRadius(16).brightness(-75.f).get()));
+			iv3.setImageDrawable(new BitmapDrawable(getResources(),Dali.create(getActivity()).load(R.drawable.test_img1).blurRadius(24).get()));
 
 			ImageView iv4 = (ImageView) rootView.findViewById(R.id.image4);
-			iv4.setImageDrawable(new BitmapDrawable(getResources(),Dali.create(getActivity()).load(R.drawable.test_img1).blurRadius(16).brightness(-90.f).get()));
+			iv4.setImageDrawable(new BitmapDrawable(getResources(),Dali.create(getActivity()).load(R.drawable.test_img1).blurRadius(1).get()));
 
 
 			return rootView;
