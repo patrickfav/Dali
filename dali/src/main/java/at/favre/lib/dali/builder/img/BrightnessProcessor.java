@@ -12,25 +12,32 @@ import android.support.v8.renderscript.ScriptIntrinsicConvolve3x3;
  *
  * Brightness values are from -100 to +900
  */
-public class BrightnessManipulator implements IManipulator {
+public class BrightnessProcessor implements IBitmapProcessor {
 	private RenderScript rs;
 	private float brightness;
 
-	public BrightnessManipulator(RenderScript rs, float brightness) {
+	public BrightnessProcessor(RenderScript rs, float brightness) {
 		this.rs = rs;
 		this.brightness = brightness;
 	}
 
 	@Override
 	public Bitmap manipulate(Bitmap bitmapOriginal) {
-		Allocation input = Allocation.createFromBitmap(rs, bitmapOriginal);
-		final Allocation output = Allocation.createTyped(rs, input.getType());
-		final ScriptIntrinsicConvolve3x3 script = ScriptIntrinsicConvolve3x3.create(rs, Element.U8_4(rs));
-		script.setCoefficients(createBrightnessKernel(brightness));
-		script.setInput(input);
-		script.forEach(output);
-		output.copyTo(bitmapOriginal);
+		if(brightness != 0) {
+			Allocation input = Allocation.createFromBitmap(rs, bitmapOriginal);
+			final Allocation output = Allocation.createTyped(rs, input.getType());
+			final ScriptIntrinsicConvolve3x3 script = ScriptIntrinsicConvolve3x3.create(rs, Element.U8_4(rs));
+			script.setCoefficients(createBrightnessKernel(brightness));
+			script.setInput(input);
+			script.forEach(output);
+			output.copyTo(bitmapOriginal);
+		}
 		return bitmapOriginal;
+	}
+
+	@Override
+	public String getProcessorTag() {
+		return this.getClass().getSimpleName()+": "+brightness;
 	}
 
 	private float[] createBrightnessKernel(float brightness) {

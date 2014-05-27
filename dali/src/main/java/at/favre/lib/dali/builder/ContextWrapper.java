@@ -1,6 +1,7 @@
 package at.favre.lib.dali.builder;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.support.v8.renderscript.RenderScript;
 
 /**
@@ -35,5 +36,9 @@ public class ContextWrapper {
 			renderScript = RenderScript.create(context,renderScriptContextType);
 		}
 		return renderScript;
+	}
+
+	public Resources getResources() {
+		return context.getResources();
 	}
 }

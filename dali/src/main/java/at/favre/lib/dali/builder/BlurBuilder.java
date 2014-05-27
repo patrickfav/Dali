@@ -1,8 +1,27 @@
 package at.favre.lib.dali.builder;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.support.v8.renderscript.RenderScript;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import at.favre.lib.dali.blur.EBlurAlgorithm;
+import at.favre.lib.dali.blur.IBlur;
+import at.favre.lib.dali.blur.algorithms.BoxBlur;
+import at.favre.lib.dali.blur.algorithms.GaussianFastBlur;
+import at.favre.lib.dali.blur.algorithms.IgnoreBlur;
+import at.favre.lib.dali.blur.algorithms.RenderScriptBox5x5Blur;
+import at.favre.lib.dali.blur.algorithms.RenderScriptGaussian5x5Blur;
+import at.favre.lib.dali.blur.algorithms.RenderScriptGaussianBlur;
+import at.favre.lib.dali.blur.algorithms.RenderScriptStackBlur;
+import at.favre.lib.dali.blur.algorithms.StackBlur;
+import at.favre.lib.dali.builder.img.BrightnessProcessor;
+import at.favre.lib.dali.builder.img.ContrastProcessor;
+import at.favre.lib.dali.builder.img.FrostGlassProcessor;
+import at.favre.lib.dali.builder.img.IBitmapProcessor;
 
 /**
  * Created by PatrickF on 26.05.2014.
@@ -13,25 +32,31 @@ public class BlurBuilder {
 	private static final int MIN_BLUR_RADIUS = 1;
 	private static final int MAX_BLUR_RADIUS = 25;
 
-	private boolean debugMode = true;
+	private Data data;
 
-	private boolean shouldUseFrostedGlassEffect = false;
-	private float contrast = 0.f;
-	private float brightness = 0.f;
-	private EBlurAlgorithm algorithm = EBlurAlgorithm.RS_GAUSS_FAST;
-	private boolean copyBitmapBeforeBlur = false;
-	private int blurRadius=16;
-	private ImageReference imageReference;
-	private ContextWrapper contextWrapper;
+	protected static class Data {
+		protected boolean debugMode = true;
+		protected BitmapFactory.Options options = new BitmapFactory.Options();
+		protected IBlur blurAlgorithm;
+		protected boolean copyBitmapBeforeBlur = false;
+		protected int blurRadius=16;
+		protected boolean rescaleIfDownscaled = true;
+		protected ImageReference imageReference;
+		protected ContextWrapper contextWrapper;
+		protected List<IBitmapProcessor> preProcessors = new ArrayList<IBitmapProcessor>();
+		protected List<IBitmapProcessor> postProcessors = new ArrayList<IBitmapProcessor>();
+	}
 
 	public BlurBuilder(ContextWrapper contextWrapper, ImageReference imageReference) {
-		this.imageReference = imageReference;
-		this.contextWrapper = contextWrapper;
+		data = new Data();
+		data.imageReference = imageReference;
+		data.contextWrapper = contextWrapper;
+		data.blurAlgorithm = new RenderScriptGaussianBlur(data.contextWrapper.getRenderScript());
 	}
 
 	public BlurBuilder blurRadius(int radius) {
 		checkBlurRadiusPrecondition(radius);
-		this.blurRadius = radius;
+		data.blurRadius = radius;
 		return this;
 	}
 
@@ -41,8 +66,46 @@ public class BlurBuilder {
 		}
 	}
 
-	public BlurBuilder frostedGlass(boolean shouldEnableEffect) {
-		shouldUseFrostedGlassEffect = shouldEnableEffect;
+	/**
+	 * If this the image bitmap should be copied before blur.
+	 *
+	 * This will increase memory (RAM) usage while blurring, but
+	 * if the bitmap's object is used anywhere else it would
+	 * create side effects.
+	 *
+	 * @param shouldCopy
+	 * @return
+	 */
+	public BlurBuilder copyBitmapBeforeProcess(boolean shouldCopy) {
+		data.copyBitmapBeforeBlur = shouldCopy;
+		return this;
+	}
+
+	public BlurBuilder downScale(int scaleInSample) {
+		data.options.inSampleSize = Math.min(Math.max(1, scaleInSample), 16384);
+		return this;
+	}
+
+	public BlurBuilder reScaleIfDownscaled(boolean rescale) {
+		data.rescaleIfDownscaled = rescale;
+		return this;
+	}
+
+	public BlurBuilder options(BitmapFactory.Options options) {
+		data.options =options;
+		return this;
+	}
+
+	/**
+	 * Add custom processor. This will be applied to the
+	 * image BEFORE blurring. The order in which this is
+	 * calls defines the order the processors are applied.
+	 *
+	 * @param processor
+	 * @return
+	 */
+	public BlurBuilder addPreProcessor(IBitmapProcessor processor) {
+		data.preProcessors.add(processor);
 		return this;
 	}
 
@@ -54,10 +117,9 @@ public class BlurBuilder {
 	 * @return
 	 */
 	public BlurBuilder brightness(float brightness) {
-		this.brightness = Math.max(Math.min(900.f,brightness),-100.f);
+		data.postProcessors.add(new BrightnessProcessor(data.contextWrapper.getRenderScript(),Math.max(Math.min(900.f,brightness),-100.f)));
 		return this;
 	}
-
 
 	/**
 	 * Change contrast of the image
@@ -66,7 +128,25 @@ public class BlurBuilder {
 	 * @return
 	 */
 	public BlurBuilder contrast(float contrast) {
-		this.contrast = Math.max(Math.min(1500.f,contrast),-1500.f);
+		data.postProcessors.add(new ContrastProcessor(data.contextWrapper.getRenderScript(),Math.max(Math.min(1500.f,contrast),-1500.f)));
+		return this;
+	}
+
+	public BlurBuilder frostedGlass() {
+		data.postProcessors.add(new FrostGlassProcessor(data.contextWrapper.getRenderScript(),data.contextWrapper.getContext().getResources()));
+		return this;
+	}
+
+	/**
+	 * Add custom processor. This will be applied to the
+	 * image AFTER blurring. The order in which this is
+	 * calls defines the order the processors are applied.
+	 *
+	 * @param processor
+	 * @return
+	 */
+	public BlurBuilder addPostProcessor(IBitmapProcessor processor) {
+		data.postProcessors.add(processor);
 		return this;
 	}
 
@@ -81,60 +161,44 @@ public class BlurBuilder {
 	 * @return
 	 */
 	public BlurBuilder algorithm(EBlurAlgorithm algorithm) {
-		this.algorithm = algorithm;
+		RenderScript rs= data.contextWrapper.getRenderScript();
+		Context ctx = data.contextWrapper.getContext();
+
+		switch (algorithm) {
+			case RS_GAUSS_FAST:
+				data.blurAlgorithm =  new RenderScriptGaussianBlur(rs);
+			case RS_BOX_5x5:
+				data.blurAlgorithm = new RenderScriptBox5x5Blur(rs);
+			case RS_GAUSS_5x5:
+				data.blurAlgorithm = new RenderScriptGaussian5x5Blur(rs);
+			case RS_STACKBLUR:
+				data.blurAlgorithm = new RenderScriptStackBlur(rs, ctx);
+			case STACKBLUR:
+				data.blurAlgorithm = new StackBlur();
+			case GAUSS_FAST:
+				data.blurAlgorithm = new GaussianFastBlur();
+			case BOX_BLUR:
+				data.blurAlgorithm = new BoxBlur();
+			default:
+				data.blurAlgorithm = new IgnoreBlur();
+		}
+
 		return this;
 	}
 
 	/**
-	 * If this the image bitmap should be copied before blur.
+	 * Provide your custom blur implementation
 	 *
-	 * This will increase memory (RAM) usage while blurring, but
-	 * if the bitmap's pointer is used anywhere else it would be
-	 * affected of course.
-	 *
-	 * @param shouldCopy
+	 * @param blurAlgorithm
 	 * @return
 	 */
-	public BlurBuilder copyBitmapBeforeBlur(boolean shouldCopy) {
-		this.copyBitmapBeforeBlur = shouldCopy;
+	public BlurBuilder algorithm(IBlur blurAlgorithm) {
+		data.blurAlgorithm = blurAlgorithm;
 		return this;
 	}
 
-
-	protected boolean isShouldUseFrostedGlassEffect() {
-		return shouldUseFrostedGlassEffect;
-	}
-
-	protected float getContrast() {
-		return contrast;
-	}
-
-	protected EBlurAlgorithm getAlgorithm() {
-		return algorithm;
-	}
-
-	protected boolean isCopyBitmapBeforeBlur() {
-		return copyBitmapBeforeBlur;
-	}
-
-	protected int getBlurRadius() {
-		return blurRadius;
-	}
-
-	protected ImageReference getImageReference() {
-		return imageReference;
-	}
-
-	protected ContextWrapper getContextWrapper() {
-		return contextWrapper;
-	}
-
-	protected float getBrightness() {
-		return brightness;
-	}
-
 	public Bitmap get() {
-		return new BlurWorker(this,null,debugMode).process();
+		return new BlurWorker(data,null).process();
 	}
 
 	public interface TaskFinishedListener {
