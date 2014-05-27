@@ -40,7 +40,7 @@ public class BlurBuilder {
 		protected IBlur blurAlgorithm;
 		protected boolean copyBitmapBeforeBlur = false;
 		protected int blurRadius=16;
-		protected boolean rescaleIfDownscaled = true;
+		protected boolean rescaleIfDownscaled = false;
 		protected ImageReference imageReference;
 		protected ContextWrapper contextWrapper;
 		protected List<IBitmapProcessor> preProcessors = new ArrayList<IBitmapProcessor>();
@@ -81,18 +81,44 @@ public class BlurBuilder {
 		return this;
 	}
 
+	/**
+	 * Will scale the image down before processing for
+	 * performance enhancement and less memory usage
+	 * sacrificing image quality.
+	 *
+	 * @param scaleInSample value > 1 will scale the image width/height, so 2 will get you 1/4
+	 *                      of the original size and 4 will get you 1/16 of the original size - this just sets
+	 *                      the inSample size in {@link android.graphics.BitmapFactory.Options#inSampleSize } and
+	 *                      behaves exactly the same, so keep the value 2^n for least scaling artifacts
+	 * @return
+	 */
 	public BlurBuilder downScale(int scaleInSample) {
 		data.options.inSampleSize = Math.min(Math.max(1, scaleInSample), 16384);
 		return this;
 	}
 
-	public BlurBuilder reScaleIfDownscaled(boolean rescale) {
-		data.rescaleIfDownscaled = rescale;
+	/**
+	 * Artificially rescales the image if downscaled before to
+	 * it's original width/height
+	 *
+	 * @return
+	 */
+	public BlurBuilder reScaleIfDownscaled() {
+		data.rescaleIfDownscaled = true;
 		return this;
 	}
 
+	/**
+	 * Set your custom decoder options here. Mind that that may
+	 * overwrite the value in {@link #downScale(int)} ()};
+	 *
+	 * @param options non-null
+	 * @return
+	 */
 	public BlurBuilder options(BitmapFactory.Options options) {
-		data.options =options;
+		if(options != null) {
+			data.options = options;
+		}
 		return this;
 	}
 

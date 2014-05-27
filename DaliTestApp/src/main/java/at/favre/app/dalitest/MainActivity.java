@@ -67,10 +67,10 @@ public class MainActivity extends Activity {
 			iv2.setImageDrawable(new BitmapDrawable(getResources(),Dali.create(getActivity()).load(R.drawable.test_img1).blurRadius(24).brightness(10).frostedGlass().get()));
 
 			ImageView iv3 = (ImageView) rootView.findViewById(R.id.image3);
-			iv3.setImageDrawable(new BitmapDrawable(getResources(),Dali.create(getActivity()).load(R.drawable.test_img1).blurRadius(12).downScale(2).get()));
+			iv3.setImageDrawable(new BitmapDrawable(getResources(),Dali.create(getActivity()).load(R.drawable.test_img1).blurRadius(12).downScale(2).reScaleIfDownscaled().get()));
 
 			ImageView iv4 = (ImageView) rootView.findViewById(R.id.image4);
-			iv4.setImageDrawable(new BitmapDrawable(getResources(),Dali.create(getActivity()).load(R.drawable.test_img1).blurRadius(12).downScale(3).get()));
+			iv4.setImageDrawable(new BitmapDrawable(getResources(),Dali.create(getActivity()).load(R.drawable.test_img1).blurRadius(12).downScale(3).reScaleIfDownscaled().get()));
 
 			return rootView;
         }

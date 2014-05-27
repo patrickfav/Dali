@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Point;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -41,7 +42,11 @@ public class ImageReference {
 
 	public Bitmap synchronouslyLoadBitmap(Resources resources) {
 		if(bitmap != null) {
-			return bitmap;
+			if(decoderOptions != null && decoderOptions.inSampleSize > 1) {
+				return Bitmap.createScaledBitmap(bitmap,bitmap.getWidth()/decoderOptions.inSampleSize,bitmap.getHeight()/decoderOptions.inSampleSize,false);
+			} else {
+				return bitmap;
+			}
 		} else if(resId != null) {
 			return BitmapFactory.decodeResource(resources, resId, decoderOptions);
 		} else if(fileToBitmap != null) {
@@ -60,12 +65,16 @@ public class ImageReference {
 			return new Point(bitmap.getWidth(),bitmap.getHeight());
 		} else if(resId != null) {
 			BitmapFactory.decodeResource(resources, resId, justBoundsOptions);
+			float scale = (float) justBoundsOptions.inTargetDensity / justBoundsOptions.inDensity;
+			return new Point((int) (justBoundsOptions.outWidth * scale + 0.5f),(int) (justBoundsOptions.outHeight * scale + 0.5f));
 		} else if(fileToBitmap != null) {
 			BitmapFactory.decodeFile(fileToBitmap.getAbsolutePath(), justBoundsOptions);
 		} else if(inputStream != null) {
 			BitmapFactory.decodeStream(inputStream, null,justBoundsOptions);
+			try {
+				inputStream.reset();
+			} catch (IOException e) {}
 		}
-		float scale = (float) justBoundsOptions.inTargetDensity / justBoundsOptions.inDensity;
-		return new Point((int) (justBoundsOptions.outWidth * scale + 0.5f),(int) (justBoundsOptions.outHeight * scale + 0.5f));
+		return new Point(justBoundsOptions.outWidth,justBoundsOptions.outHeight);
 	}
 }
