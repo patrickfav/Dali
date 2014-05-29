@@ -1,27 +1,19 @@
 package at.favre.lib.dali.builder;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.v8.renderscript.RenderScript;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import at.favre.lib.dali.blur.EBlurAlgorithm;
 import at.favre.lib.dali.blur.IBlur;
-import at.favre.lib.dali.blur.algorithms.BoxBlur;
-import at.favre.lib.dali.blur.algorithms.GaussianFastBlur;
-import at.favre.lib.dali.blur.algorithms.IgnoreBlur;
-import at.favre.lib.dali.blur.algorithms.RenderScriptBox5x5Blur;
-import at.favre.lib.dali.blur.algorithms.RenderScriptGaussian5x5Blur;
 import at.favre.lib.dali.blur.algorithms.RenderScriptGaussianBlur;
-import at.favre.lib.dali.blur.algorithms.RenderScriptStackBlur;
-import at.favre.lib.dali.blur.algorithms.StackBlur;
 import at.favre.lib.dali.builder.img.BrightnessProcessor;
 import at.favre.lib.dali.builder.img.ContrastProcessor;
 import at.favre.lib.dali.builder.img.FrostGlassProcessor;
 import at.favre.lib.dali.builder.img.IBitmapProcessor;
+import at.favre.lib.dali.util.BlurUtil;
 
 /**
  * Created by PatrickF on 26.05.2014.
@@ -35,7 +27,7 @@ public class BlurBuilder {
 	private Data data;
 
 	protected static class Data {
-		protected boolean debugMode = true;
+		protected boolean debugMode = false;
 		protected BitmapFactory.Options options = new BitmapFactory.Options();
 		protected IBlur blurAlgorithm;
 		protected boolean copyBitmapBeforeBlur = false;
@@ -47,11 +39,12 @@ public class BlurBuilder {
 		protected List<IBitmapProcessor> postProcessors = new ArrayList<IBitmapProcessor>();
 	}
 
-	public BlurBuilder(ContextWrapper contextWrapper, ImageReference imageReference) {
+	public BlurBuilder(ContextWrapper contextWrapper, ImageReference imageReference, boolean debugMode) {
 		data = new Data();
 		data.imageReference = imageReference;
 		data.contextWrapper = contextWrapper;
 		data.blurAlgorithm = new RenderScriptGaussianBlur(data.contextWrapper.getRenderScript());
+		data.debugMode = debugMode;
 	}
 
 	public BlurBuilder blurRadius(int radius) {
@@ -187,27 +180,7 @@ public class BlurBuilder {
 	 * @return
 	 */
 	public BlurBuilder algorithm(EBlurAlgorithm algorithm) {
-		RenderScript rs= data.contextWrapper.getRenderScript();
-		Context ctx = data.contextWrapper.getContext();
-
-		switch (algorithm) {
-			case RS_GAUSS_FAST:
-				data.blurAlgorithm =  new RenderScriptGaussianBlur(rs);
-			case RS_BOX_5x5:
-				data.blurAlgorithm = new RenderScriptBox5x5Blur(rs);
-			case RS_GAUSS_5x5:
-				data.blurAlgorithm = new RenderScriptGaussian5x5Blur(rs);
-			case RS_STACKBLUR:
-				data.blurAlgorithm = new RenderScriptStackBlur(rs, ctx);
-			case STACKBLUR:
-				data.blurAlgorithm = new StackBlur();
-			case GAUSS_FAST:
-				data.blurAlgorithm = new GaussianFastBlur();
-			case BOX_BLUR:
-				data.blurAlgorithm = new BoxBlur();
-			default:
-				data.blurAlgorithm = new IgnoreBlur();
-		}
+		data.blurAlgorithm = BlurUtil.getIBlurAlgorithm(algorithm,data.contextWrapper);
 
 		return this;
 	}

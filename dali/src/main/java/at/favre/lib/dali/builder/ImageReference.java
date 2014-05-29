@@ -10,7 +10,10 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Created by PatrickF on 26.05.2014.
+ * This is a wrapper for the different
+ * options one can specify a reference of
+ * an image. This will only load (if necessary)
+ * the image ondemand.
  */
 public class ImageReference {
 	private Integer resId;

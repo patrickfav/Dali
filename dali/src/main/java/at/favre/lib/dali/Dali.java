@@ -2,14 +2,19 @@ package at.favre.lib.dali;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.view.View;
 
 import java.io.File;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import at.favre.lib.dali.builder.BlurBuilder;
 import at.favre.lib.dali.builder.ContextWrapper;
 import at.favre.lib.dali.builder.ImageReference;
+import at.favre.lib.dali.builder.LiveBlurBuilder;
 
 /**
  * Created by PatrickF on 26.05.2014.
@@ -17,31 +22,36 @@ import at.favre.lib.dali.builder.ImageReference;
 public class Dali {
 
 	public static Dali create(Context ctx) {
-		return new Dali(ctx.getApplicationContext());
+		return new Dali(ctx.getApplicationContext(), false);
+	}
+	public static Dali create(Context ctx, boolean debugMode) {
+		return new Dali(ctx.getApplicationContext(),debugMode);
 	}
 
 
 	private ContextWrapper contextWrapper;
+	private boolean debugMode;
 
-	private Dali(Context ctx) {
+	private Dali(Context ctx, boolean debugMode) {
+		this.debugMode = debugMode;
 		contextWrapper = new ContextWrapper(ctx);
 	}
 
 	public BlurBuilder load(Bitmap bitmap) {
-		return new BlurBuilder(contextWrapper, new ImageReference(bitmap));
+		return new BlurBuilder(contextWrapper, new ImageReference(bitmap),debugMode);
 	}
 
 	public BlurBuilder load(int resId) {
-		return new BlurBuilder(contextWrapper, new ImageReference(resId));
+		return new BlurBuilder(contextWrapper, new ImageReference(resId),debugMode);
 	}
 
 	public BlurBuilder load(InputStream inputStream) {
-		return new BlurBuilder(contextWrapper, new ImageReference(inputStream));
+		return new BlurBuilder(contextWrapper, new ImageReference(inputStream),debugMode);
 	}
 
 	public BlurBuilder load(File file) {
 		checkFile(file);
-		return new BlurBuilder(contextWrapper, new ImageReference(file));
+		return new BlurBuilder(contextWrapper, new ImageReference(file),debugMode);
 	}
 
 	public BlurBuilder load(URI uri) {
@@ -65,5 +75,12 @@ public class Dali {
 		if(errMsg != null) {
 			throw new IllegalArgumentException("Could not load file "+file+": "+errMsg);
 		}
+	}
+
+	public LiveBlurBuilder liveBlur(View rootView, View blurOntoView, View... blurOntoViewMore) {
+		List<View> viewList = new ArrayList<View>();
+		viewList.add(blurOntoView);
+		viewList.addAll(Arrays.asList(blurOntoViewMore));
+		return new LiveBlurBuilder(contextWrapper,rootView,viewList,debugMode);
 	}
 }
