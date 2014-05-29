@@ -1,5 +1,6 @@
 package at.favre.lib.dali.builder.live;
 
+import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
@@ -25,6 +26,7 @@ public class LiveBlurBuilder extends ABuilder {
 		public int inSampleSize = 8;
 		public View rootView;
 		public List<View> viewsToBlurOnto;
+		public Bitmap.Config config = Bitmap.Config.ARGB_8888;
 	}
 
 	public LiveBlurBuilder(ContextWrapper contextWrapper, View rootView, List<View> viewsToBlurOnto, boolean debugMode) {

@@ -77,10 +77,10 @@ public class Dali {
 		}
 	}
 
-	public LiveBlurBuilder liveBlur(View rootView, View blurOntoView, View... blurOntoViewMore) {
+	public LiveBlurBuilder liveBlur(View unblurredContentView, View blurOntoView, View... blurOntoViewMore) {
 		List<View> viewList = new ArrayList<View>();
 		viewList.add(blurOntoView);
 		viewList.addAll(Arrays.asList(blurOntoViewMore));
-		return new LiveBlurBuilder(contextWrapper,rootView,viewList,debugMode);
+		return new LiveBlurBuilder(contextWrapper,unblurredContentView,viewList,debugMode);
 	}
 }
