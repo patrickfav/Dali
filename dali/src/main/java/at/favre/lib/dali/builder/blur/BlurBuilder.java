@@ -1,7 +1,8 @@
-package at.favre.lib.dali.builder;
+package at.favre.lib.dali.builder.blur;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,29 +10,26 @@ import java.util.List;
 import at.favre.lib.dali.blur.EBlurAlgorithm;
 import at.favre.lib.dali.blur.IBlur;
 import at.favre.lib.dali.blur.algorithms.RenderScriptGaussianBlur;
-import at.favre.lib.dali.builder.img.BrightnessProcessor;
-import at.favre.lib.dali.builder.img.ContrastProcessor;
-import at.favre.lib.dali.builder.img.FrostGlassProcessor;
-import at.favre.lib.dali.builder.img.IBitmapProcessor;
+import at.favre.lib.dali.builder.ABuilder;
+import at.favre.lib.dali.builder.ContextWrapper;
+import at.favre.lib.dali.builder.ImageReference;
+import at.favre.lib.dali.builder.processor.BrightnessProcessor;
+import at.favre.lib.dali.builder.processor.ContrastProcessor;
+import at.favre.lib.dali.builder.processor.FrostGlassProcessor;
+import at.favre.lib.dali.builder.processor.IBitmapProcessor;
 import at.favre.lib.dali.util.BlurUtil;
 
 /**
  * Created by PatrickF on 26.05.2014.
  */
-public class BlurBuilder {
+public class BlurBuilder extends ABuilder {
 	private final static String TAG = BlurBuilder.class.getSimpleName();
 
-	private static final int MIN_BLUR_RADIUS = 1;
-	private static final int MAX_BLUR_RADIUS = 25;
+	private BlurData data;
 
-	private Data data;
-
-	protected static class Data {
-		protected boolean debugMode = false;
+	protected static class BlurData extends ABuilder.Data {
 		protected BitmapFactory.Options options = new BitmapFactory.Options();
-		protected IBlur blurAlgorithm;
 		protected boolean copyBitmapBeforeBlur = false;
-		protected int blurRadius=16;
 		protected boolean rescaleIfDownscaled = false;
 		protected ImageReference imageReference;
 		protected ContextWrapper contextWrapper;
@@ -40,23 +38,22 @@ public class BlurBuilder {
 	}
 
 	public BlurBuilder(ContextWrapper contextWrapper, ImageReference imageReference, boolean debugMode) {
-		data = new Data();
+		data = new BlurData();
 		data.imageReference = imageReference;
 		data.contextWrapper = contextWrapper;
 		data.blurAlgorithm = new RenderScriptGaussianBlur(data.contextWrapper.getRenderScript());
 		data.debugMode = debugMode;
 	}
 
-	public BlurBuilder blurRadius(int radius) {
-		checkBlurRadiusPrecondition(radius);
-		data.blurRadius = radius;
-		return this;
-	}
 
-	private void checkBlurRadiusPrecondition(int blurRadius) {
-		if(blurRadius < MIN_BLUR_RADIUS ||  blurRadius > MAX_BLUR_RADIUS) {
-			throw new IllegalArgumentException("Valid blur radius must be between (inclusive) "+MIN_BLUR_RADIUS+" and "+MAX_BLUR_RADIUS+" found "+blurRadius);
-		}
+	/**
+	 * @param blurRadius the views use to blur the view, default is {@link at.favre.lib.dali.builder.BuilderDefaults#BLUR_RADIUS};
+	 * @throws java.lang.IllegalStateException if blurradius not in range [{@link at.favre.lib.dali.builder.BuilderDefaults#BLUR_RADIUS_MIN},{@link at.favre.lib.dali.builder.BuilderDefaults#BLUR_RADIUS_MAX}}
+	 */
+	public BlurBuilder blurRadius(int blurRadius) {
+		BlurUtil.checkBlurRadiusPrecondition(blurRadius);
+		data.blurRadius = blurRadius;
+		return this;
 	}
 
 	/**
@@ -196,7 +193,11 @@ public class BlurBuilder {
 		return this;
 	}
 
-	public Bitmap get() {
+	public BitmapDrawable get() {
+		return new BitmapDrawable(data.contextWrapper.getResources(),getAsBitmap());
+	}
+
+	public Bitmap getAsBitmap() {
 		return new BlurWorker(data,null).process();
 	}
 

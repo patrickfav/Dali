@@ -1,9 +1,10 @@
-package at.favre.lib.dali.builder;
+package at.favre.lib.dali.builder.blur;
 
 import android.graphics.Bitmap;
 import android.graphics.Point;
 
-import at.favre.lib.dali.builder.img.IBitmapProcessor;
+import at.favre.lib.dali.builder.PerformanceProfiler;
+import at.favre.lib.dali.builder.processor.IBitmapProcessor;
 import at.favre.lib.dali.util.BenchmarkUtil;
 import at.favre.lib.dali.util.BitmapUtil;
 
@@ -11,10 +12,10 @@ import at.favre.lib.dali.util.BitmapUtil;
  * Created by PatrickF on 26.05.2014.
  */
 public class BlurWorker implements Runnable {
-	private BlurBuilder.Data builderData;
+	private BlurBuilder.BlurData builderData;
 	private BlurBuilder.TaskFinishedListener listener;
 
-	public BlurWorker(BlurBuilder.Data builderData,BlurBuilder.TaskFinishedListener listener) {
+	public BlurWorker(BlurBuilder.BlurData builderData,BlurBuilder.TaskFinishedListener listener) {
 		this.builderData = builderData;
 		this.listener = listener;
 	}

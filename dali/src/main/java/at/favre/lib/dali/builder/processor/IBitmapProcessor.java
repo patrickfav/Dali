@@ -1,4 +1,4 @@
-package at.favre.lib.dali.builder.img;
+package at.favre.lib.dali.builder.processor;
 
 import android.graphics.Bitmap;
 

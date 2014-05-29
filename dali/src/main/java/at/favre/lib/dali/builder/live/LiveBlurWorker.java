@@ -1,4 +1,4 @@
-package at.favre.lib.dali.builder;
+package at.favre.lib.dali.builder.live;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -21,9 +21,9 @@ public class LiveBlurWorker {
 	private AtomicBoolean isWorking = new AtomicBoolean(false);
 	private Bitmap dest;
 
-	private LiveBlurBuilder.Data data;
+	private LiveBlurBuilder.LiveBlurData data;
 
-	public LiveBlurWorker(LiveBlurBuilder.Data data) {
+	public LiveBlurWorker(LiveBlurBuilder.LiveBlurData data) {
 		this.data = data;
 	}
 
@@ -51,14 +51,26 @@ public class LiveBlurWorker {
 				isWorking.compareAndSet(true, false);
 				return true;
 			} else {
-				LogUtil.logDebug(TAG,"Skip blur frame, already in blur",data.debugMode);
+				LogUtil.logDebug(TAG, "Skip blur frame, already in blur", data.debugMode);
 			}
 		} catch (Throwable t) {
-			Log.e(TAG,"Could not create blur view",t);
+			isWorking.set(false);
+			if(data.silentFail) {
+				Log.e(TAG,"Could not create blur view",t);
+			} else {
+				throw new RuntimeException("Error while updating the live blur",t);
+			}
 		}
 		return false;
 	}
 
+	/**
+	 * Draws the given view to a canvas with the given scale (higher = smaller)
+	 * @param dest
+	 * @param view
+	 * @param downSampling
+	 * @return
+	 */
 	private Bitmap drawViewToBitmap(Bitmap dest, View view, int downSampling) {
 		float scale = 1f / downSampling;
 		int viewWidth = view.getWidth();
@@ -67,7 +79,7 @@ public class LiveBlurWorker {
 		int bmpHeight = Math.round(viewHeight * scale);
 
 		if (dest == null || dest.getWidth() != bmpWidth || dest.getHeight() != bmpHeight) {
-			dest = Bitmap.createBitmap(bmpWidth, bmpHeight, Bitmap.Config.ARGB_8888);
+			dest = Bitmap.createBitmap(bmpWidth, bmpHeight, Bitmap.Config.ARGB_4444);
 		}
 
 		Canvas c = new Canvas(dest);
@@ -79,6 +91,9 @@ public class LiveBlurWorker {
 		return dest;
 	}
 
+	/**
+	 * legacy helper for setting background
+	 */
 	private void setViewBackground(View v, Drawable d) {
 		if (Build.VERSION.SDK_INT >= 16) {
 			v.setBackground(d);
@@ -87,14 +102,35 @@ public class LiveBlurWorker {
 		}
 	}
 
+	/**
+	 * crops the srcBmp with the canvasView bounds and returns the cropped bitmap
+	 */
 	private Bitmap crop(Bitmap srcBmp, View canvasView, int downsampling) {
 		float scale = 1f / downsampling;
 		return Bitmap.createBitmap(
 				srcBmp,
-				(int) Math.floor((canvasView.getX())*scale),
-				(int) Math.floor((canvasView.getY())*scale),
+				(int) Math.floor((getX(canvasView))*scale),
+				(int) Math.floor((getY(canvasView))*scale),
 				(int) Math.floor((canvasView.getWidth())*scale),
 				(int) Math.floor((canvasView.getHeight())*scale)
 		);
 	}
+
+
+	private float getX(View v) {
+		if (Build.VERSION.SDK_INT >= 11) {
+			return v.getX();
+		} else {
+			return v.getLeft();
+		}
+	}
+
+	private float getY(View v) {
+		if (Build.VERSION.SDK_INT >= 11) {
+			return v.getY();
+		} else {
+			return v.getTop();
+		}
+	}
+
 }

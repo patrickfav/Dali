@@ -13,6 +13,7 @@ import at.favre.lib.dali.blur.algorithms.RenderScriptGaussian5x5Blur;
 import at.favre.lib.dali.blur.algorithms.RenderScriptGaussianBlur;
 import at.favre.lib.dali.blur.algorithms.RenderScriptStackBlur;
 import at.favre.lib.dali.blur.algorithms.StackBlur;
+import at.favre.lib.dali.builder.BuilderDefaults;
 import at.favre.lib.dali.builder.ContextWrapper;
 
 /**
@@ -20,6 +21,12 @@ import at.favre.lib.dali.builder.ContextWrapper;
  */
 public class BlurUtil {
 
+	/**
+	 * Creates an IBlur instance for the given algorithm enum
+	 * @param algorithm
+	 * @param contextWrapper
+	 * @return
+	 */
 	public static IBlur getIBlurAlgorithm(EBlurAlgorithm algorithm, ContextWrapper contextWrapper) {
 		RenderScript rs= contextWrapper.getRenderScript();
 		Context ctx = contextWrapper.getContext();
@@ -41,6 +48,16 @@ public class BlurUtil {
 				return new BoxBlur();
 			default:
 				return new IgnoreBlur();
+		}
+	}
+
+	/**
+	 * Check if blur radius is within valid range of {@link at.favre.lib.dali.builder.BuilderDefaults#BLUR_RADIUS_MIN} and {@link at.favre.lib.dali.builder.BuilderDefaults#BLUR_RADIUS_MAX}
+	 * @param blurRadius
+	 */
+	public static void checkBlurRadiusPrecondition(int blurRadius) {
+		if(blurRadius < BuilderDefaults.BLUR_RADIUS_MIN ||  blurRadius > BuilderDefaults.BLUR_RADIUS_MAX) {
+			throw new IllegalArgumentException("Valid blur radius must be between (inclusive) "+BuilderDefaults.BLUR_RADIUS_MIN +" and "+BuilderDefaults.BLUR_RADIUS_MAX+" found "+blurRadius);
 		}
 	}
 }

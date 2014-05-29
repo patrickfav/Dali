@@ -11,10 +11,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import at.favre.lib.dali.builder.BlurBuilder;
+import at.favre.lib.dali.builder.blur.BlurBuilder;
 import at.favre.lib.dali.builder.ContextWrapper;
 import at.favre.lib.dali.builder.ImageReference;
-import at.favre.lib.dali.builder.LiveBlurBuilder;
+import at.favre.lib.dali.builder.live.LiveBlurBuilder;
 
 /**
  * Created by PatrickF on 26.05.2014.

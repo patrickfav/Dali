@@ -1,6 +1,5 @@
 package at.favre.app.dalitest;
 
-import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
@@ -8,7 +7,6 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
@@ -21,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import at.favre.lib.dali.Dali;
-import at.favre.lib.dali.builder.LiveBlurWorker;
+import at.favre.lib.dali.builder.live.LiveBlurWorker;
 import at.favre.lib.dali.view.ObservableScrollView;
 import at.favre.lib.dali.view.ObservableViewPager;
 import at.favre.lib.dali.view.Observers;
@@ -58,11 +56,12 @@ public class LiveBlurFragment extends Fragment{
 		topBlurView = v.findViewById(R.id.topBlurView);
 		bottomBlurView = v.findViewById(R.id.bottomBlurView);
 
-		blurWorker = Dali.create(getActivity(),true).liveBlur(templateView,topBlurView,bottomBlurView).downSample(8).assemble();
+		blurWorker = Dali.create(getActivity(),true).liveBlur(templateView,topBlurView,bottomBlurView).downSample(8).assemble(true);
 
 		mPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 			@Override
 			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+				blurWorker.updateBlurView();
 			}
 
 			@Override
@@ -74,20 +73,19 @@ public class LiveBlurFragment extends Fragment{
 			}
 		});
 
-		mPager.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-
-			@Override
-			public boolean onPreDraw() {
-				return true;
-			}
-		});
-
-		mPager.setOnDrawListener(new Observers.DrawListener() {
-			@Override
-			public void onDraw(Canvas canvas) {
-				blurWorker.updateBlurView();
-			}
-		});
+//		mPager.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+//
+//			@Override
+//			public boolean onPreDraw() {
+//				return true;
+//			}
+//		});
+//
+//		mPager.setOnDrawListener(new Observers.DrawListener() {
+//			@Override
+//			public void onDraw(Canvas canvas) {
+//			}
+//		});
 
 		return v;
 	}
