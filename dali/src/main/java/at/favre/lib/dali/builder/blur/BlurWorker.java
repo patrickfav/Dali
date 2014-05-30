@@ -41,7 +41,7 @@ public class BlurWorker implements Runnable {
 		if(builderData.shouldDiskCache) {
 			profiler.startTask(-2, "cache lookup (key:" + cacheKey + ")");
 			Bitmap cache = builderData.diskCacheManager.get(cacheKey);
-			profiler.endTask(-2,cache == null ? "cache miss":"cache hit");
+			profiler.endTask(-2,cache == null ? "miss":"hit");
 			if(cache != null) {
 				profiler.printResultToLog();
 				return cache;

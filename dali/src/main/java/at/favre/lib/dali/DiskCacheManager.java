@@ -36,7 +36,7 @@ public class DiskCacheManager {
 	public DiskLruCache getDiskCache() {
 		if (diskLruCache == null) {
 			try {
-				diskLruCache = DiskLruCache.open(new File(LegacySDKUtil.getCacheDir(ctx), DISK_CACHE_FOLDER_NAME), BuildConfig.VERSION_CODE, 2, DISK_CACHE_SIZE_BYTE);
+				diskLruCache = DiskLruCache.open(new File(LegacySDKUtil.getCacheDir(ctx), DISK_CACHE_FOLDER_NAME), BuildConfig.VERSION_CODE, 1, DISK_CACHE_SIZE_BYTE);
 			}catch (Exception e) {
 				Log.e(TAG, "Could not create disk cache", e);
 			}
@@ -64,10 +64,16 @@ public class DiskCacheManager {
 			try {
 				DiskLruCache.Editor editor =getDiskCache().edit(cacheKey);
 
-				out = new BufferedOutputStream(editor.newOutputStream(0), IO_BUFFER_SIZE_BYTE);
-				boolean result =  bitmap.compress(FORMAT,100, out);
-				editor.commit();
-				return result;
+				if(editor != null) {
+					out = new BufferedOutputStream(editor.newOutputStream(0), IO_BUFFER_SIZE_BYTE);
+					if(bitmap.compress(FORMAT, 100, out)) {
+						editor.commit();
+						return true;
+					} else {
+						Log.w(TAG,"Could not compress png");
+						editor.abort();
+					}
+				}
 			} catch (Exception e) {
 				Log.w(TAG,"Could not write outputstream",e);
 			} finally {
