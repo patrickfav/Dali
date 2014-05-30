@@ -20,6 +20,8 @@ public class BenchmarkUtil {
 		format.setRoundingMode(RoundingMode.HALF_UP);
 	}
 
+	private BenchmarkUtil(){}
+
 	public static long elapsedRealTimeNanos() {
 		if (Build.VERSION.SDK_INT >= 17) {
 			return SystemClock.elapsedRealtimeNanos();

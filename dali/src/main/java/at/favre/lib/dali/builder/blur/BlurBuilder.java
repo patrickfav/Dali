@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable;
 import java.util.ArrayList;
 import java.util.List;
 
+import at.favre.lib.dali.DiskCacheManager;
 import at.favre.lib.dali.blur.EBlurAlgorithm;
 import at.favre.lib.dali.blur.IBlur;
 import at.favre.lib.dali.blur.algorithms.RenderScriptGaussianBlur;
@@ -17,7 +18,7 @@ import at.favre.lib.dali.builder.processor.BrightnessProcessor;
 import at.favre.lib.dali.builder.processor.ContrastProcessor;
 import at.favre.lib.dali.builder.processor.FrostGlassProcessor;
 import at.favre.lib.dali.builder.processor.IBitmapProcessor;
-import at.favre.lib.dali.util.BlurUtil;
+import at.favre.lib.dali.util.BuilderUtil;
 
 /**
  * Created by PatrickF on 26.05.2014.
@@ -27,21 +28,24 @@ public class BlurBuilder extends ABuilder {
 
 	private BlurData data;
 
-	protected static class BlurData extends ABuilder.Data {
-		protected BitmapFactory.Options options = new BitmapFactory.Options();
-		protected boolean copyBitmapBeforeBlur = false;
-		protected boolean rescaleIfDownscaled = false;
-		protected ImageReference imageReference;
-		protected ContextWrapper contextWrapper;
-		protected List<IBitmapProcessor> preProcessors = new ArrayList<IBitmapProcessor>();
-		protected List<IBitmapProcessor> postProcessors = new ArrayList<IBitmapProcessor>();
+	public static class BlurData extends ABuilder.Data {
+		public BitmapFactory.Options options = new BitmapFactory.Options();
+		public boolean copyBitmapBeforeBlur = false;
+		public boolean rescaleIfDownscaled = false;
+		public boolean shouldDiskCache = true;
+		public ImageReference imageReference;
+		public ContextWrapper contextWrapper;
+		public List<IBitmapProcessor> preProcessors = new ArrayList<IBitmapProcessor>();
+		public List<IBitmapProcessor> postProcessors = new ArrayList<IBitmapProcessor>();
+		public DiskCacheManager diskCacheManager;
 	}
 
-	public BlurBuilder(ContextWrapper contextWrapper, ImageReference imageReference, boolean debugMode) {
+	public BlurBuilder(ContextWrapper contextWrapper, ImageReference imageReference, DiskCacheManager diskCacheManager, boolean debugMode) {
 		data = new BlurData();
 		data.imageReference = imageReference;
 		data.contextWrapper = contextWrapper;
 		data.blurAlgorithm = new RenderScriptGaussianBlur(data.contextWrapper.getRenderScript());
+		data.diskCacheManager = diskCacheManager;
 		data.debugMode = debugMode;
 	}
 
@@ -51,7 +55,7 @@ public class BlurBuilder extends ABuilder {
 	 * @throws java.lang.IllegalStateException if blurradius not in range [{@link at.favre.lib.dali.builder.BuilderDefaults#BLUR_RADIUS_MIN},{@link at.favre.lib.dali.builder.BuilderDefaults#BLUR_RADIUS_MAX}}
 	 */
 	public BlurBuilder blurRadius(int blurRadius) {
-		BlurUtil.checkBlurRadiusPrecondition(blurRadius);
+		BuilderUtil.checkBlurRadiusPrecondition(blurRadius);
 		data.blurRadius = blurRadius;
 		return this;
 	}
@@ -64,7 +68,6 @@ public class BlurBuilder extends ABuilder {
 	 * create side effects.
 	 *
 	 * @param shouldCopy
-	 * @return
 	 */
 	public BlurBuilder copyBitmapBeforeProcess(boolean shouldCopy) {
 		data.copyBitmapBeforeBlur = shouldCopy;
@@ -80,7 +83,6 @@ public class BlurBuilder extends ABuilder {
 	 *                      of the original size and 4 will get you 1/16 of the original size - this just sets
 	 *                      the inSample size in {@link android.graphics.BitmapFactory.Options#inSampleSize } and
 	 *                      behaves exactly the same, so keep the value 2^n for least scaling artifacts
-	 * @return
 	 */
 	public BlurBuilder downScale(int scaleInSample) {
 		data.options.inSampleSize = Math.min(Math.max(1, scaleInSample), 16384);
@@ -90,8 +92,6 @@ public class BlurBuilder extends ABuilder {
 	/**
 	 * Artificially rescales the image if downscaled before to
 	 * it's original width/height
-	 *
-	 * @return
 	 */
 	public BlurBuilder reScaleIfDownscaled() {
 		data.rescaleIfDownscaled = true;
@@ -103,7 +103,6 @@ public class BlurBuilder extends ABuilder {
 	 * overwrite the value in {@link #downScale(int)} ()};
 	 *
 	 * @param options non-null
-	 * @return
 	 */
 	public BlurBuilder options(BitmapFactory.Options options) {
 		if(options != null) {
@@ -118,7 +117,6 @@ public class BlurBuilder extends ABuilder {
 	 * calls defines the order the processors are applied.
 	 *
 	 * @param processor
-	 * @return
 	 */
 	public BlurBuilder addPreProcessor(IBitmapProcessor processor) {
 		data.preProcessors.add(processor);
@@ -130,7 +128,6 @@ public class BlurBuilder extends ABuilder {
 	 *
 	 * @param brightness default is 0, pos values increase brightness, neg. values decrease contrast
 	 *                   min value is -100 (which is all black) and max value is 900 (which is all white)
-	 * @return
 	 */
 	public BlurBuilder brightness(float brightness) {
 		data.postProcessors.add(new BrightnessProcessor(data.contextWrapper.getRenderScript(),Math.max(Math.min(900.f,brightness),-100.f)));
@@ -141,7 +138,6 @@ public class BlurBuilder extends ABuilder {
 	 * Change contrast of the image
 	 *
 	 * @param contrast default is 0, pos values increase contrast, neg. values decrease contrast
-	 * @return
 	 */
 	public BlurBuilder contrast(float contrast) {
 		data.postProcessors.add(new ContrastProcessor(data.contextWrapper.getRenderScript(),Math.max(Math.min(1500.f,contrast),-1500.f)));
@@ -159,7 +155,6 @@ public class BlurBuilder extends ABuilder {
 	 * calls defines the order the processors are applied.
 	 *
 	 * @param processor
-	 * @return
 	 */
 	public BlurBuilder addPostProcessor(IBitmapProcessor processor) {
 		data.postProcessors.add(processor);
@@ -174,10 +169,9 @@ public class BlurBuilder extends ABuilder {
 	 * which is the best and fastest you get on Android suffices in nearly every situation
 	 *
 	 * @param algorithm
-	 * @return
 	 */
 	public BlurBuilder algorithm(EBlurAlgorithm algorithm) {
-		data.blurAlgorithm = BlurUtil.getIBlurAlgorithm(algorithm,data.contextWrapper);
+		data.blurAlgorithm = BuilderUtil.getIBlurAlgorithm(algorithm, data.contextWrapper);
 
 		return this;
 	}
@@ -186,10 +180,18 @@ public class BlurBuilder extends ABuilder {
 	 * Provide your custom blur implementation
 	 *
 	 * @param blurAlgorithm
-	 * @return
 	 */
 	public BlurBuilder algorithm(IBlur blurAlgorithm) {
 		data.blurAlgorithm = blurAlgorithm;
+		return this;
+	}
+
+	/**
+	 * Skips the disk cache (lookup & save).
+	 * Use this if you only use this image once.
+	 */
+	public BlurBuilder skipDiskCache() {
+		data.shouldDiskCache = false;
 		return this;
 	}
 
@@ -200,6 +202,13 @@ public class BlurBuilder extends ABuilder {
 	public Bitmap getAsBitmap() {
 		return new BlurWorker(data,null).process();
 	}
+
+	/* INTERNAL METHODS ************************************************************************* */
+
+	protected String getCacheKey() {
+		return BuilderUtil.getCacheKey(data);
+	}
+
 
 	public interface TaskFinishedListener {
 		public void onBitmapReady(Bitmap manipulatedBitmap);

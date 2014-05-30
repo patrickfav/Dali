@@ -21,6 +21,7 @@ android {
 }
 
 dependencies {
+    compile 'com.jakewharton:disklrucache:2.+'
     compile 'com.android.support:appcompat-v7:19.+'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }

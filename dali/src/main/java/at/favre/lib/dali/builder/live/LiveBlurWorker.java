@@ -4,13 +4,13 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.util.Log;
 import android.view.View;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import at.favre.lib.dali.util.LogUtil;
+import at.favre.lib.dali.util.BuilderUtil;
+import at.favre.lib.dali.util.LegacySDKUtil;
 
 /**
  * Created by PatrickF on 29.05.2014.
@@ -30,28 +30,28 @@ public class LiveBlurWorker {
 	public boolean updateBlurView() {
 		try {
 			if(data.rootView == null || data.viewsToBlurOnto.isEmpty()) {
-				LogUtil.logDebug(TAG,"Views not set",data.debugMode);
+				BuilderUtil.logDebug(TAG, "Views not set", data.debugMode);
 				return false;
 			}
 
 			if( data.viewsToBlurOnto.get(0).getWidth() == 0 || data.viewsToBlurOnto.get(0).getHeight() == 0) {
-				LogUtil.logDebug(TAG,"Views not ready to be blurred",data.debugMode);
+				BuilderUtil.logDebug(TAG, "Views not ready to be blurred", data.debugMode);
 				return false;
 			}
 
 			if (!isWorking.get()) {
 				isWorking.compareAndSet(false, true);
 
-				dest = drawViewToBitmap(dest, data.rootView, data.inSampleSize);
+				dest = drawViewToBitmap(dest, data.rootView, data.inSampleSize,data.config);
 
 				for (View view : data.viewsToBlurOnto) {
 					Drawable d = new BitmapDrawable(data.contextWrapper.getResources(), data.blurAlgorithm.blur(data.blurRadius,crop(dest.copy(dest.getConfig(), true), view, data.inSampleSize)));
-					setViewBackground(view, d);
+					LegacySDKUtil.setViewBackground(view, d);
 				}
 				isWorking.compareAndSet(true, false);
 				return true;
 			} else {
-				LogUtil.logDebug(TAG, "Skip blur frame, already in blur", data.debugMode);
+				BuilderUtil.logDebug(TAG, "Skip blur frame, already in blur", data.debugMode);
 			}
 		} catch (Throwable t) {
 			isWorking.set(false);
@@ -71,7 +71,7 @@ public class LiveBlurWorker {
 	 * @param downSampling
 	 * @return
 	 */
-	private Bitmap drawViewToBitmap(Bitmap dest, View view, int downSampling) {
+	private static Bitmap drawViewToBitmap(Bitmap dest, View view, int downSampling, Bitmap.Config bitmapConfig) {
 		float scale = 1f / downSampling;
 		int viewWidth = view.getWidth();
 		int viewHeight = view.getHeight();
@@ -79,7 +79,7 @@ public class LiveBlurWorker {
 		int bmpHeight = Math.round(viewHeight * scale);
 
 		if (dest == null || dest.getWidth() != bmpWidth || dest.getHeight() != bmpHeight) {
-			dest = Bitmap.createBitmap(bmpWidth, bmpHeight, Bitmap.Config.ARGB_4444);
+			dest = Bitmap.createBitmap(bmpWidth, bmpHeight, bitmapConfig);
 		}
 
 		Canvas c = new Canvas(dest);
@@ -91,46 +91,23 @@ public class LiveBlurWorker {
 		return dest;
 	}
 
-	/**
-	 * legacy helper for setting background
-	 */
-	private void setViewBackground(View v, Drawable d) {
-		if (Build.VERSION.SDK_INT >= 16) {
-			v.setBackground(d);
-		} else {
-			v.setBackgroundDrawable(d);
-		}
-	}
+
 
 	/**
 	 * crops the srcBmp with the canvasView bounds and returns the cropped bitmap
 	 */
-	private Bitmap crop(Bitmap srcBmp, View canvasView, int downsampling) {
+	private static Bitmap crop(Bitmap srcBmp, View canvasView, int downsampling) {
 		float scale = 1f / downsampling;
 		return Bitmap.createBitmap(
 				srcBmp,
-				(int) Math.floor((getX(canvasView))*scale),
-				(int) Math.floor((getY(canvasView))*scale),
+				(int) Math.floor((LegacySDKUtil.getX(canvasView))*scale),
+				(int) Math.floor((LegacySDKUtil.getY(canvasView))*scale),
 				(int) Math.floor((canvasView.getWidth())*scale),
 				(int) Math.floor((canvasView.getHeight())*scale)
 		);
 	}
 
 
-	private float getX(View v) {
-		if (Build.VERSION.SDK_INT >= 11) {
-			return v.getX();
-		} else {
-			return v.getLeft();
-		}
-	}
 
-	private float getY(View v) {
-		if (Build.VERSION.SDK_INT >= 11) {
-			return v.getY();
-		} else {
-			return v.getTop();
-		}
-	}
 
 }

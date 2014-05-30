@@ -2,16 +2,20 @@ package at.favre.lib.dali.builder.blur;
 
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.os.Handler;
 
 import at.favre.lib.dali.builder.PerformanceProfiler;
 import at.favre.lib.dali.builder.processor.IBitmapProcessor;
 import at.favre.lib.dali.util.BenchmarkUtil;
-import at.favre.lib.dali.util.BitmapUtil;
+import at.favre.lib.dali.util.BuilderUtil;
+import at.favre.lib.dali.util.LegacySDKUtil;
 
 /**
  * Created by PatrickF on 26.05.2014.
  */
 public class BlurWorker implements Runnable {
+	private final static String TAG = BlurWorker.class.getSimpleName();
+
 	private BlurBuilder.BlurData builderData;
 	private BlurBuilder.TaskFinishedListener listener;
 
@@ -32,6 +36,18 @@ public class BlurWorker implements Runnable {
 	public Bitmap process() {
 		PerformanceProfiler profiler = new PerformanceProfiler("blur image",builderData.debugMode);
 
+		final String cacheKey = BuilderUtil.getCacheKey(builderData);
+
+		if(builderData.shouldDiskCache) {
+			profiler.startTask(-2, "cache lookup (key:" + cacheKey + ")");
+			Bitmap cache = builderData.diskCacheManager.get(cacheKey);
+			profiler.endTask(-2,cache == null ? "cache miss":"cache hit");
+			if(cache != null) {
+				profiler.printResultToLog();
+				return cache;
+			}
+		}
+
 		int width=0,height=0;
 		if(builderData.options.inSampleSize > 1 && builderData.rescaleIfDownscaled) {
 			profiler.startTask(-1, "measure image");
@@ -44,7 +60,7 @@ public class BlurWorker implements Runnable {
 		profiler.startTask(0, "load bitmap");
 		builderData.imageReference.setDecoderOptions(builderData.options);
 		Bitmap bitmapToWorkWith = builderData.imageReference.synchronouslyLoadBitmap(builderData.contextWrapper.getResources());
-		profiler.endTask(0, "insample: "+builderData.options.inSampleSize+", height:" + bitmapToWorkWith.getHeight() + ", width:" + bitmapToWorkWith.getWidth() + ", memory usage " + BenchmarkUtil.getScalingUnitByteSize(BitmapUtil.sizeOf(bitmapToWorkWith)));
+		profiler.endTask(0, "insample: "+builderData.options.inSampleSize+", height:" + bitmapToWorkWith.getHeight() + ", width:" + bitmapToWorkWith.getWidth() + ", memory usage " + BenchmarkUtil.getScalingUnitByteSize(LegacySDKUtil.byteSizeOf(bitmapToWorkWith)));
 
 		if (builderData.copyBitmapBeforeBlur) {
 			profiler.startTask(1, "copy bitmap");
@@ -76,10 +92,33 @@ public class BlurWorker implements Runnable {
 			profiler.endTask(40000);
 		}
 
+		if(builderData.shouldDiskCache) {
+			profiler.startTask(40001, "async try to disk cache");
+			new Handler().post(new CacheTask(bitmapToWorkWith,builderData,cacheKey));
+			profiler.endTask(40001);
+		}
+
 		profiler.printResultToLog();
 
 
 		return bitmapToWorkWith;
+	}
+
+	public static class CacheTask implements Runnable {
+		private Bitmap bitmap;
+		private BlurBuilder.BlurData data;
+		private String cacheKey;
+
+		public CacheTask(Bitmap bitmap, BlurBuilder.BlurData data, String cacheKey) {
+			this.bitmap = bitmap;
+			this.data = data;
+			this.cacheKey = cacheKey;
+		}
+
+		@Override
+		public void run() {
+			data.diskCacheManager.putBitmap(bitmap,cacheKey);
+		}
 	}
 
 	private int getInSampleSizeFromScale(float scale, boolean keepPowOfTwo) {

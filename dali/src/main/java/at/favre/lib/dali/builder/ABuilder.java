@@ -7,7 +7,7 @@ import at.favre.lib.dali.blur.IBlur;
  */
 public abstract class ABuilder {
 
-	protected static class Data {
+	public static class Data {
 		public boolean debugMode=false;
 		public int blurRadius = BuilderDefaults.BLUR_RADIUS;
 		public IBlur blurAlgorithm;

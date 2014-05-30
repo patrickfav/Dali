@@ -2,6 +2,9 @@ package at.favre.lib.dali.util;
 
 import android.content.Context;
 import android.support.v8.renderscript.RenderScript;
+import android.util.Log;
+
+import java.security.MessageDigest;
 
 import at.favre.lib.dali.blur.EBlurAlgorithm;
 import at.favre.lib.dali.blur.IBlur;
@@ -15,11 +18,15 @@ import at.favre.lib.dali.blur.algorithms.RenderScriptStackBlur;
 import at.favre.lib.dali.blur.algorithms.StackBlur;
 import at.favre.lib.dali.builder.BuilderDefaults;
 import at.favre.lib.dali.builder.ContextWrapper;
+import at.favre.lib.dali.builder.blur.BlurBuilder;
+import at.favre.lib.dali.builder.processor.IBitmapProcessor;
 
 /**
  * Created by PatrickF on 29.05.2014.
  */
-public class BlurUtil {
+public class BuilderUtil {
+
+	private BuilderUtil() {}
 
 	/**
 	 * Creates an IBlur instance for the given algorithm enum
@@ -58,6 +65,58 @@ public class BlurUtil {
 	public static void checkBlurRadiusPrecondition(int blurRadius) {
 		if(blurRadius < BuilderDefaults.BLUR_RADIUS_MIN ||  blurRadius > BuilderDefaults.BLUR_RADIUS_MAX) {
 			throw new IllegalArgumentException("Valid blur radius must be between (inclusive) "+BuilderDefaults.BLUR_RADIUS_MIN +" and "+BuilderDefaults.BLUR_RADIUS_MAX+" found "+blurRadius);
+		}
+	}
+
+	public static String getCacheKey(BlurBuilder.BlurData data) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(data.imageReference.getContentId()+"+");
+		sb.append(data.blurRadius+"+");
+		sb.append(data.blurAlgorithm.getClass().getSimpleName()+"+");
+		sb.append(data.rescaleIfDownscaled+"+");
+
+		for (IBitmapProcessor preProcessor : data.preProcessors) {
+			sb.append(preProcessor.getProcessorTag()+"+");
+		}
+		for (IBitmapProcessor postProcessor : data.postProcessors) {
+			sb.append(postProcessor.getProcessorTag()+"+");
+		}
+
+		if(data.options != null) {
+			sb.append(data.options.inSampleSize+"+");
+		}
+
+		return sha1Hash(sb.toString());
+	}
+
+	public static String sha1Hash(String text) {
+		try {
+			MessageDigest md = MessageDigest.getInstance("SHA-1");
+			md.update(text.getBytes("iso-8859-1"), 0, text.length());
+			byte[] sha1hash = md.digest();
+			return convertToHex(sha1hash);
+		} catch (Exception e) {
+			throw new RuntimeException("Could not hash",e);
+		}
+	}
+
+	private static String convertToHex(byte[] data) {
+		StringBuilder buf = new StringBuilder();
+		for (byte b : data) {
+			int halfbyte = (b >>> 4) & 0x0F;
+			int two_halfs = 0;
+			do {
+				buf.append((0 <= halfbyte) && (halfbyte <= 9) ? (char) ('0' + halfbyte) : (char) ('a' + (halfbyte - 10)));
+				halfbyte = b & 0x0F;
+			} while (two_halfs++ < 1);
+		}
+		return buf.toString();
+	}
+
+	public static void logDebug(String tag, String msg, boolean shouldLog) {
+		if(shouldLog) {
+			Log.d(tag, msg);
 		}
 	}
 }

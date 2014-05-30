@@ -1,7 +1,5 @@
 package at.favre.lib.dali.util;
 
-import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,8 +8,6 @@ import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.os.Build;
-import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
@@ -22,6 +18,8 @@ import java.io.FileOutputStream;
  */
 public class BitmapUtil {
 	private static final String TAG = BitmapUtil.class.getSimpleName();
+
+	private BitmapUtil() {}
 
 	public static void clearCacheDir(File cacheDir) {
 		File[] files = cacheDir.listFiles();
@@ -80,10 +78,9 @@ public class BitmapUtil {
 		return null;
 	}
 
-	public static String getCacheDir(Context ctx) {
-		return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) ||!Environment.isExternalStorageRemovable() ?
-				ctx.getExternalCacheDir().getPath() : ctx.getCacheDir().getPath();
-	}
+	/**
+	 * Mirrors the given bitmap
+	 */
 
 	public static Bitmap flip(Bitmap src) {
 		Matrix m = new Matrix();
@@ -91,16 +88,6 @@ public class BitmapUtil {
 		return Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), m, false);
 	}
 
-	@TargetApi(Build.VERSION_CODES.KITKAT)
-	public static int sizeOf(Bitmap data) {
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB_MR1) {
-			return data.getRowBytes() * data.getHeight();
-		} else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-			return data.getByteCount();
-		} else {
-			return data.getAllocationByteCount();
-		}
-	}
 
 	/**
 	 *

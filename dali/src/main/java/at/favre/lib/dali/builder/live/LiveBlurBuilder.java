@@ -11,7 +11,7 @@ import at.favre.lib.dali.blur.EBlurAlgorithm;
 import at.favre.lib.dali.builder.ABuilder;
 import at.favre.lib.dali.builder.blur.BlurBuilder;
 import at.favre.lib.dali.builder.ContextWrapper;
-import at.favre.lib.dali.util.BlurUtil;
+import at.favre.lib.dali.util.BuilderUtil;
 
 /**
  * Builder for creating a {@link at.favre.lib.dali.builder.live.LiveBlurWorker}
@@ -34,7 +34,7 @@ public class LiveBlurBuilder extends ABuilder {
 		data.rootView = rootView;
 		data.viewsToBlurOnto = viewsToBlurOnto;
 		data.contextWrapper = contextWrapper;
-		data.blurAlgorithm = BlurUtil.getIBlurAlgorithm(EBlurAlgorithm.RS_GAUSS_FAST,contextWrapper);
+		data.blurAlgorithm = BuilderUtil.getIBlurAlgorithm(EBlurAlgorithm.RS_GAUSS_FAST, contextWrapper);
 		data.debugMode = debugMode;
 	}
 
@@ -48,7 +48,7 @@ public class LiveBlurBuilder extends ABuilder {
 	 * @throws java.lang.IllegalStateException if blurradius not in range [{@link at.favre.lib.dali.builder.BuilderDefaults#BLUR_RADIUS_MIN},{@link at.favre.lib.dali.builder.BuilderDefaults#BLUR_RADIUS_MAX}}
 	 */
 	public LiveBlurBuilder blurRadius(int blurRadius) {
-		BlurUtil.checkBlurRadiusPrecondition(blurRadius);
+		BuilderUtil.checkBlurRadiusPrecondition(blurRadius);
 		data.blurRadius = blurRadius;
 		return this;
 	}

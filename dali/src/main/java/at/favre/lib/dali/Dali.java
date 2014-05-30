@@ -11,20 +11,24 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import at.favre.lib.dali.builder.blur.BlurBuilder;
 import at.favre.lib.dali.builder.ContextWrapper;
 import at.favre.lib.dali.builder.ImageReference;
+import at.favre.lib.dali.builder.blur.BlurBuilder;
 import at.favre.lib.dali.builder.live.LiveBlurBuilder;
+import at.favre.lib.dali.util.Precondition;
 
 /**
  * Created by PatrickF on 26.05.2014.
  */
 public class Dali {
+	private static DiskCacheManager DISK_CACHE_MANAGER;
 
 	public static Dali create(Context ctx) {
-		return new Dali(ctx.getApplicationContext(), false);
+		return create(ctx,false);
 	}
 	public static Dali create(Context ctx, boolean debugMode) {
+		Precondition.checkNotNull("Provided context must not be null",ctx);
+		DISK_CACHE_MANAGER = new DiskCacheManager(ctx);
 		return new Dali(ctx.getApplicationContext(),debugMode);
 	}
 
@@ -38,20 +42,20 @@ public class Dali {
 	}
 
 	public BlurBuilder load(Bitmap bitmap) {
-		return new BlurBuilder(contextWrapper, new ImageReference(bitmap),debugMode);
+		return new BlurBuilder(contextWrapper, new ImageReference(bitmap),DISK_CACHE_MANAGER,debugMode);
 	}
 
 	public BlurBuilder load(int resId) {
-		return new BlurBuilder(contextWrapper, new ImageReference(resId),debugMode);
+		return new BlurBuilder(contextWrapper, new ImageReference(resId),DISK_CACHE_MANAGER,debugMode);
 	}
 
 	public BlurBuilder load(InputStream inputStream) {
-		return new BlurBuilder(contextWrapper, new ImageReference(inputStream),debugMode);
+		return new BlurBuilder(contextWrapper, new ImageReference(inputStream),DISK_CACHE_MANAGER,debugMode);
 	}
 
 	public BlurBuilder load(File file) {
 		checkFile(file);
-		return new BlurBuilder(contextWrapper, new ImageReference(file),debugMode);
+		return new BlurBuilder(contextWrapper, new ImageReference(file),DISK_CACHE_MANAGER,debugMode);
 	}
 
 	public BlurBuilder load(URI uri) {
