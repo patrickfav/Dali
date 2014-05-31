@@ -4,11 +4,13 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.view.View;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+import at.favre.lib.dali.util.BuilderUtil;
 import at.favre.lib.dali.util.LegacySDKUtil;
 
 /**
@@ -20,43 +22,55 @@ import at.favre.lib.dali.util.LegacySDKUtil;
 public class ImageReference {
 	private static final String CACHE_KEY_PREFIX = "cachekey_";
 
+	public enum SourceType {RES_ID,INPUT_STREAM,BITMAP, FILE, VIEW, UNKNOWN}
+
 	private Integer resId;
 	private InputStream inputStream;
 	private Bitmap bitmap;
 	private File fileToBitmap;
+	private View view;
 
 	private String contentId;
+	private SourceType type = SourceType.UNKNOWN;
 
 	private BitmapFactory.Options decoderOptions;
 
 	public ImageReference(int resId) {
 		this.resId = resId;
 		this.contentId = "resid_"+resId;
+		this.type=SourceType.RES_ID;
 	}
 
 	public ImageReference(InputStream inputStream) {
-		this.inputStream = inputStream;
-		this.contentId = String.valueOf(inputStream.hashCode());
+		this(inputStream, String.valueOf(inputStream.hashCode()));
 	}
 
 	public ImageReference(InputStream inputStream, String cacheKey) {
 		this.inputStream = inputStream;
 		this.contentId = CACHE_KEY_PREFIX+cacheKey;
+		this.type=SourceType.INPUT_STREAM;
 	}
 
 	public ImageReference(Bitmap bitmap) {
-		this.bitmap = bitmap;
-		this.contentId = LegacySDKUtil.getBitmapId(bitmap);
+		this(bitmap,LegacySDKUtil.getBitmapId(bitmap));
 	}
 
 	public ImageReference(Bitmap bitmap, String cacheKey) {
 		this.bitmap = bitmap;
 		this.contentId = CACHE_KEY_PREFIX+cacheKey;
+		this.type=SourceType.BITMAP;
 	}
 
 	public ImageReference(File fileToBitmap) {
 		this.fileToBitmap = fileToBitmap;
 		this.contentId = "file_"+fileToBitmap.getAbsolutePath();
+		this.type=SourceType.FILE;
+	}
+
+	public ImageReference(View view) {
+		this.view = view;
+		this.contentId = "view_"+view.hashCode();
+		this.type=SourceType.VIEW;
 	}
 
 	public void setDecoderOptions(BitmapFactory.Options decoderOptions) {
@@ -109,6 +123,18 @@ public class ImageReference {
 			return BitmapFactory.decodeFile(fileToBitmap.getAbsolutePath(), decoderOptions);
 		} else if(inputStream != null) {
 			return BitmapFactory.decodeStream(inputStream, null,decoderOptions);
+		} else if(view != null) {
+			int downSample = 1;
+			Bitmap.Config config = Bitmap.Config.ARGB_8888;
+			if(decoderOptions != null) {
+				if(decoderOptions.inSampleSize > 1) {
+					downSample = decoderOptions.inSampleSize;
+				}
+				if(decoderOptions.inPreferredConfig != null) {
+					config = decoderOptions.inPreferredConfig;
+				}
+			}
+			return BuilderUtil.drawViewToBitmap(bitmap,view,downSample,config);
 		}
 		throw new IllegalStateException("No image resource was set");
 	}
@@ -133,13 +159,38 @@ public class ImageReference {
 			BitmapFactory.decodeFile(fileToBitmap.getAbsolutePath(), justBoundsOptions);
 		} else if(inputStream != null) {
 			BitmapFactory.decodeStream(inputStream, null,justBoundsOptions);
-			try {
-				inputStream.reset();
-			} catch (IOException e) {}
+			try {inputStream.reset();} catch (IOException e) {}
+		} else if(view != null) {
+			return new Point(view.getWidth(),view.getHeight());
 		}
 		return new Point(justBoundsOptions.outWidth,justBoundsOptions.outHeight);
 	}
 
 
+	/**
+	 * Returns the readable type of source data (eg. view, bitmap, file, etc.)
+	 */
+	public SourceType getSourceType() {
+		return type;
+	}
 
+	public Integer getResId() {
+		return resId;
+	}
+
+	public InputStream getInputStream() {
+		return inputStream;
+	}
+
+	public Bitmap getBitmap() {
+		return bitmap;
+	}
+
+	public File getFileToBitmap() {
+		return fileToBitmap;
+	}
+
+	public View getView() {
+		return view;
+	}
 }

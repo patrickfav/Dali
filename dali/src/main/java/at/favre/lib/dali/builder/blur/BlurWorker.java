@@ -4,22 +4,27 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 
 import java.util.concurrent.Callable;
+import java.util.concurrent.Semaphore;
 
 import at.favre.lib.dali.Dali;
+import at.favre.lib.dali.builder.ImageReference;
 import at.favre.lib.dali.builder.PerformanceProfiler;
+import at.favre.lib.dali.builder.exception.BlurWorkerException;
 import at.favre.lib.dali.builder.processor.IBitmapProcessor;
 import at.favre.lib.dali.util.BenchmarkUtil;
 import at.favre.lib.dali.util.BuilderUtil;
 import at.favre.lib.dali.util.LegacySDKUtil;
 
 /**
- * Created by PatrickF on 26.05.2014.
+ * This is the worker thread for a the {@link at.favre.lib.dali.builder.blur.BlurBuilder}. It
+ * contains all the business logic for processing the image.
+ *
  */
 public class BlurWorker implements Callable<BlurWorker.Result> {
 	private final static String TAG = BlurWorker.class.getSimpleName();
 
 	private BlurBuilder.BlurData builderData;
-
+	private final Semaphore semaphore = new Semaphore(0,true);
 	public BlurWorker(BlurBuilder.BlurData builderData) {
 		this.builderData = builderData;
 	}
@@ -35,73 +40,104 @@ public class BlurWorker implements Callable<BlurWorker.Result> {
 
 	public Bitmap process() {
 		PerformanceProfiler profiler = new PerformanceProfiler("blur image", Dali.getConfig().debugMode);
+		try {
+			final String cacheKey = BuilderUtil.getCacheKey(builderData);
 
-		final String cacheKey = BuilderUtil.getCacheKey(builderData);
-
-		if(builderData.shouldCache) {
-			profiler.startTask(-2, "cache lookup (key:" + cacheKey + ")");
-			Bitmap cache = builderData.diskCacheManager.get(cacheKey);
-			profiler.endTask(-2,cache == null ? "miss":"hit");
-			if(cache != null) {
-				profiler.printResultToLog();
-				return cache;
+			if (builderData.shouldCache) {
+				profiler.startTask(-3, "cache lookup (key:" + cacheKey + ")");
+				Bitmap cache = builderData.diskCacheManager.get(cacheKey);
+				profiler.endTask(-3, cache == null ? "miss" : "hit");
+				if (cache != null) {
+					profiler.printResultToLog();
+					return cache;
+				}
 			}
+
+			if (builderData.imageReference.getSourceType().equals(ImageReference.SourceType.VIEW)) {
+				profiler.startTask(-2, "wait for view to be measured");
+//				BuilderUtil.logVerbose(TAG,"start thread",Dali.getConfig().debugMode);
+//				View v = builderData.imageReference.getView();
+//				BuilderUtil.logVerbose(TAG,"start thread 2",Dali.getConfig().debugMode);
+//				v.post(new WaitForMeasurement(semaphore));
+//				BuilderUtil.logVerbose(TAG,"start thread 3",Dali.getConfig().debugMode);
+//
+//				BuilderUtil.logVerbose(TAG,"aquire lock for waiting for the view to be measured",Dali.getConfig().debugMode);
+//				semaphore.acquire();
+//				BuilderUtil.logVerbose(TAG,"view seems measured, lock was released",Dali.getConfig().debugMode);
+				profiler.endTask(-2);
+			}
+
+			int width = 0, height = 0;
+			if (builderData.options.inSampleSize > 1 && builderData.rescaleIfDownscaled) {
+				profiler.startTask(-1, "measure image");
+				Point p = builderData.imageReference.measureImage(builderData.contextWrapper.getResources());
+				width = p.x;
+				height = p.y;
+				profiler.endTask(-1, height + "x" + width);
+			}
+
+			profiler.startTask(0, "load image");
+			builderData.imageReference.setDecoderOptions(builderData.options);
+			Bitmap bitmapToWorkWith = builderData.imageReference.synchronouslyLoadBitmap(builderData.contextWrapper.getResources());
+			profiler.endTask(0, "source: " + builderData.imageReference.getSourceType() + ", insample: " + builderData.options.inSampleSize + ", height:" + bitmapToWorkWith.getHeight() + ", width:" + bitmapToWorkWith.getWidth() + ", memory usage " + BenchmarkUtil.getScalingUnitByteSize(LegacySDKUtil.byteSizeOf(bitmapToWorkWith)));
+
+			if (builderData.copyBitmapBeforeBlur) {
+				profiler.startTask(1, "copy bitmap");
+				bitmapToWorkWith = bitmapToWorkWith.copy(bitmapToWorkWith.getConfig(), true);
+				profiler.endTask(1);
+			}
+
+			int profileIdPreProcessor = 100;
+			for (IBitmapProcessor postProcessor : builderData.preProcessors) {
+				profiler.startTask(profileIdPreProcessor, postProcessor.getProcessorTag());
+				bitmapToWorkWith = postProcessor.manipulate(bitmapToWorkWith);
+				profiler.endTask(profileIdPreProcessor++);
+			}
+
+			profiler.startTask(10000, "blur with radius " + builderData.blurRadius + "px (" + builderData.blurRadius * builderData.options.inSampleSize + "spx) and algorithm " + builderData.blurAlgorithm.getClass().getSimpleName());
+			bitmapToWorkWith = builderData.blurAlgorithm.blur(builderData.blurRadius, bitmapToWorkWith);
+			profiler.endTask(10000);
+
+			int profileIdPostProcessor = 20000;
+			for (IBitmapProcessor postProcessor : builderData.postProcessors) {
+				profiler.startTask(profileIdPostProcessor, postProcessor.getProcessorTag());
+				bitmapToWorkWith = postProcessor.manipulate(bitmapToWorkWith);
+				profiler.endTask(profileIdPostProcessor++);
+			}
+
+			if (builderData.options.inSampleSize > 1 && builderData.rescaleIfDownscaled && height > 0 && width > 0) {
+				profiler.startTask(40000, "rescale to " + height + "x" + width);
+				bitmapToWorkWith = Bitmap.createScaledBitmap(bitmapToWorkWith, width, height, false);
+				profiler.endTask(40000);
+			}
+
+			if (builderData.shouldCache) {
+				profiler.startTask(40001, "async try to disk cache");
+				Dali.getExecutorManager().executeOnFireAndForgetThreadPool(new AddToCacheTask(bitmapToWorkWith, builderData, cacheKey));
+				profiler.endTask(40001);
+			}
+
+
+			return bitmapToWorkWith;
+		}catch (Throwable t) {
+			throw new BlurWorkerException(t);
+		} finally {
+			profiler.printResultToLog();
+		}
+	}
+
+	public static class WaitForMeasurement implements Runnable {
+		private Semaphore lock;
+
+		public WaitForMeasurement(Semaphore lock) {
+			this.lock = lock;
 		}
 
-		int width=0,height=0;
-		if(builderData.options.inSampleSize > 1 && builderData.rescaleIfDownscaled) {
-			profiler.startTask(-1, "measure image");
-			Point p = builderData.imageReference.measureImage(builderData.contextWrapper.getResources());
-			width = p.x;
-			height = p.y;
-			profiler.endTask(-1, height+"x"+width);
+		@Override
+		public void run() {
+			BuilderUtil.logVerbose(TAG,"in view message queue, seems measured, will unlock",Dali.getConfig().debugMode);
+			lock.release();
 		}
-
-		profiler.startTask(0, "load bitmap");
-		builderData.imageReference.setDecoderOptions(builderData.options);
-		Bitmap bitmapToWorkWith = builderData.imageReference.synchronouslyLoadBitmap(builderData.contextWrapper.getResources());
-		profiler.endTask(0, "insample: "+builderData.options.inSampleSize+", height:" + bitmapToWorkWith.getHeight() + ", width:" + bitmapToWorkWith.getWidth() + ", memory usage " + BenchmarkUtil.getScalingUnitByteSize(LegacySDKUtil.byteSizeOf(bitmapToWorkWith)));
-
-		if (builderData.copyBitmapBeforeBlur) {
-			profiler.startTask(1, "copy bitmap");
-			bitmapToWorkWith = bitmapToWorkWith.copy(bitmapToWorkWith.getConfig(), true);
-			profiler.endTask(1);
-		}
-
-		int profileIdPreProcessor = 100;
-		for (IBitmapProcessor postProcessor : builderData.preProcessors) {
-			profiler.startTask(profileIdPreProcessor, postProcessor.getProcessorTag());
-			bitmapToWorkWith = postProcessor.manipulate(bitmapToWorkWith);
-			profiler.endTask(profileIdPreProcessor++);
-		}
-
-		profiler.startTask(10000, "blur with radius " + builderData.blurRadius + " and algorithm " + builderData.blurAlgorithm.getClass().getSimpleName());
-		bitmapToWorkWith = builderData.blurAlgorithm.blur(builderData.blurRadius,bitmapToWorkWith);
-		profiler.endTask(10000);
-
-		int profileIdPostProcessor = 20000;
-		for (IBitmapProcessor postProcessor : builderData.postProcessors) {
-			profiler.startTask(profileIdPostProcessor, postProcessor.getProcessorTag());
-			bitmapToWorkWith = postProcessor.manipulate(bitmapToWorkWith);
-			profiler.endTask(profileIdPostProcessor++);
-		}
-
-		if(builderData.options.inSampleSize > 1 && builderData.rescaleIfDownscaled) {
-			profiler.startTask(40000, "rescale to "+height +"x"+ width);
-			bitmapToWorkWith = Bitmap.createScaledBitmap(bitmapToWorkWith, width, height, false);
-			profiler.endTask(40000);
-		}
-
-		if(builderData.shouldCache) {
-			profiler.startTask(40001, "async try to disk cache");
-			Dali.getExecutorManager().executeOnCacheThreadPool(new AddToCacheTask(bitmapToWorkWith, builderData, cacheKey));
-			profiler.endTask(40001);
-		}
-
-		profiler.printResultToLog();
-
-
-		return bitmapToWorkWith;
 	}
 
 	public static class AddToCacheTask implements Runnable {

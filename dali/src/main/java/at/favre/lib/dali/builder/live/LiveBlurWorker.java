@@ -1,7 +1,6 @@
 package at.favre.lib.dali.builder.live;
 
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
@@ -43,7 +42,7 @@ public class LiveBlurWorker {
 			if (!isWorking.get()) {
 				isWorking.compareAndSet(false, true);
 
-				dest = drawViewToBitmap(dest, data.rootView, data.inSampleSize,data.config);
+				dest = BuilderUtil.drawViewToBitmap(dest, data.rootView, data.inSampleSize,data.config);
 
 				for (View view : data.viewsToBlurOnto) {
 					Drawable d = new BitmapDrawable(data.contextWrapper.getResources(), data.blurAlgorithm.blur(data.blurRadius,crop(dest.copy(dest.getConfig(), true), view, data.inSampleSize)));
@@ -64,35 +63,6 @@ public class LiveBlurWorker {
 		}
 		return false;
 	}
-
-	/**
-	 * Draws the given view to a canvas with the given scale (higher = smaller)
-	 * @param dest
-	 * @param view
-	 * @param downSampling
-	 * @return
-	 */
-	private static Bitmap drawViewToBitmap(Bitmap dest, View view, int downSampling, Bitmap.Config bitmapConfig) {
-		float scale = 1f / downSampling;
-		int viewWidth = view.getWidth();
-		int viewHeight = view.getHeight();
-		int bmpWidth = Math.round(viewWidth * scale);
-		int bmpHeight = Math.round(viewHeight * scale);
-
-		if (dest == null || dest.getWidth() != bmpWidth || dest.getHeight() != bmpHeight) {
-			dest = Bitmap.createBitmap(bmpWidth, bmpHeight, bitmapConfig);
-		}
-
-		Canvas c = new Canvas(dest);
-		if (downSampling > 1) {
-			c.scale(scale, scale);
-		}
-
-		view.draw(c);
-		return dest;
-	}
-
-
 
 	/**
 	 * crops the srcBmp with the canvasView bounds and returns the cropped bitmap

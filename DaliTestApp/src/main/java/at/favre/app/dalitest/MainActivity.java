@@ -19,7 +19,7 @@ public class MainActivity extends ActionBarActivity {
 		getSupportActionBar().show();
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new SimpleBlurFragment())
+                    .add(R.id.container, new LiveBlurFragment())
                     .commit();
         }
     }

@@ -105,6 +105,10 @@ public class Dali {
 		return new BlurBuilder(contextWrapper, new ImageReference(inputStream),DISK_CACHE_MANAGER);
 	}
 
+	public BlurBuilder load(View view) {
+		return new BlurBuilder(contextWrapper, new ImageReference(view),DISK_CACHE_MANAGER);
+	}
+
 	public BlurBuilder load(File file) {
 		checkFile(file);
 		return new BlurBuilder(contextWrapper, new ImageReference(file),DISK_CACHE_MANAGER);

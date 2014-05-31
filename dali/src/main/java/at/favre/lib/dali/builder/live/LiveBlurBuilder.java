@@ -9,8 +9,8 @@ import java.util.List;
 
 import at.favre.lib.dali.blur.EBlurAlgorithm;
 import at.favre.lib.dali.builder.ABuilder;
-import at.favre.lib.dali.builder.blur.BlurBuilder;
 import at.favre.lib.dali.builder.ContextWrapper;
+import at.favre.lib.dali.builder.blur.BlurBuilder;
 import at.favre.lib.dali.util.BuilderUtil;
 
 /**

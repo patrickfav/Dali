@@ -3,10 +3,13 @@ package at.favre.lib.dali.builder.blur;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Future;
 
+import at.favre.lib.dali.Dali;
 import at.favre.lib.dali.blur.EBlurAlgorithm;
 import at.favre.lib.dali.blur.IBlur;
 import at.favre.lib.dali.blur.algorithms.RenderScriptGaussianBlur;
@@ -14,6 +17,7 @@ import at.favre.lib.dali.builder.ABuilder;
 import at.favre.lib.dali.builder.ContextWrapper;
 import at.favre.lib.dali.builder.ImageReference;
 import at.favre.lib.dali.builder.TwoLevelCache;
+import at.favre.lib.dali.builder.exception.BlurWorkerException;
 import at.favre.lib.dali.builder.processor.BrightnessProcessor;
 import at.favre.lib.dali.builder.processor.ContrastProcessor;
 import at.favre.lib.dali.builder.processor.FrostGlassProcessor;
@@ -194,22 +198,35 @@ public class BlurBuilder extends ABuilder {
 		return this;
 	}
 
+	/* GETTER METHODS ************************************************************************* */
+
+	public void into(final ImageView imageView) {
+		imageView.post(new Runnable() {
+			@Override
+			public void run() {
+				imageView.setImageDrawable(get());
+			}
+		});
+	}
+
 	public BitmapDrawable get() {
 		return new BitmapDrawable(data.contextWrapper.getResources(),getAsBitmap());
 	}
 
 	public Bitmap getAsBitmap() {
-		return new BlurWorker(data).process();
+		Future<BlurWorker.Result> result = Dali.getExecutorManager().submitThreadPool(new BlurWorker(data));
+		try {
+			BlurWorker.Result r = result.get();
+
+			if(r.isError()) {
+				throw new BlurWorkerException(r.getThrowable());
+			} else {
+				return r.getBitmap();
+			}
+		} catch (Exception e) {
+			throw new BlurWorkerException("Could not get bitmap from future",e);
+		}
 	}
-
-
-
-	/* INTERNAL METHODS ************************************************************************* */
-
-	protected String getCacheKey() {
-		return BuilderUtil.getCacheKey(data);
-	}
-
 
 	public interface TaskFinishedListener {
 		public void onBitmapReady(Bitmap manipulatedBitmap);

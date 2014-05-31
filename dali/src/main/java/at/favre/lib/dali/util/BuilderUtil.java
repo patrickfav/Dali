@@ -1,8 +1,11 @@
 package at.favre.lib.dali.util;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.support.v8.renderscript.RenderScript;
 import android.util.Log;
+import android.view.View;
 
 import java.security.MessageDigest;
 
@@ -112,6 +115,33 @@ public class BuilderUtil {
 			} while (two_halfs++ < 1);
 		}
 		return buf.toString();
+	}
+
+	/**
+	 * Draws the given view to a canvas with the given scale (higher = smaller)
+	 * @param dest
+	 * @param view
+	 * @param downSampling
+	 * @return
+	 */
+	public static Bitmap drawViewToBitmap(Bitmap dest, View view, int downSampling, Bitmap.Config bitmapConfig) {
+		float scale = 1f / downSampling;
+		int viewWidth = view.getWidth();
+		int viewHeight = view.getHeight();
+		int bmpWidth = Math.round(viewWidth * scale);
+		int bmpHeight = Math.round(viewHeight * scale);
+
+		if (dest == null || dest.getWidth() != bmpWidth || dest.getHeight() != bmpHeight) {
+			dest = Bitmap.createBitmap(bmpWidth, bmpHeight, bitmapConfig);
+		}
+
+		Canvas c = new Canvas(dest);
+		if (downSampling > 1) {
+			c.scale(scale, scale);
+		}
+
+		view.draw(c);
+		return dest;
 	}
 
 	public static void logDebug(String tag, String msg, boolean shouldLog) {
