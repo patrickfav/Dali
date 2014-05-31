@@ -116,4 +116,26 @@ public class BitmapUtil {
 
 		return ret;
 	}
+
+
+	public static int getInSampleSizeFromScale(float scale, boolean keepPowOfTwo) {
+		int insample = 1;
+		float scaleThreshold = 1.f;
+
+		while(scaleThreshold >= scale) {
+			if(keepPowOfTwo) {
+				insample *= 2;
+			} else {
+				insample += 1;
+			}
+
+			scaleThreshold = scaleThreshold / insample;
+		}
+
+		if(keepPowOfTwo) {
+			return insample / 2;
+		} else {
+			return insample - 1;
+		}
+	}
 }

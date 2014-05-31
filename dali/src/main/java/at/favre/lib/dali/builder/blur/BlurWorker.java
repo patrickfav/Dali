@@ -2,8 +2,10 @@ package at.favre.lib.dali.builder.blur;
 
 import android.graphics.Bitmap;
 import android.graphics.Point;
-import android.os.Handler;
 
+import java.util.concurrent.Callable;
+
+import at.favre.lib.dali.Dali;
 import at.favre.lib.dali.builder.PerformanceProfiler;
 import at.favre.lib.dali.builder.processor.IBitmapProcessor;
 import at.favre.lib.dali.util.BenchmarkUtil;
@@ -13,32 +15,30 @@ import at.favre.lib.dali.util.LegacySDKUtil;
 /**
  * Created by PatrickF on 26.05.2014.
  */
-public class BlurWorker implements Runnable {
+public class BlurWorker implements Callable<BlurWorker.Result> {
 	private final static String TAG = BlurWorker.class.getSimpleName();
 
 	private BlurBuilder.BlurData builderData;
-	private BlurBuilder.TaskFinishedListener listener;
 
-	public BlurWorker(BlurBuilder.BlurData builderData,BlurBuilder.TaskFinishedListener listener) {
+	public BlurWorker(BlurBuilder.BlurData builderData) {
 		this.builderData = builderData;
-		this.listener = listener;
 	}
 
 	@Override
-	public void run() {
+	public Result call() {
 		try {
-			listener.onBitmapReady(process());
+			return new Result(process());
 		} catch (Throwable t) {
-			listener.onError(t);
+			return new Result(t);
 		}
 	}
 
 	public Bitmap process() {
-		PerformanceProfiler profiler = new PerformanceProfiler("blur image",builderData.debugMode);
+		PerformanceProfiler profiler = new PerformanceProfiler("blur image", Dali.getConfig().debugMode);
 
 		final String cacheKey = BuilderUtil.getCacheKey(builderData);
 
-		if(builderData.shouldDiskCache) {
+		if(builderData.shouldCache) {
 			profiler.startTask(-2, "cache lookup (key:" + cacheKey + ")");
 			Bitmap cache = builderData.diskCacheManager.get(cacheKey);
 			profiler.endTask(-2,cache == null ? "miss":"hit");
@@ -92,9 +92,9 @@ public class BlurWorker implements Runnable {
 			profiler.endTask(40000);
 		}
 
-		if(builderData.shouldDiskCache) {
+		if(builderData.shouldCache) {
 			profiler.startTask(40001, "async try to disk cache");
-			new Handler().post(new CacheTask(bitmapToWorkWith,builderData,cacheKey));
+			Dali.getExecutorManager().executeOnCacheThreadPool(new AddToCacheTask(bitmapToWorkWith, builderData, cacheKey));
 			profiler.endTask(40001);
 		}
 
@@ -104,12 +104,12 @@ public class BlurWorker implements Runnable {
 		return bitmapToWorkWith;
 	}
 
-	public static class CacheTask implements Runnable {
+	public static class AddToCacheTask implements Runnable {
 		private Bitmap bitmap;
 		private BlurBuilder.BlurData data;
 		private String cacheKey;
 
-		public CacheTask(Bitmap bitmap, BlurBuilder.BlurData data, String cacheKey) {
+		public AddToCacheTask(Bitmap bitmap, BlurBuilder.BlurData data, String cacheKey) {
 			this.bitmap = bitmap;
 			this.data = data;
 			this.cacheKey = cacheKey;
@@ -117,28 +117,33 @@ public class BlurWorker implements Runnable {
 
 		@Override
 		public void run() {
-			data.diskCacheManager.putBitmap(bitmap,cacheKey);
+			data.diskCacheManager.putInCache(bitmap, cacheKey);
 		}
 	}
 
-	private int getInSampleSizeFromScale(float scale, boolean keepPowOfTwo) {
-		int insample = 1;
-		float scaleThreshold = 1.f;
+	public static class Result {
+		private Bitmap bitmap;
+		private Throwable throwable;
 
-		while(scaleThreshold >= scale) {
-			if(keepPowOfTwo) {
-				insample *= 2;
-			} else {
-				insample += 1;
-			}
-
-			scaleThreshold = scaleThreshold / insample;
+		public Result(Bitmap bitmap) {
+			this.bitmap = bitmap;
 		}
 
-		if(keepPowOfTwo) {
-			return insample / 2;
-		} else {
-			return insample - 1;
+		public Result(Throwable t) {
+			this.throwable = t;
+		}
+
+		public Bitmap getBitmap() {
+			return bitmap;
+		}
+
+		public Throwable getThrowable() {
+			return throwable;
+		}
+
+		public boolean isError() {
+			return throwable != null;
 		}
 	}
+
 }

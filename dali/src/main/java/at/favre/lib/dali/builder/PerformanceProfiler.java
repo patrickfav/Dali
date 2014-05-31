@@ -8,7 +8,9 @@ import java.util.List;
 import at.favre.lib.dali.util.BenchmarkUtil;
 
 /**
- * Created by PatrickF on 26.05.2014.
+ * A simple Profiler that helps in measuring parts of code.
+ *
+ * This will use nano seconds (if possible with SDK)
  */
 public class PerformanceProfiler {
 	private final static String TAG = PerformanceProfiler.class.getSimpleName();
@@ -32,6 +34,11 @@ public class PerformanceProfiler {
 		this.isActivated = isActivated;
 	}
 
+	/**
+	 * Start a task. The id is needed to end the task
+	 * @param id
+	 * @param taskName
+	 */
 	public void startTask(int id, String taskName) {
 		if(isActivated) {
 			durations.add(new Duration(id, taskName, BenchmarkUtil.elapsedRealTimeNanos()));
@@ -57,21 +64,36 @@ public class PerformanceProfiler {
 		}
 	}
 
+	/**
+	 * Returns the duration of the measured tasks in ms
+	 */
+	public double getDurationMs() {
+		double durationMs = 0;
+		for (Duration duration : durations) {
+			if(duration.taskFinished()) {
+				durationMs += duration.getDurationMS();
+			}
+		}
+		return durationMs;
+	}
+
 	public void printResultToLog(String tag) {
 		if(isActivated) {
-			Log.d(tag, "Log profile for task " + description);
+			StringBuilder sb = new StringBuilder("->\nLog profile for task " + description+" - "+ BenchmarkUtil.formatNum(getDurationMs(),"0.##")+"ms\n----------------------------------------\n");
 			for (Duration duration : durations) {
-				String logMsg = duration.getTaskDescription();
+				String logMsg = " * "+duration.getTaskDescription();
 				if(duration.getAdditionalInfo() != null && !duration.getAdditionalInfo().isEmpty()) {
 					logMsg += " / "+duration.getAdditionalInfo();
 				}
 				if(duration.taskFinished()) {
-					logMsg += " - " + duration.getDuration() / 1000000l + "ms";
+					logMsg += " - " + BenchmarkUtil.formatNum(duration.getDurationMS(),"0.##") + "ms";
 				} else {
 					logMsg += " - unfinished";
 				}
-				Log.d(tag, logMsg);
+				sb.append(logMsg+"\n");
 			}
+
+			Log.d(tag, sb.toString());
 		}
 	}
 
@@ -107,6 +129,10 @@ public class PerformanceProfiler {
 
 		public long getDuration() {
 			return duration;
+		}
+
+		public double getDurationMS() {
+			return duration / 1000000d;
 		}
 
 		public boolean taskFinished() {

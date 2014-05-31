@@ -9,6 +9,7 @@ import android.view.View;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import at.favre.lib.dali.Dali;
 import at.favre.lib.dali.util.BuilderUtil;
 import at.favre.lib.dali.util.LegacySDKUtil;
 
@@ -30,12 +31,12 @@ public class LiveBlurWorker {
 	public boolean updateBlurView() {
 		try {
 			if(data.rootView == null || data.viewsToBlurOnto.isEmpty()) {
-				BuilderUtil.logDebug(TAG, "Views not set", data.debugMode);
+				BuilderUtil.logDebug(TAG, "Views not set", Dali.getConfig().debugMode);
 				return false;
 			}
 
 			if( data.viewsToBlurOnto.get(0).getWidth() == 0 || data.viewsToBlurOnto.get(0).getHeight() == 0) {
-				BuilderUtil.logDebug(TAG, "Views not ready to be blurred", data.debugMode);
+				BuilderUtil.logDebug(TAG, "Views not ready to be blurred", Dali.getConfig().debugMode);
 				return false;
 			}
 
@@ -51,7 +52,7 @@ public class LiveBlurWorker {
 				isWorking.compareAndSet(true, false);
 				return true;
 			} else {
-				BuilderUtil.logDebug(TAG, "Skip blur frame, already in blur", data.debugMode);
+				BuilderUtil.logDebug(TAG, "Skip blur frame, already in blur", Dali.getConfig().debugMode);
 			}
 		} catch (Throwable t) {
 			isWorking.set(false);

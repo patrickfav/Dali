@@ -119,4 +119,9 @@ public class BuilderUtil {
 			Log.d(tag, msg);
 		}
 	}
+	public static void logVerbose(String tag, String msg, boolean shouldLog) {
+		if(shouldLog) {
+			Log.v(tag, msg);
+		}
+	}
 }

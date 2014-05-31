@@ -41,7 +41,7 @@ public class BrightnessProcessor implements IBitmapProcessor {
 	}
 
 	private float[] createBrightnessKernel(float brightness) {
-		float kernelElement = 1.f / 9.f; //get average
+		float kernelElement = 1.f / 9.f; //getFromDiskCache average
 		kernelElement += kernelElement * (brightness / 100.f); //add or subtract from the average to brighten or darken
 		kernelElement = Math.max(Math.min(1,kernelElement),0); // normalize to max/min values
 

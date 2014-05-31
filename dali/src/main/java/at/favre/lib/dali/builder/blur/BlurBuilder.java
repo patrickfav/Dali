@@ -7,13 +7,13 @@ import android.graphics.drawable.BitmapDrawable;
 import java.util.ArrayList;
 import java.util.List;
 
-import at.favre.lib.dali.DiskCacheManager;
 import at.favre.lib.dali.blur.EBlurAlgorithm;
 import at.favre.lib.dali.blur.IBlur;
 import at.favre.lib.dali.blur.algorithms.RenderScriptGaussianBlur;
 import at.favre.lib.dali.builder.ABuilder;
 import at.favre.lib.dali.builder.ContextWrapper;
 import at.favre.lib.dali.builder.ImageReference;
+import at.favre.lib.dali.builder.TwoLevelCache;
 import at.favre.lib.dali.builder.processor.BrightnessProcessor;
 import at.favre.lib.dali.builder.processor.ContrastProcessor;
 import at.favre.lib.dali.builder.processor.FrostGlassProcessor;
@@ -32,21 +32,20 @@ public class BlurBuilder extends ABuilder {
 		public BitmapFactory.Options options = new BitmapFactory.Options();
 		public boolean copyBitmapBeforeBlur = false;
 		public boolean rescaleIfDownscaled = false;
-		public boolean shouldDiskCache = true;
+		public boolean shouldCache = true;
 		public ImageReference imageReference;
 		public ContextWrapper contextWrapper;
 		public List<IBitmapProcessor> preProcessors = new ArrayList<IBitmapProcessor>();
 		public List<IBitmapProcessor> postProcessors = new ArrayList<IBitmapProcessor>();
-		public DiskCacheManager diskCacheManager;
+		public TwoLevelCache diskCacheManager;
 	}
 
-	public BlurBuilder(ContextWrapper contextWrapper, ImageReference imageReference, DiskCacheManager diskCacheManager, boolean debugMode) {
+	public BlurBuilder(ContextWrapper contextWrapper, ImageReference imageReference, TwoLevelCache diskCacheManager) {
 		data = new BlurData();
 		data.imageReference = imageReference;
 		data.contextWrapper = contextWrapper;
 		data.blurAlgorithm = new RenderScriptGaussianBlur(data.contextWrapper.getRenderScript());
 		data.diskCacheManager = diskCacheManager;
-		data.debugMode = debugMode;
 	}
 
 
@@ -79,8 +78,8 @@ public class BlurBuilder extends ABuilder {
 	 * performance enhancement and less memory usage
 	 * sacrificing image quality.
 	 *
-	 * @param scaleInSample value > 1 will scale the image width/height, so 2 will get you 1/4
-	 *                      of the original size and 4 will get you 1/16 of the original size - this just sets
+	 * @param scaleInSample value > 1 will scale the image width/height, so 2 will getFromDiskCache you 1/4
+	 *                      of the original size and 4 will getFromDiskCache you 1/16 of the original size - this just sets
 	 *                      the inSample size in {@link android.graphics.BitmapFactory.Options#inSampleSize } and
 	 *                      behaves exactly the same, so keep the value 2^n for least scaling artifacts
 	 */
@@ -166,7 +165,7 @@ public class BlurBuilder extends ABuilder {
 	 *
 	 * NOTE: this probably never is necessary to do except for testing purpose, the default
 	 * algorithm, which uses Android's {@link android.support.v8.renderscript.ScriptIntrinsicBlur}
-	 * which is the best and fastest you get on Android suffices in nearly every situation
+	 * which is the best and fastest you getFromDiskCache on Android suffices in nearly every situation
 	 *
 	 * @param algorithm
 	 */
@@ -187,11 +186,11 @@ public class BlurBuilder extends ABuilder {
 	}
 
 	/**
-	 * Skips the disk cache (lookup & save).
+	 * Skips the cache (lookup & save).
 	 * Use this if you only use this image once.
 	 */
-	public BlurBuilder skipDiskCache() {
-		data.shouldDiskCache = false;
+	public BlurBuilder skipCache() {
+		data.shouldCache = false;
 		return this;
 	}
 
@@ -200,8 +199,10 @@ public class BlurBuilder extends ABuilder {
 	}
 
 	public Bitmap getAsBitmap() {
-		return new BlurWorker(data,null).process();
+		return new BlurWorker(data).process();
 	}
+
+
 
 	/* INTERNAL METHODS ************************************************************************* */
 

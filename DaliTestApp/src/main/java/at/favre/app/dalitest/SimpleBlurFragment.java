@@ -22,7 +22,7 @@ public class SimpleBlurFragment extends Fragment{
 							 Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-		Dali dali = Dali.create(getActivity(),true);
+		Dali dali = Dali.create(getActivity());
 
 		final ImageView iv = (ImageView) rootView.findViewById(R.id.image);
 		iv.setImageDrawable(dali.load(R.drawable.test_img1).blurRadius(24).get());

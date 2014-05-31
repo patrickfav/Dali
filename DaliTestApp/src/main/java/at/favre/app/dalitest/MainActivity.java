@@ -5,11 +5,15 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import at.favre.lib.dali.Dali;
+
 
 public class MainActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+		Dali.setDebugMode(true);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 		getSupportActionBar().show();

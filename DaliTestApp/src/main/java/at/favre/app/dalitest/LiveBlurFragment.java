@@ -56,7 +56,7 @@ public class LiveBlurFragment extends Fragment{
 		topBlurView = v.findViewById(R.id.topBlurView);
 		bottomBlurView = v.findViewById(R.id.bottomBlurView);
 
-		blurWorker = Dali.create(getActivity(),true).liveBlur(templateView,topBlurView,bottomBlurView).downSample(8).assemble(true);
+		blurWorker = Dali.create(getActivity()).liveBlur(templateView,topBlurView,bottomBlurView).downSample(8).assemble(true);
 
 		mPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 			@Override

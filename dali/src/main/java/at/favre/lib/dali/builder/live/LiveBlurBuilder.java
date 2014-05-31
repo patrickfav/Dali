@@ -29,13 +29,12 @@ public class LiveBlurBuilder extends ABuilder {
 		public Bitmap.Config config = Bitmap.Config.ARGB_8888;
 	}
 
-	public LiveBlurBuilder(ContextWrapper contextWrapper, View rootView, List<View> viewsToBlurOnto, boolean debugMode) {
+	public LiveBlurBuilder(ContextWrapper contextWrapper, View rootView, List<View> viewsToBlurOnto) {
 		data = new LiveBlurData();
 		data.rootView = rootView;
 		data.viewsToBlurOnto = viewsToBlurOnto;
 		data.contextWrapper = contextWrapper;
 		data.blurAlgorithm = BuilderUtil.getIBlurAlgorithm(EBlurAlgorithm.RS_GAUSS_FAST, contextWrapper);
-		data.debugMode = debugMode;
 	}
 
 	public LiveBlurBuilder downSample(int inSampleSize) {
