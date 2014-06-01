@@ -1,4 +1,4 @@
-package at.favre.app.dalitest;
+package at.favre.app.dalitest.fragment;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import at.favre.app.dalitest.R;
 import at.favre.lib.dali.Dali;
 import at.favre.lib.dali.builder.ImageReference;
 import at.favre.lib.dali.builder.animation.BlurAnimation;
@@ -25,7 +26,7 @@ public class SimpleAnimationFragment extends Fragment{
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_simple_blur, container, false);
 
 		final ImageView iv = (ImageView) rootView.findViewById(R.id.image);
 		iv.setImageDrawable(Dali.create(getActivity()).load(R.drawable.test_img1).blurRadius(24).get());

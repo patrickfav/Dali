@@ -1,4 +1,4 @@
-package at.favre.app.dalitest;
+package at.favre.app.dalitest.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,6 +18,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import at.favre.app.dalitest.R;
 import at.favre.lib.dali.Dali;
 import at.favre.lib.dali.builder.live.LiveBlurWorker;
 import at.favre.lib.dali.view.ObservableScrollView;
@@ -72,20 +73,6 @@ public class LiveBlurFragment extends Fragment{
 			public void onPageScrollStateChanged(int state) {
 			}
 		});
-
-//		mPager.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-//
-//			@Override
-//			public boolean onPreDraw() {
-//				return true;
-//			}
-//		});
-//
-//		mPager.setOnDrawListener(new Observers.DrawListener() {
-//			@Override
-//			public void onDraw(Canvas canvas) {
-//			}
-//		});
 
 		return v;
 	}

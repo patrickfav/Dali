@@ -1,4 +1,4 @@
-package at.favre.app.dalitest;
+package at.favre.app.dalitest.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import at.favre.app.dalitest.R;
 import at.favre.lib.dali.Dali;
 
 /**
