@@ -3,6 +3,7 @@ package at.favre.lib.dali.builder.blur;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 
+import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Semaphore;
 
@@ -22,6 +23,9 @@ import at.favre.lib.dali.util.LegacySDKUtil;
  */
 public class BlurWorker implements Callable<BlurWorker.Result> {
 	private final static String TAG = BlurWorker.class.getSimpleName();
+
+	private final String id = UUID.randomUUID().toString();
+	private String tag;
 
 	private BlurBuilder.BlurData builderData;
 	private final Semaphore semaphore = new Semaphore(0,true);
@@ -51,6 +55,8 @@ public class BlurWorker implements Callable<BlurWorker.Result> {
 					profiler.printResultToLog();
 					return cache;
 				}
+			} else {
+				builderData.diskCacheManager.purge(cacheKey);
 			}
 
 			if (builderData.imageReference.getSourceType().equals(ImageReference.SourceType.VIEW)) {
@@ -124,6 +130,18 @@ public class BlurWorker implements Callable<BlurWorker.Result> {
 		} finally {
 			profiler.printResultToLog();
 		}
+	}
+
+	public String getTag() {
+		return tag;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setTag(String tag) {
+		this.tag = tag;
 	}
 
 	public static class WaitForMeasurement implements Runnable {

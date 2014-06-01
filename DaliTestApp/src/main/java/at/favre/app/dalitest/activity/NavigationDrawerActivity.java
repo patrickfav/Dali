@@ -1,7 +1,7 @@
 package at.favre.app.dalitest.activity;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -15,13 +15,14 @@ import java.util.List;
 
 import at.favre.app.dalitest.R;
 import at.favre.app.dalitest.fragment.LiveBlurFragment;
+import at.favre.lib.dali.builder.nav.DaliBlurDrawerToggle;
 
 
 public class NavigationDrawerActivity extends ActionBarActivity {
 
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
-	private ActionBarDrawerToggle mDrawerToggle;
+	private DaliBlurDrawerToggle mDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,7 @@ public class NavigationDrawerActivity extends ActionBarActivity {
 
 
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+//		mDrawerLayout.setScrimColor(getResources().getColor(R.color.bright_blue_transparent));
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
 		// Set the adapter for the list view
@@ -52,26 +54,42 @@ public class NavigationDrawerActivity extends ActionBarActivity {
 
 		final String mTitle = getTitle().toString();
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+		mDrawerToggle = new DaliBlurDrawerToggle(this, mDrawerLayout,
 				R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close) {
 
 			/** Called when a drawer has settled in a completely closed state. */
 			public void onDrawerClosed(View view) {
 				super.onDrawerClosed(view);
-				getActionBar().setTitle(mTitle);
+				getSupportActionBar().setTitle(mTitle);
 				invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
 			}
 
 			/** Called when a drawer has settled in a completely open state. */
 			public void onDrawerOpened(View drawerView) {
 				super.onDrawerOpened(drawerView);
-				getActionBar().setTitle(mTitle);
+				getSupportActionBar().setTitle(mTitle);
 				invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
 			}
 		};
-
+		mDrawerToggle.setDrawerIndicatorEnabled(true);
 		// Set the drawer toggle as the DrawerListener
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setHomeButtonEnabled(true);
+	}
+
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		// Sync the toggle state after onRestoreInstanceState has occurred.
+		mDrawerToggle.syncState();
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 
 	/* Called whenever we call invalidateOptionsMenu() */

@@ -7,6 +7,7 @@ import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.Future;
 
 import at.favre.lib.dali.Dali;
@@ -42,6 +43,7 @@ public class BlurBuilder extends ABuilder {
 		public List<IBitmapProcessor> preProcessors = new ArrayList<IBitmapProcessor>();
 		public List<IBitmapProcessor> postProcessors = new ArrayList<IBitmapProcessor>();
 		public TwoLevelCache diskCacheManager;
+		public String tag = UUID.randomUUID().toString();
 	}
 
 	public BlurBuilder(ContextWrapper contextWrapper, ImageReference imageReference, TwoLevelCache diskCacheManager) {
@@ -190,23 +192,33 @@ public class BlurBuilder extends ABuilder {
 	}
 
 	/**
-	 * Skips the cache (lookup & save).
-	 * Use this if you only use this image once.
+	 * Skips the cache (lookup & save). This will also delete all
+	 * saved caches for this configuration. Use this if you only
+	 * use this image once or want to purge the cache for this.
 	 */
 	public BlurBuilder skipCache() {
 		data.shouldCache = false;
 		return this;
 	}
 
+	/**
+	 * Tags this builder's worker, so it could be later canceld by {@link at.favre.lib.dali.builder.ExecutorManager#cancelByTag(String)}
+	 */
+	public BlurBuilder tag(String tag) {
+		data.tag = tag;
+		return this;
+	}
+
 	/* GETTER METHODS ************************************************************************* */
 
-	public void into(final ImageView imageView) {
+	public JobDescription into(final ImageView imageView) {
 		imageView.post(new Runnable() {
 			@Override
 			public void run() {
 				imageView.setImageDrawable(get());
 			}
 		});
+		return getJobDescription();
 	}
 
 	public BitmapDrawable get() {
@@ -214,17 +226,37 @@ public class BlurBuilder extends ABuilder {
 	}
 
 	public Bitmap getAsBitmap() {
-		Future<BlurWorker.Result> result = Dali.getExecutorManager().submitThreadPool(new BlurWorker(data));
+		Future<BlurWorker.Result> result = Dali.getExecutorManager().submitThreadPool(new BlurWorker(data),data.tag);
+		BlurWorker.Result r = null;
 		try {
-			BlurWorker.Result r = result.get();
+			r = result.get();
+		} catch (Exception e) {
+			throw new BlurWorkerException("Could not get bitmap from future",e);
+		}
 
+		if(r != null) {
 			if(r.isError()) {
 				throw new BlurWorkerException(r.getThrowable());
 			} else {
 				return r.getBitmap();
 			}
-		} catch (Exception e) {
-			throw new BlurWorkerException("Could not get bitmap from future",e);
+		}
+		throw new BlurWorkerException("result was null");
+	}
+
+	public JobDescription getJobDescription() {
+		return new JobDescription(BuilderUtil.getCacheKey(data),BuilderUtil.getBuilderDescription(data), data.tag);
+	}
+
+	public static class JobDescription {
+		public final String cacheKey;
+		public final String builderDescription;
+		public final String tag;
+
+		public JobDescription(String cacheKey, String builderDescription, String tag) {
+			this.cacheKey = cacheKey;
+			this.builderDescription = builderDescription;
+			this.tag = tag;
 		}
 	}
 

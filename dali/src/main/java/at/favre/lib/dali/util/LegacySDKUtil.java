@@ -1,11 +1,13 @@
 package at.favre.lib.dali.util;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Environment;
 import android.view.View;
+import android.widget.ImageView;
 
 /**
  * Created by PatrickF on 30.05.2014.
@@ -72,5 +74,15 @@ public class LegacySDKUtil {
 	public static String getCacheDir(Context ctx) {
 		return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) ||!Environment.isExternalStorageRemovable() ?
 				ctx.getExternalCacheDir().getPath() : ctx.getCacheDir().getPath();
+	}
+
+
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+	public static void setImageAlpha(ImageView imageView, int alpha) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+			imageView.setImageAlpha(alpha);
+		} else {
+			imageView.setAlpha(alpha);
+		}
 	}
 }

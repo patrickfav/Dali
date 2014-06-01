@@ -9,11 +9,13 @@ import android.view.View;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import at.favre.lib.dali.Dali;
+import at.favre.lib.dali.builder.exception.LiveBlurWorkerException;
 import at.favre.lib.dali.util.BuilderUtil;
 import at.favre.lib.dali.util.LegacySDKUtil;
 
 /**
- * Created by PatrickF on 29.05.2014.
+ * This is contains the business logic for the live blur feature.
+ * It is optimized to reuse resources for fast and continuous reblurring.
  */
 public class LiveBlurWorker {
 	private final static String TAG = LiveBlurWorker.class.getSimpleName();
@@ -28,6 +30,7 @@ public class LiveBlurWorker {
 	}
 
 	public boolean updateBlurView() {
+		BuilderUtil.checkIfOnUiThread();
 		try {
 			if(data.rootView == null || data.viewsToBlurOnto.isEmpty()) {
 				BuilderUtil.logDebug(TAG, "Views not set", Dali.getConfig().debugMode);
@@ -58,7 +61,7 @@ public class LiveBlurWorker {
 			if(data.silentFail) {
 				Log.e(TAG,"Could not create blur view",t);
 			} else {
-				throw new RuntimeException("Error while updating the live blur",t);
+				throw new LiveBlurWorkerException("Error while updating the live blur",t);
 			}
 		}
 		return false;
@@ -77,8 +80,4 @@ public class LiveBlurWorker {
 				(int) Math.floor((canvasView.getHeight())*scale)
 		);
 	}
-
-
-
-
 }

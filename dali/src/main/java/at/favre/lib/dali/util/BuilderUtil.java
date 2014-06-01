@@ -3,6 +3,7 @@ package at.favre.lib.dali.util;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.os.Looper;
 import android.support.v8.renderscript.RenderScript;
 import android.util.Log;
 import android.view.View;
@@ -71,26 +72,30 @@ public class BuilderUtil {
 		}
 	}
 
-	public static String getCacheKey(BlurBuilder.BlurData data) {
+	public static String getBuilderDescription(BlurBuilder.BlurData data) {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(data.imageReference.getContentId()+"+");
-		sb.append(data.blurRadius+"+");
-		sb.append(data.blurAlgorithm.getClass().getSimpleName()+"+");
-		sb.append(data.rescaleIfDownscaled+"+");
+		sb.append(data.imageReference.getContentId()+", ");
+		sb.append("radius: "+data.blurRadius+", ");
+		sb.append(data.blurAlgorithm.getClass().getSimpleName()+", ");
+		sb.append("rescaleIfDownScale: "+data.rescaleIfDownscaled+", ");
 
 		for (IBitmapProcessor preProcessor : data.preProcessors) {
-			sb.append(preProcessor.getProcessorTag()+"+");
+			sb.append(preProcessor.getProcessorTag()+", ");
 		}
 		for (IBitmapProcessor postProcessor : data.postProcessors) {
-			sb.append(postProcessor.getProcessorTag()+"+");
+			sb.append(postProcessor.getProcessorTag()+", ");
 		}
 
 		if(data.options != null) {
-			sb.append(data.options.inSampleSize+"+");
+			sb.append("sampleSize: "+data.options.inSampleSize+", ");
 		}
 
-		return sha1Hash(sb.toString());
+		return sb.toString();
+	}
+
+	public static String getCacheKey(BlurBuilder.BlurData data) {
+		return sha1Hash(getBuilderDescription(data));
 	}
 
 	public static String sha1Hash(String text) {
@@ -152,6 +157,12 @@ public class BuilderUtil {
 	public static void logVerbose(String tag, String msg, boolean shouldLog) {
 		if(shouldLog) {
 			Log.v(tag, msg);
+		}
+	}
+
+	public static void checkIfOnUiThread() {
+		if (Looper.myLooper() != Looper.getMainLooper()) {
+			throw new IllegalStateException("This method must be called from the ui thread which is "+Looper.getMainLooper()+" was called from "+Looper.myLooper()+".");
 		}
 	}
 }

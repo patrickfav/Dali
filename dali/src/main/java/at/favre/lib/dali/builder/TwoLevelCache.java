@@ -213,6 +213,31 @@ public class TwoLevelCache {
 		}
 	}
 
+	/**
+	 * Removes the value connected to the given key
+	 * from all levels of the cache. Will not throw an
+	 * exception on fail.
+	 *
+	 * @param cacheKey
+	 */
+	public void purge(String cacheKey) {
+		try {
+			if (useMemoryCache) {
+				if (memoryCache != null) {
+					memoryCache.remove(cacheKey);
+				}
+			}
+
+			if (useDiskCache) {
+				if (diskLruCache != null) {
+					diskLruCache.remove(cacheKey);
+				}
+			}
+		} catch(Exception e){
+			Log.w(TAG, "Could not remove entry in cache purge", e);
+		}
+	}
+
 
 	private static class BitmapLruMemoryCache extends LruCache<String,Bitmap> {
 

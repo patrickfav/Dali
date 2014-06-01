@@ -1,7 +1,11 @@
 package at.favre.lib.dali.blur;
 
+import android.support.v8.renderscript.RenderScript;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import at.favre.lib.dali.blur.algorithms.RenderScriptGaussianBlur;
 
 /**
  * Enum of all supported algorithms
@@ -22,4 +26,8 @@ public enum EBlurAlgorithm {
         }
         return algorithms;
     }
+
+	public static IBlur createDefaultBlur(RenderScript rs) {
+		return new RenderScriptGaussianBlur(rs);
+	}
 }
