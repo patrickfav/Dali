@@ -10,7 +10,7 @@ import android.support.v8.renderscript.ScriptIntrinsicConvolve3x3;
  * This will change the brightness of a bitmap. It utilizes
  * a convolve matrix algorithm powered by renderscript (=native & fast)
  *
- * Brightness values are from -100 to +900
+ * Brightness values are from -100 (black) to 1000 and more
  */
 public class BrightnessProcessor implements IBitmapProcessor {
 	private RenderScript rs;
@@ -41,14 +41,23 @@ public class BrightnessProcessor implements IBitmapProcessor {
 	}
 
 	private float[] createBrightnessKernel(float brightness) {
-		float kernelElement = 1.f / 9.f; //getFromDiskCache average
-		kernelElement += kernelElement * (brightness / 100.f); //add or subtract from the average to brighten or darken
-		kernelElement = Math.max(Math.min(1,kernelElement),0); // normalize to max/min values
+		float kernelElement;
+		if(brightness < 0 ) {
+			kernelElement = 1f- Math.abs(brightness) / 100f;
+		} else {
+			kernelElement = 1f + Math.abs(brightness) / 100f;
+		}
+
+		kernelElement = Math.max(Math.min(100,kernelElement),0); // normalize to max/min values
 
 		float [] brightnessKernel = new float[9];
 
 		for (int i = 0; i < 9; i++) {
-			brightnessKernel[i] = kernelElement;
+			if(i == 4) {
+				brightnessKernel[i] = kernelElement;
+			} else {
+				brightnessKernel[i] = 0;
+			}
 		}
 
 		return brightnessKernel;

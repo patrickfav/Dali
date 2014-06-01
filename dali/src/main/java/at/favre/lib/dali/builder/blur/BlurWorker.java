@@ -59,10 +59,11 @@ public class BlurWorker implements Callable<BlurWorker.Result> {
 		}
 	}
 
-	public Bitmap process() {
-		BuilderUtil.logVerbose(TAG,"Start process "+builderData.tag,Dali.getConfig().debugMode);
-
-		PerformanceProfiler profiler = new PerformanceProfiler("blur image for tag "+builderData.tag, Dali.getConfig().debugMode);
+	/**
+	 * The core process
+	 */
+	private Bitmap process() {
+		PerformanceProfiler profiler = new PerformanceProfiler("blur image task ["+builderData.tag+"] started at "+BenchmarkUtil.getCurrentTime(), Dali.getConfig().debugMode);
 		try {
 			final String cacheKey = BuilderUtil.getCacheKey(builderData);
 

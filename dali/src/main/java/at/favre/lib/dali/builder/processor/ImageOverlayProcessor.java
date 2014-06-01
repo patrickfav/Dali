@@ -13,11 +13,11 @@ import at.favre.lib.dali.R;
 /**
  * Created by PatrickF on 27.05.2014.
  */
-public class FrostGlassProcessor implements IBitmapProcessor {
+public class ImageOverlayProcessor implements IBitmapProcessor {
 	private RenderScript rs;
 	private Resources res;
 
-	public FrostGlassProcessor(RenderScript rs, Resources res) {
+	public ImageOverlayProcessor(RenderScript rs, Resources res) {
 		this.rs = rs;
 		this.res = res;
 	}

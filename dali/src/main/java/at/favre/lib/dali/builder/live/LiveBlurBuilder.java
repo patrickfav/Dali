@@ -23,7 +23,7 @@ public class LiveBlurBuilder extends ABuilder {
 
 	protected static class LiveBlurData extends ABuilder.Data {
 		public boolean silentFail=false;
-		public int inSampleSize = 8;
+		public int downSampleSize = 8;
 		public View rootView;
 		public List<View> viewsToBlurOnto;
 		public Bitmap.Config config = Bitmap.Config.ARGB_8888;
@@ -37,8 +37,8 @@ public class LiveBlurBuilder extends ABuilder {
 		data.blurAlgorithm = BuilderUtil.getIBlurAlgorithm(EBlurAlgorithm.RS_GAUSS_FAST, contextWrapper);
 	}
 
-	public LiveBlurBuilder downSample(int inSampleSize) {
-		data.inSampleSize = inSampleSize;
+	public LiveBlurBuilder downScale(int downSampleSize) {
+		data.downSampleSize = downSampleSize;
 		return this;
 	}
 

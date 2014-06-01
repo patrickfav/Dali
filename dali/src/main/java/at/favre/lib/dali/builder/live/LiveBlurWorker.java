@@ -49,10 +49,10 @@ public class LiveBlurWorker {
 			if (!isWorking.get()) {
 				isWorking.compareAndSet(false, true);
 
-				dest = BuilderUtil.drawViewToBitmap(dest, data.rootView, data.inSampleSize,data.config);
+				dest = BuilderUtil.drawViewToBitmap(dest, data.rootView, data.downSampleSize,data.config);
 
 				for (View view : data.viewsToBlurOnto) {
-					Drawable d = new BitmapDrawable(data.contextWrapper.getResources(), data.blurAlgorithm.blur(data.blurRadius,crop(dest.copy(dest.getConfig(), true), view, data.inSampleSize)));
+					Drawable d = new BitmapDrawable(data.contextWrapper.getResources(), data.blurAlgorithm.blur(data.blurRadius,crop(dest.copy(dest.getConfig(), true), view, data.downSampleSize)));
 					LegacySDKUtil.setViewBackground(view, d);
 				}
 				isWorking.compareAndSet(true, false);

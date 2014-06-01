@@ -22,7 +22,7 @@
             android:id="@+id/subtitle1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:typeface="monospace"
             android:text="Lorem ipsum"/>
 
@@ -36,7 +36,7 @@
             android:id="@+id/subtitle2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:typeface="monospace"
             android:text="Lorem ipsum"/>
 
@@ -50,7 +50,7 @@
             android:id="@+id/subtitle3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:typeface="monospace"
             android:text="Lorem ipsum"/>
 
@@ -64,7 +64,7 @@
             android:id="@+id/subtitle4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:typeface="monospace"
             android:text="Lorem ipsum"/>
     </LinearLayout>

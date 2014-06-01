@@ -13,15 +13,15 @@ public class BlurKeyFrame {
 	private final float brightness;
 	private final int duration;
 
-	public BlurKeyFrame(int inSampleSize, int blurRadius, float brightness, int duration) {
-		this.inSampleSize = inSampleSize;
+	public BlurKeyFrame(int downScaleSize, int blurRadius, float brightness, int duration) {
+		this.inSampleSize = downScaleSize;
 		this.blurRadius = blurRadius;
 		this.brightness = brightness;
 		this.duration = duration;
 	}
 
 	protected Bitmap prepareFrame(Bitmap original, Dali dali) {
-		return dali.load(original).downScale(inSampleSize).blurRadius(blurRadius).brightness(brightness).skipCache().reScaleIfDownscaled().getAsBitmap();
+		return dali.load(original).downScale(inSampleSize).blurRadius(blurRadius).brightness(brightness).reScale().getAsBitmap();
 	}
 
 	public int getDuration() {
@@ -31,7 +31,7 @@ public class BlurKeyFrame {
 	@Override
 	public String toString() {
 		return "BlurKeyFrame{" +
-				"inSampleSize=" + inSampleSize +
+				"downSampleSize=" + inSampleSize +
 				", blurRadius=" + blurRadius +
 				", brightness=" + brightness +
 				", duration=" + duration +

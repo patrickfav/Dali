@@ -17,6 +17,15 @@
         android:text="Simple Blur"/>
 
     <Button
+        android:id="@+id/btn_blur2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Simple Blur (Brightness)"/>
+
+    <Button
         android:id="@+id/btn_liveblur1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -53,5 +62,15 @@
         android:layout_marginTop="16dp"
         android:text="Navigation Drawer Blur"/>
 
+
+    <Button
+        android:id="@+id/btn_clear_cache"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:textColor="#ffcc0000"
+        android:text="Clear Cache"/>
 
 </LinearLayout>

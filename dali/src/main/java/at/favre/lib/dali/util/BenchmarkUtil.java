@@ -6,6 +6,8 @@ import android.os.SystemClock;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -64,6 +66,10 @@ public class BenchmarkUtil {
 				}
 			}
 		}
+	}
 
+	public static String getCurrentTime() {
+		SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss.SSS");
+		return sdf.format(new Date());
 	}
 }

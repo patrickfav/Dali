@@ -2,7 +2,11 @@ package at.favre.lib.dali.builder.blur;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -25,7 +29,7 @@ import at.favre.lib.dali.builder.TwoLevelCache;
 import at.favre.lib.dali.builder.exception.BlurWorkerException;
 import at.favre.lib.dali.builder.processor.BrightnessProcessor;
 import at.favre.lib.dali.builder.processor.ContrastProcessor;
-import at.favre.lib.dali.builder.processor.FrostGlassProcessor;
+import at.favre.lib.dali.builder.processor.ImageOverlayProcessor;
 import at.favre.lib.dali.builder.processor.IBitmapProcessor;
 import at.favre.lib.dali.util.BuilderUtil;
 
@@ -34,6 +38,7 @@ import at.favre.lib.dali.util.BuilderUtil;
  */
 public class BlurBuilder extends ABuilder {
 	private final static String TAG = BlurBuilder.class.getSimpleName();
+	private final static int FADE_IN_MS = 200;
 
 	private BlurData data;
 	private Handler uiThreadHandler = new Handler(Looper.getMainLooper());
@@ -50,6 +55,7 @@ public class BlurBuilder extends ABuilder {
 		public TwoLevelCache diskCacheManager;
 		public String tag = UUID.randomUUID().toString();
 		public int errorResId = R.drawable.ic_error_pic;
+		public boolean alphaFadeIn = true;
 	}
 
 	public BlurBuilder(ContextWrapper contextWrapper, ImageReference imageReference, TwoLevelCache diskCacheManager) {
@@ -104,7 +110,7 @@ public class BlurBuilder extends ABuilder {
 	 * Artificially rescales the image if downscaled before to
 	 * it's original width/height
 	 */
-	public BlurBuilder reScaleIfDownscaled() {
+	public BlurBuilder reScale() {
 		data.rescaleIfDownscaled = true;
 		return this;
 	}
@@ -137,11 +143,11 @@ public class BlurBuilder extends ABuilder {
 	/**
 	 * Set brightness to  eg. darken the resulting image for use as background
 	 *
-	 * @param brightness default is 0, pos values increase brightness, neg. values decrease contrast
-	 *                   min value is -100 (which is all black) and max value is 900 (which is all white)
+	 * @param brightness default is 0, pos values increase brightness, neg. values decrease brightness
+	 *                   .-100 is black, positive goes up to 1000+
 	 */
 	public BlurBuilder brightness(float brightness) {
-		data.postProcessors.add(new BrightnessProcessor(data.contextWrapper.getRenderScript(),Math.max(Math.min(900.f,brightness),-100.f)));
+		data.postProcessors.add(new BrightnessProcessor(data.contextWrapper.getRenderScript(),brightness));
 		return this;
 	}
 
@@ -156,7 +162,7 @@ public class BlurBuilder extends ABuilder {
 	}
 
 	public BlurBuilder frostedGlass() {
-		data.postProcessors.add(new FrostGlassProcessor(data.contextWrapper.getRenderScript(),data.contextWrapper.getContext().getResources()));
+		data.postProcessors.add(new ImageOverlayProcessor(data.contextWrapper.getRenderScript(),data.contextWrapper.getContext().getResources()));
 		return this;
 	}
 
@@ -223,6 +229,11 @@ public class BlurBuilder extends ABuilder {
 		return this;
 	}
 
+	public BlurBuilder noFade() {
+		data.alphaFadeIn = false;
+		return this;
+	}
+
 	/* GETTER METHODS ************************************************************************* */
 
 
@@ -240,7 +251,15 @@ public class BlurBuilder extends ABuilder {
 								imageView.setImageResource(data.errorResId);
 							}
 						} else {
-							imageView.setImageDrawable(new BitmapDrawable(data.contextWrapper.getResources(), result.getBitmap()));
+							if(data.alphaFadeIn) {
+								TransitionDrawable transition = new TransitionDrawable(new Drawable[] {
+										new ColorDrawable(Color.parseColor("#00FFFFFF")),new BitmapDrawable(data.contextWrapper.getResources(), result.getBitmap())
+								});
+								imageView.setImageDrawable(transition);
+								transition.startTransition(FADE_IN_MS);
+							} else {
+								imageView.setImageDrawable(new BitmapDrawable(data.contextWrapper.getResources(), result.getBitmap()));
+							}
 						}
 					}
 				});

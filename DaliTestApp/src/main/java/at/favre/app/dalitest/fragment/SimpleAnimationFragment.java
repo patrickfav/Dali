@@ -79,7 +79,7 @@ public class SimpleAnimationFragment extends Fragment{
 
 
 		final ImageView iv3 = (ImageView) rootView.findViewById(R.id.image3);
-		iv3.setImageDrawable(Dali.create(getActivity()).load(R.drawable.test_img1).blurRadius(12).downScale(2).reScaleIfDownscaled().get());
+		iv3.setImageDrawable(Dali.create(getActivity()).load(R.drawable.test_img1).blurRadius(12).downScale(2).reScale().get());
 
 		BlurKeyFrameManager man3 = BlurKeyFrameManager.createLinearKeyFrames(4,700,4,20,-60);
 
@@ -97,7 +97,7 @@ public class SimpleAnimationFragment extends Fragment{
 
 
 		final ImageView iv4 = (ImageView) rootView.findViewById(R.id.image4);
-		iv4.setImageDrawable(Dali.create(getActivity()).load(R.drawable.test_img1).blurRadius(12).downScale(3).reScaleIfDownscaled().get());
+		iv4.setImageDrawable(Dali.create(getActivity()).load(R.drawable.test_img1).blurRadius(12).downScale(3).reScale().get());
 
 		BlurKeyFrameManager man4 = BlurKeyFrameManager.createLinearKeyFrames(2,700,4,20,-60);
 

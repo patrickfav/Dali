@@ -59,6 +59,12 @@ public class Dali {
 			DISK_CACHE_MANAGER=null;
 			createCache(ctx);
 		}
+
+		if(EXECUTOR_MANAGER != null) {
+			EXECUTOR_MANAGER.shutDown();
+			EXECUTOR_MANAGER = null;
+		}
+		Log.i(TAG,"New config set");
 	}
 
 	public static void setDebugMode(boolean debugMode) {

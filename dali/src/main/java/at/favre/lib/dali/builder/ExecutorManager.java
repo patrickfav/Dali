@@ -31,7 +31,7 @@ public class ExecutorManager {
 		mainThreadPool = new ThreadPoolExecutor(1, maxConcurrentMainWorkers,
 				2500L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(MAX_QUEUE));
 
-		fireAndForgetThreadPool = new ThreadPoolExecutor(2, 4,500L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(MAX_QUEUE));
+		fireAndForgetThreadPool = new ThreadPoolExecutor(1, 4,500L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(MAX_QUEUE));
 
 		taskList = new ConcurrentHashMap<String, List<Future<BlurWorker.Result>>>();
 	}
@@ -93,5 +93,10 @@ public class ExecutorManager {
 
 	public void executeOnFireAndForgetThreadPool(Runnable r) {
 		fireAndForgetThreadPool.execute(r);
+	}
+
+	public void shutDown() {
+		mainThreadPool.shutdown();
+		fireAndForgetThreadPool.shutdown();
 	}
 }
