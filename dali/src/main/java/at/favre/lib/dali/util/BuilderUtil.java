@@ -161,8 +161,12 @@ public class BuilderUtil {
 	}
 
 	public static void checkIfOnUiThread() {
-		if (Looper.myLooper() != Looper.getMainLooper()) {
+		if (isOnUiThread()) {
 			throw new IllegalStateException("This method must be called from the ui thread which is "+Looper.getMainLooper()+" was called from "+Looper.myLooper()+".");
 		}
+	}
+
+	public static boolean isOnUiThread() {
+		return Looper.myLooper() == null || Looper.myLooper() == Looper.getMainLooper();
 	}
 }

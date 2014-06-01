@@ -1,7 +1,9 @@
 # Dali
 
-# Blur Builder
+## Blur Builder
 
-# Live Blur
+## Live Blur
 
-# Navigation Drawer Background Blur
+## Blur Transition Animation
+
+## Navigation Drawer Background Blur

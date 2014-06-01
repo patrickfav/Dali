@@ -30,8 +30,12 @@ public class LiveBlurWorker {
 	}
 
 	public boolean updateBlurView() {
-		BuilderUtil.checkIfOnUiThread();
 		try {
+			if(!BuilderUtil.isOnUiThread()) {
+				BuilderUtil.logDebug(TAG, "Not on ui thread", Dali.getConfig().debugMode);
+				return false;
+			}
+
 			if(data.rootView == null || data.viewsToBlurOnto.isEmpty()) {
 				BuilderUtil.logDebug(TAG, "Views not set", Dali.getConfig().debugMode);
 				return false;
