@@ -24,6 +24,7 @@ import at.favre.lib.dali.blur.IBlur;
 import at.favre.lib.dali.blur.algorithms.RenderScriptGaussianBlur;
 import at.favre.lib.dali.builder.ABuilder;
 import at.favre.lib.dali.builder.ContextWrapper;
+import at.favre.lib.dali.builder.ExecutorManager;
 import at.favre.lib.dali.builder.ImageReference;
 import at.favre.lib.dali.builder.TwoLevelCache;
 import at.favre.lib.dali.builder.exception.BlurWorkerException;
@@ -56,6 +57,7 @@ public class BlurBuilder extends ABuilder {
 		public String tag = UUID.randomUUID().toString();
 		public int errorResId = R.drawable.ic_error_pic;
 		public boolean alphaFadeIn = true;
+		public boolean onConcurrentThreadPool = false;
 	}
 
 	public BlurBuilder(ContextWrapper contextWrapper, ImageReference imageReference, TwoLevelCache diskCacheManager) {
@@ -234,6 +236,20 @@ public class BlurBuilder extends ABuilder {
 		return this;
 	}
 
+	/**
+	 * If this is called the processing will happen on the
+	 * concurrent threadpool. The max parallel threads are
+	 * defined in the global config {@link at.favre.lib.dali.Dali#resetAndSetNewConfig(android.content.Context, at.favre.lib.dali.Dali.Config)}.
+	 *
+	 * This may make execution faster, but be aware that if processing too many big pictures concurrently
+	 * may throw {@link java.lang.OutOfMemoryError}. So only call this when
+	 * processing small pictures like thumbnails in a listview.
+	 */
+	public BlurBuilder concurrent() {
+		data.onConcurrentThreadPool = true;
+		return this;
+	}
+
 	/* GETTER METHODS ************************************************************************* */
 
 
@@ -265,7 +281,7 @@ public class BlurBuilder extends ABuilder {
 				});
 
 			}
-		}),data.tag);
+		}),data.tag, data.onConcurrentThreadPool ? ExecutorManager.ThreadPoolType.CONCURRENT : ExecutorManager.ThreadPoolType.SERIAL);
 
 		return getJobDescription();
 	}
@@ -275,7 +291,7 @@ public class BlurBuilder extends ABuilder {
 	}
 
 	public Bitmap getAsBitmap() {
-		Future<BlurWorker.Result> result = Dali.getExecutorManager().submitThreadPool(new BlurWorker(data),data.tag);
+		Future<BlurWorker.Result> result = Dali.getExecutorManager().submitThreadPool(new BlurWorker(data),data.tag,data.onConcurrentThreadPool ? ExecutorManager.ThreadPoolType.CONCURRENT : ExecutorManager.ThreadPoolType.SERIAL);
 		BlurWorker.Result r = null;
 		try {
 			r = result.get();

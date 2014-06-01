@@ -28,21 +28,21 @@ public class SimpleBlurFragment extends Fragment{
 		Dali dali = Dali.create(getActivity());
 
 		final ImageView iv = (ImageView) rootView.findViewById(R.id.image);
-		BlurBuilder.JobDescription jobDescription1 = dali.load(R.drawable.test_img1).blurRadius(24).into(iv);
+		BlurBuilder.JobDescription jobDescription1 = dali.load(R.drawable.test_img1).blurRadius(24).concurrent().into(iv);
 		((TextView) rootView.findViewById(R.id.subtitle1)).setText(jobDescription1.builderDescription);
 
 		final ImageView iv2 = (ImageView) rootView.findViewById(R.id.image2);
-		BlurBuilder.JobDescription jobDescription2 = dali.load(R.drawable.test_img1).blurRadius(24).brightness(50).into(iv2);
+		BlurBuilder.JobDescription jobDescription2 = dali.load(R.drawable.test_img1).blurRadius(24).brightness(50).concurrent().into(iv2);
 		((TextView) rootView.findViewById(R.id.subtitle2)).setText(jobDescription2.builderDescription);
 
 
 		final ImageView iv3 = (ImageView) rootView.findViewById(R.id.image3);
-		BlurBuilder.JobDescription jobDescription3 = dali.load(R.drawable.test_img1).blurRadius(12).downScale(2).reScale().into(iv3);
+		BlurBuilder.JobDescription jobDescription3 = dali.load(R.drawable.test_img1).blurRadius(12).downScale(2).concurrent().reScale().into(iv3);
 		((TextView) rootView.findViewById(R.id.subtitle3)).setText(jobDescription3.builderDescription);
 
 
 		final ImageView iv4 = (ImageView) rootView.findViewById(R.id.image4);
-		BlurBuilder.JobDescription jobDescription4 = dali.load(R.drawable.test_img1).blurRadius(8).downScale(4).brightness(-40).reScale().into(iv4);
+		BlurBuilder.JobDescription jobDescription4 = dali.load(R.drawable.test_img1).blurRadius(8).downScale(4).brightness(-40).concurrent().reScale().into(iv4);
 		((TextView) rootView.findViewById(R.id.subtitle4)).setText(jobDescription4.builderDescription);
 
 

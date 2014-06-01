@@ -20,24 +20,34 @@ import at.favre.lib.dali.util.BuilderUtil;
  * Created by PatrickF on 31.05.2014.
  */
 public class ExecutorManager {
-	private static final int MAX_QUEUE = 15;
+	private static final int MAX_QUEUE = 25;
 
-	private ExecutorService mainThreadPool;
+	public enum ThreadPoolType {SERIAL, CONCURRENT}
+
+	private ExecutorService serialThreadPool;
+	private ExecutorService concurrentThreadPool;
 	private ExecutorService fireAndForgetThreadPool;
 
 	private Map<String,List<Future<BlurWorker.Result>>> taskList;
 
 	public ExecutorManager(int maxConcurrentMainWorkers) {
-		mainThreadPool = new ThreadPoolExecutor(1, maxConcurrentMainWorkers,
-				2500L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(MAX_QUEUE));
+		concurrentThreadPool = new ThreadPoolExecutor(1, maxConcurrentMainWorkers,2500L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(MAX_QUEUE));
+
+		serialThreadPool  = new ThreadPoolExecutor(1,1,0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(MAX_QUEUE));
 
 		fireAndForgetThreadPool = new ThreadPoolExecutor(1, 4,500L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(MAX_QUEUE));
 
 		taskList = new ConcurrentHashMap<String, List<Future<BlurWorker.Result>>>();
 	}
 
-	public Future<BlurWorker.Result> submitThreadPool(Callable<BlurWorker.Result> callable, String tag) {
-		Future<BlurWorker.Result> future = mainThreadPool.submit(callable);
+	public Future<BlurWorker.Result> submitThreadPool(Callable<BlurWorker.Result> callable, String tag, ThreadPoolType type) {
+		Future<BlurWorker.Result> future=null;
+
+		if(type.equals(ThreadPoolType.CONCURRENT)) {
+			future = concurrentThreadPool.submit(callable);
+		} else {
+			future = serialThreadPool.submit(callable);
+		}
 
 		if(!taskList.containsKey(tag)) {
 			taskList.put(tag,new ArrayList<Future<BlurWorker.Result>>());
@@ -96,7 +106,8 @@ public class ExecutorManager {
 	}
 
 	public void shutDown() {
-		mainThreadPool.shutdown();
+		concurrentThreadPool.shutdown();
+		serialThreadPool.shutdown();
 		fireAndForgetThreadPool.shutdown();
 	}
 }

@@ -40,7 +40,7 @@ public class Dali {
 		public int diskCacheSizeBytes = 1024*1024*10;
 		public int memoryCacheSizeBytes = (int) Runtime.getRuntime().maxMemory() / 10;
 		public String diskCacheFolderName = "dali_diskcache";
-		public int maxBlurWorkerThreads =2;
+		public int maxBlurWorkerThreads = 3;
 		public String logTag=Dali.class.getSimpleName();
 	}
 
