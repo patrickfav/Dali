@@ -3,6 +3,9 @@ package at.favre.lib.dali.builder.blur;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
@@ -11,6 +14,7 @@ import java.util.UUID;
 import java.util.concurrent.Future;
 
 import at.favre.lib.dali.Dali;
+import at.favre.lib.dali.R;
 import at.favre.lib.dali.blur.EBlurAlgorithm;
 import at.favre.lib.dali.blur.IBlur;
 import at.favre.lib.dali.blur.algorithms.RenderScriptGaussianBlur;
@@ -32,6 +36,7 @@ public class BlurBuilder extends ABuilder {
 	private final static String TAG = BlurBuilder.class.getSimpleName();
 
 	private BlurData data;
+	private Handler uiThreadHandler = new Handler(Looper.getMainLooper());
 
 	public static class BlurData extends ABuilder.Data {
 		public BitmapFactory.Options options = new BitmapFactory.Options();
@@ -44,6 +49,7 @@ public class BlurBuilder extends ABuilder {
 		public List<IBitmapProcessor> postProcessors = new ArrayList<IBitmapProcessor>();
 		public TwoLevelCache diskCacheManager;
 		public String tag = UUID.randomUUID().toString();
+		public int errorResId = R.drawable.ic_error_pic;
 	}
 
 	public BlurBuilder(ContextWrapper contextWrapper, ImageReference imageReference, TwoLevelCache diskCacheManager) {
@@ -183,7 +189,6 @@ public class BlurBuilder extends ABuilder {
 
 	/**
 	 * Provide your custom blur implementation
-	 *
 	 * @param blurAlgorithm
 	 */
 	public BlurBuilder algorithm(IBlur blurAlgorithm) {
@@ -209,15 +214,40 @@ public class BlurBuilder extends ABuilder {
 		return this;
 	}
 
+	/**
+	 * Set the image that is set when an error occurs
+	 * @param resId - e.g. R.drawable.error_image or {@link at.favre.lib.dali.Dali#NO_IMAGE_RESID} if you want to disable error image
+	 */
+	public BlurBuilder error(int resId) {
+		data.errorResId = resId;
+		return this;
+	}
+
 	/* GETTER METHODS ************************************************************************* */
 
+
 	public JobDescription into(final ImageView imageView) {
-		imageView.post(new Runnable() {
+		Dali.getExecutorManager().submitThreadPool(new BlurWorker(data, new BlurWorker.BlurWorkerListener() {
 			@Override
-			public void run() {
-				imageView.setImageDrawable(get());
+			public void onResult(final BlurWorker.Result result) {
+				//run on ui thread because we need to modify ui
+				uiThreadHandler.post(new Runnable() {
+					@Override
+					public void run() {
+						if (result.isError()) {
+							Log.e(TAG, "Could not set into imageview", result.getThrowable());
+							if(data.errorResId == Dali.NO_IMAGE_RESID) {
+								imageView.setImageResource(data.errorResId);
+							}
+						} else {
+							imageView.setImageDrawable(new BitmapDrawable(data.contextWrapper.getResources(), result.getBitmap()));
+						}
+					}
+				});
+
 			}
-		});
+		}),data.tag);
+
 		return getJobDescription();
 	}
 

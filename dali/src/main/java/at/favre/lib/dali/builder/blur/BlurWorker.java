@@ -2,6 +2,9 @@ package at.favre.lib.dali.builder.blur;
 
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.os.Handler;
+import android.os.Looper;
+import android.view.View;
 
 import java.util.UUID;
 import java.util.concurrent.Callable;
@@ -25,25 +28,41 @@ public class BlurWorker implements Callable<BlurWorker.Result> {
 	private final static String TAG = BlurWorker.class.getSimpleName();
 
 	private final String id = UUID.randomUUID().toString();
-	private String tag;
-
+	private BlurWorkerListener listener;
 	private BlurBuilder.BlurData builderData;
 	private final Semaphore semaphore = new Semaphore(0,true);
+	private Handler uiThreadHandler = new Handler(Looper.getMainLooper());
+
 	public BlurWorker(BlurBuilder.BlurData builderData) {
+		this(builderData,null);
+	}
+
+	public BlurWorker(BlurBuilder.BlurData builderData, BlurWorkerListener listener) {
 		this.builderData = builderData;
+		this.listener = listener;
 	}
 
 	@Override
 	public Result call() {
 		try {
-			return new Result(process());
+			Result r = new Result(process());
+			if(listener != null) {
+				listener.onResult(r);
+			}
+			return r;
 		} catch (Throwable t) {
-			return new Result(t);
+			Result r = new Result(t);
+			if(listener != null) {
+				listener.onResult(r);
+			}
+			return r;
 		}
 	}
 
 	public Bitmap process() {
-		PerformanceProfiler profiler = new PerformanceProfiler("blur image", Dali.getConfig().debugMode);
+		BuilderUtil.logVerbose(TAG,"Start process "+builderData.tag,Dali.getConfig().debugMode);
+
+		PerformanceProfiler profiler = new PerformanceProfiler("blur image for tag "+builderData.tag, Dali.getConfig().debugMode);
 		try {
 			final String cacheKey = BuilderUtil.getCacheKey(builderData);
 
@@ -61,15 +80,12 @@ public class BlurWorker implements Callable<BlurWorker.Result> {
 
 			if (builderData.imageReference.getSourceType().equals(ImageReference.SourceType.VIEW)) {
 				profiler.startTask(-2, "wait for view to be measured");
-//				BuilderUtil.logVerbose(TAG,"start thread",Dali.getConfig().debugMode);
-//				View v = builderData.imageReference.getView();
-//				BuilderUtil.logVerbose(TAG,"start thread 2",Dali.getConfig().debugMode);
-//				v.post(new WaitForMeasurement(semaphore));
-//				BuilderUtil.logVerbose(TAG,"start thread 3",Dali.getConfig().debugMode);
-//
-//				BuilderUtil.logVerbose(TAG,"aquire lock for waiting for the view to be measured",Dali.getConfig().debugMode);
-//				semaphore.acquire();
-//				BuilderUtil.logVerbose(TAG,"view seems measured, lock was released",Dali.getConfig().debugMode);
+				View v = builderData.imageReference.getView();
+				uiThreadHandler.post(new WaitForMeasurement(semaphore,v));
+
+				BuilderUtil.logVerbose(TAG,"aquire lock for waiting for the view to be measured",Dali.getConfig().debugMode);
+				semaphore.acquire();
+				BuilderUtil.logVerbose(TAG,"view seems measured, lock was released",Dali.getConfig().debugMode);
 				profiler.endTask(-2);
 			}
 
@@ -123,7 +139,6 @@ public class BlurWorker implements Callable<BlurWorker.Result> {
 				profiler.endTask(40001);
 			}
 
-
 			return bitmapToWorkWith;
 		}catch (Throwable t) {
 			throw new BlurWorkerException(t);
@@ -132,29 +147,27 @@ public class BlurWorker implements Callable<BlurWorker.Result> {
 		}
 	}
 
-	public String getTag() {
-		return tag;
-	}
-
 	public String getId() {
 		return id;
 	}
 
-	public void setTag(String tag) {
-		this.tag = tag;
-	}
-
 	public static class WaitForMeasurement implements Runnable {
 		private Semaphore lock;
-
-		public WaitForMeasurement(Semaphore lock) {
+		private View v;
+		public WaitForMeasurement(Semaphore lock, View v) {
 			this.lock = lock;
+			this.v = v;
 		}
 
 		@Override
 		public void run() {
-			BuilderUtil.logVerbose(TAG,"in view message queue, seems measured, will unlock",Dali.getConfig().debugMode);
-			lock.release();
+			v.post(new Runnable() {
+				@Override
+				public void run() {
+					BuilderUtil.logVerbose(TAG,"in view message queue, seems measured, will unlock",Dali.getConfig().debugMode);
+					lock.release();
+				}
+			});
 		}
 	}
 
@@ -198,6 +211,10 @@ public class BlurWorker implements Callable<BlurWorker.Result> {
 		public boolean isError() {
 			return throwable != null;
 		}
+	}
+
+	public static interface BlurWorkerListener {
+		public void onResult(Result result);
 	}
 
 }

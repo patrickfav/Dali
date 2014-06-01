@@ -26,6 +26,8 @@ import at.favre.lib.dali.util.Precondition;
 public class Dali {
 	private static final String TAG = Dali.class.getSimpleName();
 
+	public static final int NO_IMAGE_RESID = -1;
+
 	private static TwoLevelCache DISK_CACHE_MANAGER;
 	private static ExecutorManager EXECUTOR_MANAGER;
 	private static Config GLOBAL_CONFIG = new Config();
@@ -38,7 +40,7 @@ public class Dali {
 		public int diskCacheSizeBytes = 1024*1024*10;
 		public int memoryCacheSizeBytes = (int) Runtime.getRuntime().maxMemory() / 10;
 		public String diskCacheFolderName = "dali_diskcache";
-		public int maxBlurWorkerThreads =1;
+		public int maxBlurWorkerThreads =2;
 		public String logTag=Dali.class.getSimpleName();
 	}
 
