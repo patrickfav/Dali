@@ -13,13 +13,17 @@ import at.favre.lib.dali.Dali;
  */
 public class BlurKeyFrameManager {
 
-	public static BlurKeyFrameManager createLinearKeyFrames(int keyFrames,int duration, int inSampleSize, int endBlurRadius) {
+	public static BlurKeyFrameManager createLinearKeyFrames(int keyFrames,int duration, int inSampleSize, int endBlurRadius, int endBrightness) {
 		BlurKeyFrameManager man = new BlurKeyFrameManager();
 
 		int durationPerFrame = (int) ((float) duration / (float) keyFrames);
 		int radiusIncrement = (int) ((float) endBlurRadius / (float) keyFrames);
+		int brightnessIncrement = 0;
+		if(endBrightness != 0) {
+			brightnessIncrement = (int) ((float) endBrightness / (float) keyFrames);;
+		}
 		for (int i = 0; i < keyFrames; i++) {
-			man.addKeyFrame(new BlurKeyFrame(inSampleSize,radiusIncrement*(i+1),0,durationPerFrame));
+			man.addKeyFrame(new BlurKeyFrame(inSampleSize,radiusIncrement*(i+1),brightnessIncrement*(i+1),durationPerFrame));
 		}
 
 		return man;
@@ -82,5 +86,10 @@ public class BlurKeyFrameManager {
 		public Bitmap getOriginal() {
 			return original;
 		}
+	}
+
+	@Override
+	public String toString() {
+		return keyFrames.toString();
 	}
 }

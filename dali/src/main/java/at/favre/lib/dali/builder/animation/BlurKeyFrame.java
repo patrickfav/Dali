@@ -21,10 +21,20 @@ public class BlurKeyFrame {
 	}
 
 	protected Bitmap prepareFrame(Bitmap original, Dali dali) {
-		return dali.load(original).downScale(inSampleSize).blurRadius(blurRadius).brightness(brightness).reScaleIfDownscaled().getAsBitmap();
+		return dali.load(original).downScale(inSampleSize).blurRadius(blurRadius).brightness(brightness).skipCache().reScaleIfDownscaled().getAsBitmap();
 	}
 
 	public int getDuration() {
 		return duration;
+	}
+
+	@Override
+	public String toString() {
+		return "BlurKeyFrame{" +
+				"inSampleSize=" + inSampleSize +
+				", blurRadius=" + blurRadius +
+				", brightness=" + brightness +
+				", duration=" + duration +
+				'}';
 	}
 }

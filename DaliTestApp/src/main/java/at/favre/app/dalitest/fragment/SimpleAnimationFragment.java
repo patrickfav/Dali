@@ -7,11 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import at.favre.app.dalitest.R;
 import at.favre.lib.dali.Dali;
 import at.favre.lib.dali.builder.ImageReference;
-import at.favre.lib.dali.builder.animation.BlurAnimation;
+import at.favre.lib.dali.builder.animation.BlurKeyFrameTransitionAnimation;
 import at.favre.lib.dali.builder.animation.BlurKeyFrame;
 import at.favre.lib.dali.builder.animation.BlurKeyFrameManager;
 
@@ -28,6 +29,8 @@ public class SimpleAnimationFragment extends Fragment{
 							 Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_simple_blur, container, false);
 
+
+
 		final ImageView iv = (ImageView) rootView.findViewById(R.id.image);
 		iv.setImageDrawable(Dali.create(getActivity()).load(R.drawable.test_img1).blurRadius(24).get());
 
@@ -40,7 +43,7 @@ public class SimpleAnimationFragment extends Fragment{
 		man.addKeyFrame(new BlurKeyFrame(2,16,0,300));
 		man.addKeyFrame(new BlurKeyFrame(2,20,0,300));
 
-		final BlurAnimation animation = new BlurAnimation(getActivity(),man);
+		final BlurKeyFrameTransitionAnimation animation = new BlurKeyFrameTransitionAnimation(getActivity(),man);
 		animation.prepareAnimation(original);
 
 		iv.setOnClickListener(new View.OnClickListener() {
@@ -50,12 +53,17 @@ public class SimpleAnimationFragment extends Fragment{
 			}
 		});
 
+		((TextView) rootView.findViewById(R.id.subtitle1)).setText(man.toString());
+
+
+
+
 		final ImageView iv2 = (ImageView) rootView.findViewById(R.id.image2);
 		iv2.setImageDrawable(Dali.create(getActivity()).load(R.drawable.test_img1).blurRadius(24).brightness(10).get());
 
-		BlurKeyFrameManager man2 = BlurKeyFrameManager.createLinearKeyFrames(10,700,4,20);
+		BlurKeyFrameManager man2 = BlurKeyFrameManager.createLinearKeyFrames(10,700,4,20,0);
 
-		final BlurAnimation animation2 = new BlurAnimation(getActivity(),man2);
+		final BlurKeyFrameTransitionAnimation animation2 = new BlurKeyFrameTransitionAnimation(getActivity(),man2);
 		animation2.prepareAnimation(original);
 
 		iv2.setOnClickListener(new View.OnClickListener() {
@@ -65,12 +73,17 @@ public class SimpleAnimationFragment extends Fragment{
 			}
 		});
 
+		((TextView) rootView.findViewById(R.id.subtitle2)).setText(man2.toString());
+
+
+
+
 		final ImageView iv3 = (ImageView) rootView.findViewById(R.id.image3);
 		iv3.setImageDrawable(Dali.create(getActivity()).load(R.drawable.test_img1).blurRadius(12).downScale(2).reScaleIfDownscaled().get());
 
-		BlurKeyFrameManager man3 = BlurKeyFrameManager.createLinearKeyFrames(4,700,4,20);
+		BlurKeyFrameManager man3 = BlurKeyFrameManager.createLinearKeyFrames(4,700,4,20,-60);
 
-		final BlurAnimation animation3 = new BlurAnimation(getActivity(),man3);
+		final BlurKeyFrameTransitionAnimation animation3 = new BlurKeyFrameTransitionAnimation(getActivity(),man3);
 		animation3.prepareAnimation(original);
 
 		iv3.setOnClickListener(new View.OnClickListener() {
@@ -80,12 +93,15 @@ public class SimpleAnimationFragment extends Fragment{
 			}
 		});
 
+		((TextView) rootView.findViewById(R.id.subtitle3)).setText(man3.toString());
+
+
 		final ImageView iv4 = (ImageView) rootView.findViewById(R.id.image4);
 		iv4.setImageDrawable(Dali.create(getActivity()).load(R.drawable.test_img1).blurRadius(12).downScale(3).reScaleIfDownscaled().get());
 
-		BlurKeyFrameManager man4 = BlurKeyFrameManager.createLinearKeyFrames(2,700,4,20);
+		BlurKeyFrameManager man4 = BlurKeyFrameManager.createLinearKeyFrames(2,700,4,20,-60);
 
-		final BlurAnimation animation4 = new BlurAnimation(getActivity(),man4);
+		final BlurKeyFrameTransitionAnimation animation4 = new BlurKeyFrameTransitionAnimation(getActivity(),man4);
 		animation4.prepareAnimation(original);
 
 		iv4.setOnClickListener(new View.OnClickListener() {
@@ -94,6 +110,9 @@ public class SimpleAnimationFragment extends Fragment{
 				animation4.start(iv4);
 			}
 		});
+
+		((TextView) rootView.findViewById(R.id.subtitle4)).setText(man4.toString());
+
 
 		return rootView;
 	}

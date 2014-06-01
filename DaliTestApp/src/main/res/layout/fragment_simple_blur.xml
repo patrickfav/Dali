@@ -22,7 +22,8 @@
             android:id="@+id/subtitle1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="16sp"
+            android:typeface="monospace"
             android:text="Lorem ipsum"/>
 
         <ImageView
@@ -35,7 +36,8 @@
             android:id="@+id/subtitle2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="16sp"
+            android:typeface="monospace"
             android:text="Lorem ipsum"/>
 
         <ImageView
@@ -48,7 +50,8 @@
             android:id="@+id/subtitle3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="16sp"
+            android:typeface="monospace"
             android:text="Lorem ipsum"/>
 
         <ImageView
@@ -61,7 +64,8 @@
             android:id="@+id/subtitle4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="16sp"
+            android:typeface="monospace"
             android:text="Lorem ipsum"/>
     </LinearLayout>
 </ScrollView>

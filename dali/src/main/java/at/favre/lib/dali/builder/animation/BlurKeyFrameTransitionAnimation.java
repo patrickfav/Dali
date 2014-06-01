@@ -7,23 +7,32 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by PatrickF on 29.05.2014.
  */
-public class BlurAnimation  {
-	public List<TransitionDrawable> transitionDrawables = new ArrayList<TransitionDrawable>();
-	public Context ctx;
-	public Handler handler = new Handler(Looper.getMainLooper());
-	public BlurKeyFrameManager manager;
+public class BlurKeyFrameTransitionAnimation {
+	private List<TransitionDrawable> transitionDrawables = new ArrayList<TransitionDrawable>();
+	private Context ctx;
+	private Handler handler = new Handler(Looper.getMainLooper());
+	private BlurKeyFrameManager manager;
 
-	public BlurAnimation(Context ctx,BlurKeyFrameManager manager) {
+	private List<Runnable> runnables;
+
+	private boolean running = false;
+	private boolean canceled = false;
+	private KeyFrameAnimationListener listener;
+
+	public BlurKeyFrameTransitionAnimation(Context ctx, BlurKeyFrameManager manager) {
 		this.ctx = ctx;
 		this.manager = manager;
+		this.runnables= new CopyOnWriteArrayList<Runnable>();
 	}
 
 	public void prepareAnimation(Bitmap original) {
@@ -39,9 +48,13 @@ public class BlurAnimation  {
 	}
 
 	public void start(final ImageView imageView) {
+		if(listener != null) {
+			listener.onAnimationStart();
+		}
 		long duration = 0;
 		for (int i = 0; i < transitionDrawables.size(); i++) {
 			final int iterator = i;
+
 			handler.postDelayed(new Runnable() {
 				@Override
 				public void run() {
@@ -53,6 +66,15 @@ public class BlurAnimation  {
 		}
 	}
 
+	public synchronized void cancel() {
+		this.canceled = true;
+		this.running = false;
+	}
 
+	public static interface KeyFrameAnimationListener {
+		public void onAnimationStart();
+		public void onKeyFrameChange(int keyFrameNo);
+		public void onAnimationEnd();
+	}
 
 }
