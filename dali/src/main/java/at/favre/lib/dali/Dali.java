@@ -40,7 +40,7 @@ public class Dali {
 		public int diskCacheSizeBytes = 1024*1024*10;
 		public int memoryCacheSizeBytes = (int) Runtime.getRuntime().maxMemory() / 10;
 		public String diskCacheFolderName = "dali_diskcache";
-		public int maxBlurWorkerThreads = 3;
+		public int maxBlurWorkerThreads = 4;
 		public String logTag=Dali.class.getSimpleName();
 	}
 
@@ -95,6 +95,21 @@ public class Dali {
 		}
 		return EXECUTOR_MANAGER;
 	}
+
+	public static void logD(String localTag,String msg) {
+		if(getConfig().debugMode) {
+			Log.d(getConfig().logTag,"["+localTag+"] "+msg);
+		}
+	}
+	public static void logV(String localTag,String msg){
+		if(getConfig().debugMode) {
+			Log.v(getConfig().logTag,"["+localTag+"] "+msg);
+		}
+	}
+
+
+
+	/* NON STATIC CLASS ************************************************************************* */
 
 	private ContextWrapper contextWrapper;
 

@@ -160,9 +160,9 @@ public class BuilderUtil {
 		}
 	}
 
-	public static void checkIfOnUiThread() {
+	public static void checkMustNotRunOnUiThread() {
 		if (isOnUiThread()) {
-			throw new IllegalStateException("This method must be called from the ui thread which is "+Looper.getMainLooper()+" was called from "+Looper.myLooper()+".");
+			throw new IllegalStateException("This method must NOT be called from the ui thread which is "+Looper.getMainLooper()+" was called from "+Looper.myLooper()+".");
 		}
 	}
 

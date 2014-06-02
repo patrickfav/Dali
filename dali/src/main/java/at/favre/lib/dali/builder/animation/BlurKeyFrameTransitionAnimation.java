@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Handler;
 import android.os.Looper;
-import android.view.animation.Animation;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
@@ -29,6 +28,7 @@ public class BlurKeyFrameTransitionAnimation {
 	private boolean canceled = false;
 	private KeyFrameAnimationListener listener;
 
+
 	public BlurKeyFrameTransitionAnimation(Context ctx, BlurKeyFrameManager manager) {
 		this.ctx = ctx;
 		this.manager = manager;
@@ -37,11 +37,11 @@ public class BlurKeyFrameTransitionAnimation {
 
 	public void prepareAnimation(Bitmap original) {
 		BlurKeyFrameManager.KeyFrameData data = manager.prepareFrames(ctx,original);
+		transitionDrawables = new ArrayList<TransitionDrawable>();
 
 		for (int i = 0; i < data.getFrames().size(); i++) {
 			if(i+1 < data.getFrames().size()) {
 				TransitionDrawable t = new TransitionDrawable(new Drawable[]{new BitmapDrawable(ctx.getResources(),data.getFrames().get(i)),new BitmapDrawable(ctx.getResources(),data.getFrames().get(i+1))});
-				t.setCrossFadeEnabled(false);
 				transitionDrawables.add(t);
 			}
 		}
@@ -58,8 +58,9 @@ public class BlurKeyFrameTransitionAnimation {
 			handler.postDelayed(new Runnable() {
 				@Override
 				public void run() {
-					transitionDrawables.get(iterator).startTransition(manager.getKeyFrames().get(iterator).getDuration());
-					imageView.setImageDrawable(transitionDrawables.get(iterator));
+					TransitionDrawable t = transitionDrawables.get(iterator);
+					t.startTransition(manager.getKeyFrames().get(iterator).getDuration());
+					imageView.setImageDrawable(t);
 				}
 			},duration);
 			duration += manager.getKeyFrames().get(i).getDuration();

@@ -71,11 +71,8 @@ public class DaliBlurDrawerToggle extends ActionBarDrawerToggle {
 	 */
 	private void renderBlurLayer(float slideOffset) {
 		if(enableBlur) {
-			if (slideOffset <= 0f || forceRedraw) {
-				if (drawerLayout.getChildCount() == 3) {
-					drawerLayout.removeViewAt(1);
-					blurView = null;
-				}
+			if (slideOffset == 0 || forceRedraw) {
+				clearBlurView();
 			}
 
 			if (slideOffset > 0f && blurView == null) {
@@ -101,6 +98,13 @@ public class DaliBlurDrawerToggle extends ActionBarDrawerToggle {
 				LegacySDKUtil.setImageAlpha(blurView, alpha);
 			}
 		}
+	}
+
+	private void clearBlurView() {
+		if (drawerLayout.getChildCount() == 3) {
+			drawerLayout.removeViewAt(1);
+		}
+		blurView = null;
 	}
 
 	/**

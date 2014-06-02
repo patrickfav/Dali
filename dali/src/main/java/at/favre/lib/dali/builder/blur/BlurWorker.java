@@ -9,6 +9,7 @@ import android.view.View;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 import at.favre.lib.dali.Dali;
 import at.favre.lib.dali.builder.ImageReference;
@@ -65,6 +66,7 @@ public class BlurWorker implements Callable<BlurWorker.Result> {
 	private Bitmap process() {
 		PerformanceProfiler profiler = new PerformanceProfiler("blur image task ["+builderData.tag+"] started at "+BenchmarkUtil.getCurrentTime(), Dali.getConfig().debugMode);
 		try {
+
 			final String cacheKey = BuilderUtil.getCacheKey(builderData);
 
 			if (builderData.shouldCache) {
@@ -84,11 +86,16 @@ public class BlurWorker implements Callable<BlurWorker.Result> {
 				View v = builderData.imageReference.getView();
 				uiThreadHandler.post(new WaitForMeasurement(semaphore,v));
 
-				BuilderUtil.logVerbose(TAG,"aquire lock for waiting for the view to be measured",Dali.getConfig().debugMode);
-				semaphore.acquire();
-				BuilderUtil.logVerbose(TAG,"view seems measured, lock was released",Dali.getConfig().debugMode);
+				Dali.logV(TAG,"aquire lock for waiting for the view to be measured");
+				if(semaphore.tryAcquire(8000, TimeUnit.MILLISECONDS)) {
+					Dali.logV(TAG,"view seems measured, lock was released");
+				} else {
+					throw new InterruptedException("Timeout while waiting for the view to be measured");
+				}
 				profiler.endTask(-2);
 			}
+
+//			Thread.sleep(1000);
 
 			int width = 0, height = 0;
 			if (builderData.options.inSampleSize > 1 && builderData.rescaleIfDownscaled) {
@@ -131,11 +138,11 @@ public class BlurWorker implements Callable<BlurWorker.Result> {
 			if (builderData.options.inSampleSize > 1 && builderData.rescaleIfDownscaled && height > 0 && width > 0) {
 				profiler.startTask(40000, "rescale to " + height + "x" + width);
 				bitmapToWorkWith = Bitmap.createScaledBitmap(bitmapToWorkWith, width, height, false);
-				profiler.endTask(40000);
+				profiler.endTask(40000,"memory usage "+BenchmarkUtil.getScalingUnitByteSize(LegacySDKUtil.byteSizeOf(bitmapToWorkWith)));
 			}
 
 			if (builderData.shouldCache) {
-				profiler.startTask(40001, "async try to disk cache");
+				profiler.startTask(40001, "async try to disk cache (ignore result)");
 				Dali.getExecutorManager().executeOnFireAndForgetThreadPool(new AddToCacheTask(bitmapToWorkWith, builderData, cacheKey));
 				profiler.endTask(40001);
 			}
@@ -153,10 +160,10 @@ public class BlurWorker implements Callable<BlurWorker.Result> {
 	}
 
 	public static class WaitForMeasurement implements Runnable {
-		private Semaphore lock;
+		private Semaphore semaphore;
 		private View v;
-		public WaitForMeasurement(Semaphore lock, View v) {
-			this.lock = lock;
+		public WaitForMeasurement(Semaphore semaphore, View v) {
+			this.semaphore = semaphore;
 			this.v = v;
 		}
 
@@ -165,8 +172,8 @@ public class BlurWorker implements Callable<BlurWorker.Result> {
 			v.post(new Runnable() {
 				@Override
 				public void run() {
-					BuilderUtil.logVerbose(TAG,"in view message queue, seems measured, will unlock",Dali.getConfig().debugMode);
-					lock.release();
+					Dali.logV(TAG,"in view message queue, seems measured, will unlock");
+					semaphore.release();
 				}
 			});
 		}

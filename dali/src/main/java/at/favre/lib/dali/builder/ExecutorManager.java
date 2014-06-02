@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -24,18 +23,20 @@ public class ExecutorManager {
 
 	public enum ThreadPoolType {SERIAL, CONCURRENT}
 
-	private ExecutorService serialThreadPool;
-	private ExecutorService concurrentThreadPool;
-	private ExecutorService fireAndForgetThreadPool;
+	private ThreadPoolExecutor serialThreadPool;
+	private ThreadPoolExecutor concurrentThreadPool;
+	private ThreadPoolExecutor fireAndForgetThreadPool;
 
 	private Map<String,List<Future<BlurWorker.Result>>> taskList;
 
 	public ExecutorManager(int maxConcurrentMainWorkers) {
-		concurrentThreadPool = new ThreadPoolExecutor(1, maxConcurrentMainWorkers,2500L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(MAX_QUEUE));
+		concurrentThreadPool = new ThreadPoolExecutor(maxConcurrentMainWorkers, maxConcurrentMainWorkers,5000L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(MAX_QUEUE));
+		concurrentThreadPool.allowCoreThreadTimeOut(true);
 
 		serialThreadPool  = new ThreadPoolExecutor(1,1,0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(MAX_QUEUE));
 
-		fireAndForgetThreadPool = new ThreadPoolExecutor(1, 4,500L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(MAX_QUEUE));
+		fireAndForgetThreadPool = new ThreadPoolExecutor(4, 4,5000L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(MAX_QUEUE));
+		fireAndForgetThreadPool.allowCoreThreadTimeOut(true);
 
 		taskList = new ConcurrentHashMap<String, List<Future<BlurWorker.Result>>>();
 	}

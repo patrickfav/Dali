@@ -59,7 +59,7 @@ public class BlurBuilder extends ABuilder {
 		public int errorResId = R.drawable.ic_error_pic;
 		public boolean alphaFadeIn = true;
 		public boolean onConcurrentThreadPool = false;
-		public int colorFilterColorResId = Dali.NO_RESID;
+		public int placeholder = Dali.NO_RESID;
 	}
 
 	public BlurBuilder(ContextWrapper contextWrapper, ImageReference imageReference, TwoLevelCache diskCacheManager) {
@@ -68,6 +68,7 @@ public class BlurBuilder extends ABuilder {
 		data.contextWrapper = contextWrapper;
 		data.blurAlgorithm = new RenderScriptGaussianBlur(data.contextWrapper.getRenderScript());
 		data.diskCacheManager = diskCacheManager;
+		data.options.inMutable = true;
 	}
 
 
@@ -166,7 +167,7 @@ public class BlurBuilder extends ABuilder {
 	}
 
 	public BlurBuilder colorFilter(int colorResId) {
-		data.postProcessors.add(new ColorFilterProcessor(colorResId, PorterDuff.Mode.OVERLAY));
+		data.postProcessors.add(new ColorFilterProcessor(colorResId, PorterDuff.Mode.MULTIPLY));
 		return this;
 	}
 
@@ -233,6 +234,10 @@ public class BlurBuilder extends ABuilder {
 		return this;
 	}
 
+	/**
+	 * Per default the the process image will alpha fade in. Use this
+	 * to disable the animation.
+	 */
 	public BlurBuilder noFade() {
 		data.alphaFadeIn = false;
 		return this;
@@ -252,10 +257,19 @@ public class BlurBuilder extends ABuilder {
 		return this;
 	}
 
+	public BlurBuilder placeholder(int resId) {
+		data.placeholder = resId;
+		return this;
+	}
+
 	/* GETTER METHODS ************************************************************************* */
 
 
 	public JobDescription into(final ImageView imageView) {
+		if(data.placeholder != Dali.NO_RESID) {
+			imageView.setImageResource(data.placeholder);
+		}
+
 		Dali.getExecutorManager().submitThreadPool(new BlurWorker(data, new BlurWorker.BlurWorkerListener() {
 			@Override
 			public void onResult(final BlurWorker.Result result) {
@@ -270,11 +284,22 @@ public class BlurBuilder extends ABuilder {
 							}
 						} else {
 							if(data.alphaFadeIn) {
-								TransitionDrawable transition = new TransitionDrawable(new Drawable[] {
-										new ColorDrawable(Color.parseColor("#00FFFFFF")),new BitmapDrawable(data.contextWrapper.getResources(), result.getBitmap())
+								//use what is currently in the imageview to fade
+								Drawable placeholder;
+								if(imageView.getDrawable() != null) {
+									placeholder = imageView.getDrawable();
+								} else {
+									placeholder= new ColorDrawable(Color.parseColor("#00FFFFFF"));
+								}
+
+								final TransitionDrawable transition = new TransitionDrawable(new Drawable[] {
+										placeholder,new BitmapDrawable(data.contextWrapper.getResources(), result.getBitmap())
 								});
 								imageView.setImageDrawable(transition);
 								transition.startTransition(FADE_IN_MS);
+
+								//after the transition set only the processed bitmap to avoid keeping both images in memory
+
 							} else {
 								imageView.setImageDrawable(new BitmapDrawable(data.contextWrapper.getResources(), result.getBitmap()));
 							}

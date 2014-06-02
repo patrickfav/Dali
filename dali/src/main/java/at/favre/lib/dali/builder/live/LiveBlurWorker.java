@@ -32,17 +32,17 @@ public class LiveBlurWorker {
 	public boolean updateBlurView() {
 		try {
 			if(!BuilderUtil.isOnUiThread()) {
-				BuilderUtil.logDebug(TAG, "Not on ui thread", Dali.getConfig().debugMode);
+				Dali.logD(TAG, "Not on ui thread");
 				return false;
 			}
 
 			if(data.rootView == null || data.viewsToBlurOnto.isEmpty()) {
-				BuilderUtil.logDebug(TAG, "Views not set", Dali.getConfig().debugMode);
+				Dali.logD(TAG, "Views not set");
 				return false;
 			}
 
 			if( data.viewsToBlurOnto.get(0).getWidth() == 0 || data.viewsToBlurOnto.get(0).getHeight() == 0) {
-				BuilderUtil.logDebug(TAG, "Views not ready to be blurred", Dali.getConfig().debugMode);
+				Dali.logD(TAG, "Views not ready to be blurred");
 				return false;
 			}
 
@@ -58,7 +58,7 @@ public class LiveBlurWorker {
 				isWorking.compareAndSet(true, false);
 				return true;
 			} else {
-				BuilderUtil.logDebug(TAG, "Skip blur frame, already in blur", Dali.getConfig().debugMode);
+				Dali.logD(TAG, "Skip blur frame, already in blur");
 			}
 		} catch (Throwable t) {
 			isWorking.set(false);

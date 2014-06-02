@@ -12,9 +12,9 @@ import android.widget.TextView;
 import at.favre.app.dalitest.R;
 import at.favre.lib.dali.Dali;
 import at.favre.lib.dali.builder.ImageReference;
-import at.favre.lib.dali.builder.animation.BlurKeyFrameTransitionAnimation;
 import at.favre.lib.dali.builder.animation.BlurKeyFrame;
 import at.favre.lib.dali.builder.animation.BlurKeyFrameManager;
+import at.favre.lib.dali.builder.animation.BlurKeyFrameTransitionAnimation;
 
 /**
  * Created by PatrickF on 31.05.2014.
@@ -32,9 +32,9 @@ public class SimpleAnimationFragment extends Fragment{
 
 
 		final ImageView iv = (ImageView) rootView.findViewById(R.id.image);
-		iv.setImageDrawable(Dali.create(getActivity()).load(R.drawable.test_img1).blurRadius(24).get());
+		Dali.create(getActivity()).load(R.drawable.test_img1).blurRadius(24).into(iv);
 
-		Bitmap original = new ImageReference(R.drawable.test_img1).synchronouslyLoadBitmap(getResources());
+		final Bitmap original = new ImageReference(R.drawable.test_img1).synchronouslyLoadBitmap(getResources());
 
 		BlurKeyFrameManager man = new BlurKeyFrameManager();
 		man.addKeyFrame(new BlurKeyFrame(2,4,0,300));
@@ -44,27 +44,23 @@ public class SimpleAnimationFragment extends Fragment{
 		man.addKeyFrame(new BlurKeyFrame(2,20,0,300));
 
 		final BlurKeyFrameTransitionAnimation animation = new BlurKeyFrameTransitionAnimation(getActivity(),man);
-		animation.prepareAnimation(original);
-
 		iv.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				animation.start(iv);
 			}
 		});
-
 		((TextView) rootView.findViewById(R.id.subtitle1)).setText(man.toString());
 
 
 
 
 		final ImageView iv2 = (ImageView) rootView.findViewById(R.id.image2);
-		iv2.setImageDrawable(Dali.create(getActivity()).load(R.drawable.test_img1).blurRadius(24).brightness(10).get());
+		Dali.create(getActivity()).load(R.drawable.test_img1).blurRadius(24).brightness(0).noFade().into(iv2);
 
-		BlurKeyFrameManager man2 = BlurKeyFrameManager.createLinearKeyFrames(10,700,4,20,0);
+		BlurKeyFrameManager man2 = BlurKeyFrameManager.createLinearKeyFrames(8,700,4,20,1000);
 
 		final BlurKeyFrameTransitionAnimation animation2 = new BlurKeyFrameTransitionAnimation(getActivity(),man2);
-		animation2.prepareAnimation(original);
 
 		iv2.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -79,12 +75,11 @@ public class SimpleAnimationFragment extends Fragment{
 
 
 		final ImageView iv3 = (ImageView) rootView.findViewById(R.id.image3);
-		iv3.setImageDrawable(Dali.create(getActivity()).load(R.drawable.test_img1).blurRadius(12).downScale(2).reScale().get());
+		Dali.create(getActivity()).load(R.drawable.test_img1).blurRadius(12).downScale(2).reScale().into(iv3);
 
-		BlurKeyFrameManager man3 = BlurKeyFrameManager.createLinearKeyFrames(4,700,4,20,-60);
+		BlurKeyFrameManager man3 = BlurKeyFrameManager.createLinearKeyFrames(4,1000,4,20,-80);
 
 		final BlurKeyFrameTransitionAnimation animation3 = new BlurKeyFrameTransitionAnimation(getActivity(),man3);
-		animation3.prepareAnimation(original);
 
 		iv3.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -97,12 +92,11 @@ public class SimpleAnimationFragment extends Fragment{
 
 
 		final ImageView iv4 = (ImageView) rootView.findViewById(R.id.image4);
-		iv4.setImageDrawable(Dali.create(getActivity()).load(R.drawable.test_img1).blurRadius(12).downScale(3).reScale().get());
+		Dali.create(getActivity()).load(R.drawable.test_img1).blurRadius(12).downScale(3).reScale().into(iv4);
 
-		BlurKeyFrameManager man4 = BlurKeyFrameManager.createLinearKeyFrames(2,700,4,20,-60);
+		BlurKeyFrameManager man4 = BlurKeyFrameManager.createLinearKeyFrames(2,10000,4,20,-80);
 
 		final BlurKeyFrameTransitionAnimation animation4 = new BlurKeyFrameTransitionAnimation(getActivity(),man4);
-		animation4.prepareAnimation(original);
 
 		iv4.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -113,6 +107,16 @@ public class SimpleAnimationFragment extends Fragment{
 
 		((TextView) rootView.findViewById(R.id.subtitle4)).setText(man4.toString());
 
+
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				animation.prepareAnimation(original);
+				animation2.prepareAnimation(original);
+				animation3.prepareAnimation(original);
+				animation4.prepareAnimation(original);
+			}
+		}).start();
 
 		return rootView;
 	}
