@@ -3,6 +3,7 @@ package at.favre.lib.dali.builder.blur;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -29,8 +30,8 @@ import at.favre.lib.dali.builder.ImageReference;
 import at.favre.lib.dali.builder.TwoLevelCache;
 import at.favre.lib.dali.builder.exception.BlurWorkerException;
 import at.favre.lib.dali.builder.processor.BrightnessProcessor;
+import at.favre.lib.dali.builder.processor.ColorFilterProcessor;
 import at.favre.lib.dali.builder.processor.ContrastProcessor;
-import at.favre.lib.dali.builder.processor.ImageOverlayProcessor;
 import at.favre.lib.dali.builder.processor.IBitmapProcessor;
 import at.favre.lib.dali.util.BuilderUtil;
 
@@ -58,6 +59,7 @@ public class BlurBuilder extends ABuilder {
 		public int errorResId = R.drawable.ic_error_pic;
 		public boolean alphaFadeIn = true;
 		public boolean onConcurrentThreadPool = false;
+		public int colorFilterColorResId = Dali.NO_RESID;
 	}
 
 	public BlurBuilder(ContextWrapper contextWrapper, ImageReference imageReference, TwoLevelCache diskCacheManager) {
@@ -163,8 +165,8 @@ public class BlurBuilder extends ABuilder {
 		return this;
 	}
 
-	public BlurBuilder frostedGlass() {
-		data.postProcessors.add(new ImageOverlayProcessor(data.contextWrapper.getRenderScript(),data.contextWrapper.getContext().getResources()));
+	public BlurBuilder colorFilter(int colorResId) {
+		data.postProcessors.add(new ColorFilterProcessor(colorResId, PorterDuff.Mode.OVERLAY));
 		return this;
 	}
 
@@ -224,7 +226,7 @@ public class BlurBuilder extends ABuilder {
 
 	/**
 	 * Set the image that is set when an error occurs
-	 * @param resId - e.g. R.drawable.error_image or {@link at.favre.lib.dali.Dali#NO_IMAGE_RESID} if you want to disable error image
+	 * @param resId - e.g. R.drawable.error_image or {@link at.favre.lib.dali.Dali#NO_RESID} if you want to disable error image
 	 */
 	public BlurBuilder error(int resId) {
 		data.errorResId = resId;
@@ -263,7 +265,7 @@ public class BlurBuilder extends ABuilder {
 					public void run() {
 						if (result.isError()) {
 							Log.e(TAG, "Could not set into imageview", result.getThrowable());
-							if(data.errorResId == Dali.NO_IMAGE_RESID) {
+							if(data.errorResId == Dali.NO_RESID) {
 								imageView.setImageResource(data.errorResId);
 							}
 						} else {

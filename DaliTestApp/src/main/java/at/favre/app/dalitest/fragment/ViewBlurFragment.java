@@ -30,8 +30,8 @@ public class ViewBlurFragment extends Fragment{
 		iv2 = (ImageView) rootView.findViewById(R.id.blurView2);
 
 		final Dali dali = Dali.create(getActivity());
-		dali.load(rootView.findViewById(R.id.blurTemplateView)).blurRadius(20).downScale(2).reScale().skipCache().into(iv);
-		dali.load(rootView.findViewById(R.id.blurTemplateView2)).blurRadius(20).downScale(1).reScale().skipCache().into(iv2);
+		dali.load(rootView.findViewById(R.id.blurTemplateView)).blurRadius(20).downScale(2).concurrent().reScale().skipCache().into(iv);
+		dali.load(rootView.findViewById(R.id.blurTemplateView2)).blurRadius(20).downScale(1).concurrent().reScale().skipCache().into(iv2);
 
 		rootView.findViewById(R.id.btn_rerender).setOnClickListener(new View.OnClickListener() {
 			@Override

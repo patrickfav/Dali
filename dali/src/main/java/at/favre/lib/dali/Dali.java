@@ -26,7 +26,7 @@ import at.favre.lib.dali.util.Precondition;
 public class Dali {
 	private static final String TAG = Dali.class.getSimpleName();
 
-	public static final int NO_IMAGE_RESID = -1;
+	public static final int NO_RESID = -1;
 
 	private static TwoLevelCache DISK_CACHE_MANAGER;
 	private static ExecutorManager EXECUTOR_MANAGER;

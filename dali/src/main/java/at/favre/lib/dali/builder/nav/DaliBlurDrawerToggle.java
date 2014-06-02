@@ -88,10 +88,10 @@ public class DaliBlurDrawerToggle extends ActionBarDrawerToggle {
 
 				if (BuilderUtil.isOnUiThread()) {
 					if (cacheMode.equals(CacheMode.AUTO) || forceRedraw) {
-						dali.load(drawerLayout.getChildAt(0)).blurRadius(blurRadius).downScale(downSample).error(Dali.NO_IMAGE_RESID).concurrent().skipCache().into(blurView);
+						dali.load(drawerLayout.getChildAt(0)).blurRadius(blurRadius).downScale(downSample).noFade().error(Dali.NO_RESID).concurrent().skipCache().into(blurView);
 						forceRedraw = false;
 					} else {
-						dali.load(drawerLayout.getChildAt(0)).blurRadius(blurRadius).downScale(downSample).error(Dali.NO_IMAGE_RESID).concurrent().into(blurView);
+						dali.load(drawerLayout.getChildAt(0)).blurRadius(blurRadius).downScale(downSample).noFade().error(Dali.NO_RESID).concurrent().into(blurView);
 					}
 				}
 			}

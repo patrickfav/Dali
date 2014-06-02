@@ -1,5 +1,6 @@
 package at.favre.app.dalitest.fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -28,16 +29,16 @@ public class SimpleBlurFragment extends Fragment{
 		Dali dali = Dali.create(getActivity());
 
 		final ImageView iv = (ImageView) rootView.findViewById(R.id.image);
-		BlurBuilder.JobDescription jobDescription1 = dali.load(R.drawable.test_img1).blurRadius(24).concurrent().into(iv);
+		BlurBuilder.JobDescription jobDescription1 = dali.load(R.drawable.test_img1).blurRadius(12).colorFilter(Color.parseColor("#ff00529c")).concurrent().into(iv);
 		((TextView) rootView.findViewById(R.id.subtitle1)).setText(jobDescription1.builderDescription);
 
 		final ImageView iv2 = (ImageView) rootView.findViewById(R.id.image2);
-		BlurBuilder.JobDescription jobDescription2 = dali.load(R.drawable.test_img1).blurRadius(24).brightness(50).concurrent().into(iv2);
+		BlurBuilder.JobDescription jobDescription2 = dali.load(R.drawable.test_img1).blurRadius(12).brightness(0).concurrent().into(iv2);
 		((TextView) rootView.findViewById(R.id.subtitle2)).setText(jobDescription2.builderDescription);
 
 
 		final ImageView iv3 = (ImageView) rootView.findViewById(R.id.image3);
-		BlurBuilder.JobDescription jobDescription3 = dali.load(R.drawable.test_img1).blurRadius(12).downScale(2).concurrent().reScale().into(iv3);
+		BlurBuilder.JobDescription jobDescription3 = dali.load(R.drawable.test_img1).blurRadius(12).downScale(1).colorFilter(Color.parseColor("#ffccdceb")).concurrent().reScale().into(iv3);
 		((TextView) rootView.findViewById(R.id.subtitle3)).setText(jobDescription3.builderDescription);
 
 
