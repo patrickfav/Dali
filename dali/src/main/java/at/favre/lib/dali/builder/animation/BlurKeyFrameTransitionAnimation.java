@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
@@ -17,6 +18,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Created by PatrickF on 29.05.2014.
  */
 public class BlurKeyFrameTransitionAnimation {
+	private final static String TAG = BlurKeyFrameTransitionAnimation.class.getSimpleName();
+
 	private List<TransitionDrawable> transitionDrawables = new ArrayList<TransitionDrawable>();
 	private Context ctx;
 	private Handler handler = new Handler(Looper.getMainLooper());
@@ -61,10 +64,25 @@ public class BlurKeyFrameTransitionAnimation {
 					TransitionDrawable t = transitionDrawables.get(iterator);
 					t.startTransition(manager.getKeyFrames().get(iterator).getDuration());
 					imageView.setImageDrawable(t);
+					Log.d(TAG,"transition "+iterator );
 				}
 			},duration);
 			duration += manager.getKeyFrames().get(i).getDuration();
 		}
+
+		handler.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				Log.d(TAG,"reset animation");
+				for (TransitionDrawable transitionDrawable : transitionDrawables) {
+					transitionDrawable.resetTransition();
+				}
+
+				if(listener != null) {
+					listener.onAnimationEnd();
+				}
+			}
+		},duration);
 	}
 
 	public synchronized void cancel() {

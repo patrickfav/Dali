@@ -29,10 +29,10 @@ import at.favre.lib.dali.builder.ExecutorManager;
 import at.favre.lib.dali.builder.ImageReference;
 import at.favre.lib.dali.builder.TwoLevelCache;
 import at.favre.lib.dali.builder.exception.BlurWorkerException;
-import at.favre.lib.dali.builder.processor.BrightnessProcessor;
 import at.favre.lib.dali.builder.processor.ColorFilterProcessor;
 import at.favre.lib.dali.builder.processor.ContrastProcessor;
 import at.favre.lib.dali.builder.processor.IBitmapProcessor;
+import at.favre.lib.dali.builder.processor.RenderscriptBrightnessProcessor;
 import at.favre.lib.dali.util.BuilderUtil;
 
 /**
@@ -89,10 +89,9 @@ public class BlurBuilder extends ABuilder {
 	 * if the bitmap's object is used anywhere else it would
 	 * create side effects.
 	 *
-	 * @param shouldCopy
 	 */
-	public BlurBuilder copyBitmapBeforeProcess(boolean shouldCopy) {
-		data.copyBitmapBeforeBlur = shouldCopy;
+	public BlurBuilder copyBitmapBeforeProcess() {
+		data.copyBitmapBeforeBlur = true;
 		return this;
 	}
 
@@ -152,7 +151,7 @@ public class BlurBuilder extends ABuilder {
 	 *                   .-100 is black, positive goes up to 1000+
 	 */
 	public BlurBuilder brightness(float brightness) {
-		data.postProcessors.add(new BrightnessProcessor(data.contextWrapper.getRenderScript(),brightness));
+		data.preProcessors.add(new RenderscriptBrightnessProcessor(data.contextWrapper.getRenderScript(),brightness));
 		return this;
 	}
 
@@ -162,12 +161,12 @@ public class BlurBuilder extends ABuilder {
 	 * @param contrast default is 0, pos values increase contrast, neg. values decrease contrast
 	 */
 	public BlurBuilder contrast(float contrast) {
-		data.postProcessors.add(new ContrastProcessor(data.contextWrapper.getRenderScript(),Math.max(Math.min(1500.f,contrast),-1500.f)));
+		data.preProcessors.add(new ContrastProcessor(data.contextWrapper.getRenderScript(),Math.max(Math.min(1500.f,contrast),-1500.f)));
 		return this;
 	}
 
 	public BlurBuilder colorFilter(int colorResId) {
-		data.postProcessors.add(new ColorFilterProcessor(colorResId, PorterDuff.Mode.MULTIPLY));
+		data.preProcessors.add(new ColorFilterProcessor(colorResId, PorterDuff.Mode.OVERLAY));
 		return this;
 	}
 

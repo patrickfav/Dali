@@ -27,7 +27,7 @@ public class BrightnessProcessor implements IBitmapProcessor {
 			Allocation input = Allocation.createFromBitmap(rs, bitmapOriginal);
 			final Allocation output = Allocation.createTyped(rs, input.getType());
 			final ScriptIntrinsicConvolve3x3 script = ScriptIntrinsicConvolve3x3.create(rs, Element.U8_4(rs));
-			script.setCoefficients(createBrightnessKernel(brightness));
+			script.setCoefficients(createBrightnessKernel2(brightness));
 			script.setInput(input);
 			script.forEach(output);
 			output.copyTo(bitmapOriginal);
@@ -58,6 +58,20 @@ public class BrightnessProcessor implements IBitmapProcessor {
 			} else {
 				brightnessKernel[i] = 0;
 			}
+		}
+
+		return brightnessKernel;
+	}
+
+	private float[] createBrightnessKernel2(float brightness) {
+		float kernelElement = 1.f / 9.f; //get average
+		kernelElement += kernelElement * (brightness / 100.f); //add or subtract from the average to brighten or darken
+		kernelElement = Math.max(Math.min(1,kernelElement),0); // normalize to max/min values
+
+		float [] brightnessKernel = new float[9];
+
+		for (int i = 0; i < 9; i++) {
+			brightnessKernel[i] = kernelElement;
 		}
 
 		return brightnessKernel;

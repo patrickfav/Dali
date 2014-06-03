@@ -21,7 +21,7 @@ public class BlurKeyFrame {
 	}
 
 	protected Bitmap prepareFrame(Bitmap original, Dali dali) {
-		return dali.load(original).downScale(inSampleSize).blurRadius(blurRadius).brightness(brightness).reScale().skipCache().getAsBitmap();
+		return dali.load(original).downScale(inSampleSize).blurRadius(blurRadius).brightness(brightness).reScale().skipCache().copyBitmapBeforeProcess().getAsBitmap();
 	}
 
 	public int getDuration() {
