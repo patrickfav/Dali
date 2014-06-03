@@ -6,8 +6,8 @@ import android.support.v8.renderscript.Allocation;
 import android.support.v8.renderscript.Element;
 import android.support.v8.renderscript.RenderScript;
 
-import at.favre.app.blurbenchmark.ScriptC_stackblur;
 import at.favre.lib.dali.R;
+import at.favre.lib.dali.ScriptC_stackblur;
 import at.favre.lib.dali.blur.IBlur;
 
 

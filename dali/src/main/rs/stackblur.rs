@@ -1,6 +1,5 @@
-#pragma version(1)
+#include "ip.rsh"
 #pragma rs_fp_inprecise
-#pragma rs java_package_name(at.favre.app.blurbenchmark)
 
 static unsigned short const stackblur_mul[255] =
 {
