@@ -151,7 +151,7 @@ public class BlurBuilder extends ABuilder {
 	 *                   .-100 is black, positive goes up to 1000+
 	 */
 	public BlurBuilder brightness(float brightness) {
-		data.preProcessors.add(new RenderscriptBrightnessProcessor(data.contextWrapper.getRenderScript(),brightness));
+		data.preProcessors.add(new RenderscriptBrightnessProcessor(data.contextWrapper.getRenderScript(),brightness, data.contextWrapper.getResources()));
 		return this;
 	}
 
