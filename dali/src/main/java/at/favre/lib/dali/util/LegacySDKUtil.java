@@ -72,7 +72,7 @@ public class LegacySDKUtil {
 	 * @return
 	 */
 	public static String getCacheDir(Context ctx) {
-		return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) ||!Environment.isExternalStorageRemovable() ?
+		return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) || (!Environment.isExternalStorageRemovable() && ctx.getExternalCacheDir() != null) ?
 				ctx.getExternalCacheDir().getPath() : ctx.getCacheDir().getPath();
 	}
 

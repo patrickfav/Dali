@@ -1,6 +1,7 @@
 package at.favre.lib.dali.builder.processor;
 
 import android.graphics.Bitmap;
+import android.renderscript.RSRuntimeException;
 import android.support.v8.renderscript.Allocation;
 import android.support.v8.renderscript.RenderScript;
 
@@ -23,12 +24,16 @@ public class RenderscriptBrightnessProcessor implements IBitmapProcessor {
 	@Override
 	public Bitmap manipulate(Bitmap bitmapOriginal) {
 		if(brightness != 0) {
-			Allocation input = Allocation.createFromBitmap(rs, bitmapOriginal);
-			final Allocation output = Allocation.createTyped(rs, input.getType());
-			ScriptC_brightness mScript = new ScriptC_brightness(rs);
-			mScript.invoke_setBright(brightness);
-			mScript.forEach_brightness(input, output);
-			output.copyTo(bitmapOriginal);
+            try {
+                Allocation input = Allocation.createFromBitmap(rs, bitmapOriginal);
+                final Allocation output = Allocation.createTyped(rs, input.getType());
+                ScriptC_brightness mScript = new ScriptC_brightness(rs);
+                mScript.invoke_setBright(brightness);
+                mScript.forEach_brightness(input, output);
+                output.copyTo(bitmapOriginal);
+            } catch (RSRuntimeException e) {
+                //fallback
+            }
 		}
 		return bitmapOriginal;
 	}

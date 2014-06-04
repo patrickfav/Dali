@@ -9,7 +9,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "0.1"
-        renderscriptTargetApi 19
+        renderscriptTargetApi 16
         renderscriptSupportMode true
     }
     buildTypes {
