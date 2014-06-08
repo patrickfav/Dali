@@ -5,11 +5,11 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion 10
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "0.1"
-        renderscriptTargetApi 16
+        renderscriptTargetApi 19
         renderscriptSupportMode true
     }
     buildTypes {

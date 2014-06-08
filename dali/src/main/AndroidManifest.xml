@@ -1,9 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="at.favre.lib.dali" >
 
-    <application
-        android:label="DaliLib">
-
-    </application>
-
+    <application />
 </manifest>

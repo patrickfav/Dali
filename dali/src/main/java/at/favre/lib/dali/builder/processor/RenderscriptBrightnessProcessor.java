@@ -2,8 +2,8 @@ package at.favre.lib.dali.builder.processor;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.renderscript.RSRuntimeException;
 import android.support.v8.renderscript.Allocation;
+import android.support.v8.renderscript.RSRuntimeException;
 import android.support.v8.renderscript.RenderScript;
 
 import at.favre.lib.dali.R;
