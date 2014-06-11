@@ -138,6 +138,11 @@ public class Dali {
 		return new BlurBuilder(contextWrapper, new ImageReference(file),DISK_CACHE_MANAGER);
 	}
 
+	public BlurBuilder load(File file, String cacheKey) {
+		checkFile(file);
+		return new BlurBuilder(contextWrapper, new ImageReference(file,cacheKey),DISK_CACHE_MANAGER);
+	}
+
 	public BlurBuilder load(URI uri) {
 		return load(new File(uri));
 	}
@@ -166,5 +171,9 @@ public class Dali {
 		viewList.add(blurOntoView);
 		viewList.addAll(Arrays.asList(blurOntoViewMore));
 		return new LiveBlurBuilder(contextWrapper,unblurredContentView,viewList);
+	}
+
+	public ContextWrapper getContextWrapper() {
+		return contextWrapper;
 	}
 }

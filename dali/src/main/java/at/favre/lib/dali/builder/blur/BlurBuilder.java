@@ -166,7 +166,7 @@ public class BlurBuilder extends ABuilder {
 	}
 
 	public BlurBuilder colorFilter(int colorResId) {
-		data.preProcessors.add(new ColorFilterProcessor(colorResId, PorterDuff.Mode.OVERLAY));
+		data.preProcessors.add(new ColorFilterProcessor(colorResId, PorterDuff.Mode.MULTIPLY));
 		return this;
 	}
 
@@ -269,7 +269,7 @@ public class BlurBuilder extends ABuilder {
 			imageView.setImageResource(data.placeholder);
 		}
 
-		Dali.getExecutorManager().submitThreadPool(new BlurWorker(data, new BlurWorker.BlurWorkerListener() {
+		return start(new BlurWorker.BlurWorkerListener() {
 			@Override
 			public void onResult(final BlurWorker.Result result) {
 				//run on ui thread because we need to modify ui
@@ -307,8 +307,11 @@ public class BlurBuilder extends ABuilder {
 				});
 
 			}
-		}),data.tag, data.onConcurrentThreadPool ? ExecutorManager.ThreadPoolType.CONCURRENT : ExecutorManager.ThreadPoolType.SERIAL);
+		});
+	}
 
+	public JobDescription start(BlurWorker.BlurWorkerListener listener) {
+		Dali.getExecutorManager().submitThreadPool(new BlurWorker(data,listener),data.tag, data.onConcurrentThreadPool ? ExecutorManager.ThreadPoolType.CONCURRENT : ExecutorManager.ThreadPoolType.SERIAL);
 		return getJobDescription();
 	}
 

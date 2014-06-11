@@ -9,6 +9,7 @@ import at.favre.app.dalitest.fragment.LiveBlurFragment;
 import at.favre.app.dalitest.fragment.SimpleAnimationFragment;
 import at.favre.app.dalitest.fragment.SimpleBlurBrightnessFragment;
 import at.favre.app.dalitest.fragment.SimpleBlurFragment;
+import at.favre.app.dalitest.fragment.SimpleBlurPlaygroundFragment;
 import at.favre.app.dalitest.fragment.ViewBlurFragment;
 
 
@@ -40,6 +41,8 @@ public class GenericActivity extends ActionBarActivity {
 				return new ViewBlurFragment();
 			case 4:
 				return new SimpleBlurBrightnessFragment();
+			case 5:
+				return new SimpleBlurPlaygroundFragment();
 			default:
 				return null;
 		}

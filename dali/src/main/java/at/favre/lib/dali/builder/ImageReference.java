@@ -62,8 +62,12 @@ public class ImageReference {
 	}
 
 	public ImageReference(File fileToBitmap) {
+		this(fileToBitmap,"file_"+fileToBitmap.getAbsolutePath());
+	}
+
+	public ImageReference(File fileToBitmap, String cacheKey) {
 		this.fileToBitmap = fileToBitmap;
-		this.contentId = "file_"+fileToBitmap.getAbsolutePath();
+		this.contentId = cacheKey;
 		this.type=SourceType.FILE;
 	}
 

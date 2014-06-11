@@ -23,6 +23,7 @@ public class MainMenuActivity extends ActionBarActivity {
 		findViewById(R.id.btn_animation1).setOnClickListener(new StartActivityListener(this,2));
 		findViewById(R.id.btn_viewblur).setOnClickListener(new StartActivityListener(this,3));
 		findViewById(R.id.btn_blur2).setOnClickListener(new StartActivityListener(this,4));
+		findViewById(R.id.btn_blur_misc).setOnClickListener(new StartActivityListener(this,5));
 		findViewById(R.id.btn_navdrawer).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
