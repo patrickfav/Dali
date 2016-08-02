@@ -5,7 +5,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.11.+'
+        classpath 'com.android.tools.build:gradle:2.1.2'
     }
 }
 
@@ -16,7 +16,7 @@ allprojects {
 }
 
 ext {
-    compileSdkVersion = 19
-    buildToolsVersion = "19.1.0"
-    targetSdkVersion = 19
+    compileSdkVersion = 23
+    buildToolsVersion = "24.0.0"
+    targetSdkVersion = 23
 }

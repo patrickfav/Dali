@@ -10,11 +10,11 @@ android {
         versionCode 1
         versionName "0.1"
         renderscriptTargetApi 19
-        renderscriptSupportMode true
+        renderscriptSupportModeEnabled true
     }
     buildTypes {
         release {
-            runProguard false
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }

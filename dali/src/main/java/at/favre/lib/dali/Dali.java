@@ -20,9 +20,6 @@ import at.favre.lib.dali.builder.blur.BlurBuilder;
 import at.favre.lib.dali.builder.live.LiveBlurBuilder;
 import at.favre.lib.dali.util.Precondition;
 
-/**
- * Created by PatrickF on 26.05.2014.
- */
 public class Dali {
 	private static final String TAG = Dali.class.getSimpleName();
 
