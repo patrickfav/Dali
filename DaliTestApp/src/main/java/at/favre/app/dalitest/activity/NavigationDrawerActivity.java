@@ -3,7 +3,8 @@ package at.favre.app.dalitest.activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,7 +19,7 @@ import at.favre.app.dalitest.fragment.LiveBlurFragment;
 import at.favre.lib.dali.builder.nav.DaliBlurDrawerToggle;
 
 
-public class NavigationDrawerActivity extends ActionBarActivity {
+public class NavigationDrawerActivity extends AppCompatActivity {
 
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
@@ -36,6 +37,8 @@ public class NavigationDrawerActivity extends ActionBarActivity {
 		menuItems.add("Menu 3");
 		menuItems.add("Menu 4");
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 //		mDrawerLayout.setScrimColor(getResources().getColor(R.color.bright_blue_transparent));
@@ -55,7 +58,7 @@ public class NavigationDrawerActivity extends ActionBarActivity {
 		final String mTitle = getTitle().toString();
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerToggle = new DaliBlurDrawerToggle(this, mDrawerLayout,
-				R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close) {
+                toolbar, R.string.drawer_open, R.string.drawer_close) {
 
 			/** Called when a drawer has settled in a completely closed state. */
 			public void onDrawerClosed(View view) {
@@ -73,7 +76,7 @@ public class NavigationDrawerActivity extends ActionBarActivity {
 		};
 		mDrawerToggle.setDrawerIndicatorEnabled(true);
 		// Set the drawer toggle as the DrawerListener
-		mDrawerLayout.setDrawerListener(mDrawerToggle);
+		mDrawerLayout.addDrawerListener(mDrawerToggle);
 
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		getSupportActionBar().setHomeButtonEnabled(true);

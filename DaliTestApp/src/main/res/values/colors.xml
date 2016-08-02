@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="bright_blue_transparent">#4400ddff</color>
+    <color name="color_primary">#8BC34A</color>
+    <color name="color_primary_dark">#558B2F</color>
+    <color name="accent">#4FC3F7</color>
 </resources>

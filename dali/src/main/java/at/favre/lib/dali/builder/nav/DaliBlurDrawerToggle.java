@@ -1,9 +1,10 @@
 package at.favre.lib.dali.builder.nav;
 
 import android.app.Activity;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -13,14 +14,14 @@ import at.favre.lib.dali.util.BuilderUtil;
 import at.favre.lib.dali.util.LegacySDKUtil;
 
 /**
- * This is a {@link android.support.v4.app.ActionBarDrawerToggle} that
+ * This is a {@link android.support.v7.app.ActionBarDrawerToggle} that
  * will blur the content behind when the nav drawer is opened. It uses
  * a third layer over the content layer that alpha transitions in & out.
  *
  * It features 2 Cachemodes: {@link at.favre.lib.dali.builder.nav.DaliBlurDrawerToggle.CacheMode#AUTO} and {@link at.favre.lib.dali.builder.nav.DaliBlurDrawerToggle.CacheMode#MANUAL}
  * The difference is, that in AUTO mode the blurview will be redrawn everytime
  * the nav drawer opens. In manual you can decide for yourself when the cache
- * will be invalidated. So if you hav
+ * will be invalidated.
  */
 public class DaliBlurDrawerToggle extends ActionBarDrawerToggle {
 	private static String TAG = DaliBlurDrawerToggle.class.getSimpleName();
@@ -37,8 +38,8 @@ public class DaliBlurDrawerToggle extends ActionBarDrawerToggle {
 	private boolean enableBlur = true;
 
 
-	public DaliBlurDrawerToggle(Activity activity, DrawerLayout drawerLayout, int drawerImageRes, int openDrawerContentDescRes, int closeDrawerContentDescRes) {
-		super(activity, drawerLayout, drawerImageRes, openDrawerContentDescRes, closeDrawerContentDescRes);
+	public DaliBlurDrawerToggle(Activity activity, DrawerLayout drawerLayout, Toolbar toolbar, int openDrawerContentDescRes, int closeDrawerContentDescRes) {
+		super(activity, drawerLayout, toolbar, openDrawerContentDescRes, closeDrawerContentDescRes);
 		dali= Dali.create(drawerLayout.getContext());
 		this.drawerLayout=drawerLayout;
 	}

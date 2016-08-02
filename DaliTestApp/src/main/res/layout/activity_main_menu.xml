@@ -1,11 +1,13 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="at.favre.app.dalitest.activity.GenericActivity"
-    android:orientation="vertical"
-    tools:ignore="MergeRootFrame" >
+<LinearLayout android:id="@+id/container"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="at.favre.app.dalitest.activity.GenericActivity"
+              tools:ignore="MergeRootFrame">
+
+    <include layout="@layout/inc_toolbar"/>
 
     <Button
         android:id="@+id/btn_blur1"
@@ -79,7 +81,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
-        android:textColor="#ffcc0000"
-        android:text="Clear Cache"/>
+        android:text="Clear Cache"
+        android:textColor="#ffcc0000"/>
 
 </LinearLayout>

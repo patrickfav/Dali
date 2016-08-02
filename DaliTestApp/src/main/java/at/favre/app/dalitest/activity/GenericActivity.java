@@ -2,7 +2,9 @@ package at.favre.app.dalitest.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import at.favre.app.dalitest.R;
 import at.favre.app.dalitest.fragment.LiveBlurFragment;
@@ -13,14 +15,19 @@ import at.favre.app.dalitest.fragment.SimpleBlurPlaygroundFragment;
 import at.favre.app.dalitest.fragment.ViewBlurFragment;
 
 
-public class GenericActivity extends ActionBarActivity {
+public class GenericActivity extends AppCompatActivity {
 	public final static String FRAGMENT_ID = "FRAGMENT_ID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-		getSupportActionBar().show();
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, getById(getIntent().getIntExtra(FRAGMENT_ID,0)))
@@ -48,8 +55,11 @@ public class GenericActivity extends ActionBarActivity {
 		}
 	}
 
-
-
-
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        if (menuItem.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
+        return super.onOptionsItemSelected(menuItem);
+    }
 
 }
