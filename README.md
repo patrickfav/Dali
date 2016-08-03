@@ -61,11 +61,83 @@ If you just want to use other image filters you could use:
 
 ## Live Blur
 
+Live blur refers to an effect where it a portion of the view blurs what's behind it. It can be used with e.g.
+a `ViewPager`, `Scrollview`, `RecyclerView`, etc.
+
+![Blur Nav Animation](https://github.com/patrickfav/Dali/blob/master/misc/viewpager_anim.gif?raw=true)
+
+A very simple example with a ViewPager would be:
+
+    blurWorker = Dali.create(getActivity()).liveBlur(rootViewPagerWrapperView,topBlurView,bottomBlurView).downScale(8).assemble(true);
+
+    mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            blurWorker.updateBlurView();
+        }
+        @Override public void onPageSelected(int position) {}
+		@Override public void onPageScrollStateChanged(int state) {}
+    });
+
+A full example can be found in the test app's `LiveBlurFragment.java`
+
+The idea is basically to hook up to the scrollable view and every scroll event the blur has to be updated with
+`blurWorker.updateBlurView()`. Many of the views do not offer these features therefore there are simple implementations
+for some views (see package `at.favre.lib.dali.view.Observable*`)
+
 ## Blur Transition Animation
 
 ## Navigation Drawer Background Blur
 
+A specialized version of live blur is blurring the background of a `NavigationDrawer`:
+
 ![Blur Nav Animation](https://github.com/patrickfav/Dali/blob/master/misc/blur_nav.gif?raw=true)
+
+   @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        ...
+		mDrawerToggle = new DaliBlurDrawerToggle(this, mDrawerLayout,
+                toolbar, R.string.drawer_open, R.string.drawer_close) {
+
+			public void onDrawerClosed(View view) {
+				super.onDrawerClosed(view);
+				getSupportActionBar().setTitle(mTitle);
+				invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+			}
+
+			public void onDrawerOpened(View drawerView) {
+				super.onDrawerOpened(drawerView);
+				getSupportActionBar().setTitle(mTitle);
+				invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+			}
+		};
+		mDrawerToggle.setDrawerIndicatorEnabled(true);
+		// Set the drawer toggle as the DrawerListener
+		mDrawerLayout.addDrawerListener(mDrawerToggle);
+        ...
+	}
+
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		mDrawerToggle.syncState();
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		mDrawerToggle.onConfigurationChanged(newConfig);
+	}
+
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+		return super.onPrepareOptionsMenu(menu);
+	}
+
+
+A full example can be found in the test app's `NavigationDrawerActivity.java`
+
 
 ## Licences
 

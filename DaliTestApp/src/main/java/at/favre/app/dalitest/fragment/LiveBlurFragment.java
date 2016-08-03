@@ -40,7 +40,7 @@ public class LiveBlurFragment extends Fragment{
 
 	private View topBlurView;
 	private View bottomBlurView;
-	private View templateView;
+	private View rootViewPagerWrapperView;
 
 	private LiveBlurWorker blurWorker;
 
@@ -53,25 +53,21 @@ public class LiveBlurFragment extends Fragment{
 		mPagerAdapter = new ScreenSlidePagerAdapter();
 		mPager.setAdapter(mPagerAdapter);
 
-		templateView = v.findViewById(R.id.blurTemplateView);
+		rootViewPagerWrapperView = v.findViewById(R.id.blurTemplateView);
 		topBlurView = v.findViewById(R.id.topBlurView);
 		bottomBlurView = v.findViewById(R.id.bottomBlurView);
 
-		blurWorker = Dali.create(getActivity()).liveBlur(templateView,topBlurView,bottomBlurView).downScale(8).assemble(true);
+		blurWorker = Dali.create(getActivity()).liveBlur(rootViewPagerWrapperView,topBlurView,bottomBlurView).downScale(8).assemble(true);
 
-		mPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+		mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 			@Override
 			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 				blurWorker.updateBlurView();
 			}
-
 			@Override
-			public void onPageSelected(int position) {
-			}
-
+			public void onPageSelected(int position) {}
 			@Override
-			public void onPageScrollStateChanged(int state) {
-			}
+			public void onPageScrollStateChanged(int state) {}
 		});
 
 		return v;
