@@ -142,8 +142,8 @@ the animation:
 
 then an `ImageView` can be animated:
 
-BlurKeyFrameTransitionAnimation animation = new BlurKeyFrameTransitionAnimation(getActivity(),man);
-animation.start(imageView);
+    BlurKeyFrameTransitionAnimation animation = new BlurKeyFrameTransitionAnimation(getActivity(),man);
+    animation.start(imageView);
 
 ![Blur Animation](https://github.com/patrickfav/Dali/blob/master/misc/blur_anim.gif?raw=true)
 

@@ -22,6 +22,7 @@ android {
 
 dependencies {
     compile 'com.jakewharton:disklrucache:2.+'
-    compile 'com.android.support:appcompat-v7:23.+'
+    compile 'com.android.support:appcompat-v7:24.1.1'
+    compile 'com.android.support:recyclerview-v7:24.1.1'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
