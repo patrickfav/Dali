@@ -4,7 +4,7 @@ Dali is a image blur library for Android, but also enabling any other kind of im
 RenderScript internally and is heavily cached to be fast and keeps small footprint. It features
 a lot of additional image filters and may be easily extended and pretty every configuration can be changed.
 
-![Gallery](https://github.com/patrickfav/Dali/tree/master/misc/gallery1.png)
+![Gallery](https://github.com/patrickfav/Dali/blob/master/misc/gallery1.png?raw=true)
 
 *Note: This library is in prototype state and currently not maintained or developed. It is mostly
 feature complete altough bugs are to be expected.*
@@ -65,7 +65,7 @@ If you just want to use other image filters you could use:
 
 ## Navigation Drawer Background Blur
 
-![Blur Nav Animation](https://github.com/patrickfav/Dali/tree/master/misc/blur_nav.gif)
+![Blur Nav Animation](https://github.com/patrickfav/Dali/blob/master/misc/blur_nav.gif?raw=true)
 
 ## Licences
 
