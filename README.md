@@ -2,8 +2,9 @@
 
 Dali is a image blur library for Android, but also enabling any other kind of image filter. There are
 several modules for either static blurring, live blurring and animations.
-It uses RenderScript internally and is heavily cached to be fast and keeps small footprint. It features
-a lot of additional image filters and may be easily extended and pretty every configuration can be changed.
+It uses RenderScript internally (although different implementations can be chosen) and is heavily
+cached to be fast and keeps small footprint. It features a lot of additional image filters and may be
+easily extended and pretty every configuration can be changed.
 
 ![Gallery](https://github.com/patrickfav/Dali/blob/master/misc/gallery1.png?raw=true)
 
@@ -12,13 +13,12 @@ feature complete (except for the animation module) although bugs are to be expec
 
 ## Static Blur
 
-Dali uses the builder pattern to manipulate. A very simple example would be:
+Dali uses the builder pattern easy and readable configuration. A very simple example would be:
 
     Dali.create(context).load(R.drawable.test_img1).blurRadius(12).into(imageView);
 
-which would blur given image in the background and set it to the ImageView.
-
-Inbuilt image manipulation filter are brightness, contrast and color.
+which would blur given image in the background and set it to the ImageView. Dali also supports additional
+image manipulation filters: brightness, contrast and color.
 
 Most of them use RenderScript so they should be fast. For details on the filter implementation see the
 `at.favre.lib.dali.builder.processor` package.
@@ -26,12 +26,12 @@ Most of them use RenderScript so they should be fast. For details on the filter 
 Any other manipulation filter can be implemented through the `IBitmapProcessor` and `.addPreProcessor`
 on a builder.
 
-A more complex example is:
+A more complex example including filters would be:
 
     Dali.create(context).load(R.drawable.test_img1).placeholder(R.drawable.test_img1).blurRadius(12)
         .downScale(2).colorFilter(Color.parseColor("#ffccdceb")).concurrent().reScale().into(iv3)
 
-Will blur, color filter a dowscaled version of given image on a concurrent thread pool and rescales it
+This will blur, color filter a downscaled version of given image on a concurrent thread pool and rescales it
 the target (the imageView) this case and will set a placeholder until the opartions are finished.
 
 _Do note that `Dali.create(context)` will always create a new instace so it may be advisable to keep the reference._
@@ -50,7 +50,7 @@ For more examples see `ViewBlurFragment.java`
 
 ### Skip blurring
 
-If you just want to use other image filters you could use:
+If you want to utilize Dali's features, without bluring the image you could do:
 
     Dali.create(context).load(R.drawable.test_img1).algorithm(EBlurAlgorithm.NONE).brightness(70).concurrent().into(iv);
 
@@ -148,6 +148,12 @@ then an `ImageView` can be animated:
 ![Blur Animation](https://github.com/patrickfav/Dali/blob/master/misc/blur_anim.gif?raw=true)
 
 A full example can be found in the test app's `SimpleAnimationFragment.java`
+
+The idea is from Roman Nurik's App Muzei where he explains how he does the blur transition smoothly and fast.
+Instead of just alpha fading the source and the final blur image he creates different keyframes with various
+states of blur and then fades through all those keyframes. This is a compromise between performance and image
+quality.
+[See his Google+ blog post for more info.](https://plus.google.com/+RomanNurik/posts/2sTQ1X2Cb2Z)
 
 _Note: This module is not feature complete and has still terrible bugs, so use at your own risk._
 
