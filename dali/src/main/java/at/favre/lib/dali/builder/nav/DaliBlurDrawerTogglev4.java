@@ -14,15 +14,10 @@ import at.favre.lib.dali.util.BuilderUtil;
 import at.favre.lib.dali.util.LegacySDKUtil;
 
 /**
- * This is a {@link ActionBarDrawerToggle} that
- * will blur the content behind when the nav drawer is opened. It uses
- * a third layer over the content layer that alpha transitions in & out.
- *
- * It features 2 Cachemodes: {@link DaliBlurDrawerTogglev4.CacheMode#AUTO} and {@link DaliBlurDrawerTogglev4.CacheMode#MANUAL}
- * The difference is, that in AUTO mode the blurview will be redrawn everytime
- * the nav drawer opens. In manual you can decide for yourself when the cache
- * will be invalidated.
+ * This is a {@link ActionBarDrawerToggle} version of the {@link DaliBlurDrawerToggle}. It is deprecated and
+ * you should use {@link DaliBlurDrawerToggle} instead. This is only for backwards compatibility.
  */
+@Deprecated
 public class DaliBlurDrawerTogglev4 extends ActionBarDrawerToggle {
 	private static String TAG = DaliBlurDrawerTogglev4.class.getSimpleName();
 	private DrawerLayout drawerLayout;

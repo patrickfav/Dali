@@ -16,7 +16,9 @@ import java.util.List;
 
 import at.favre.app.dalitest.R;
 import at.favre.app.dalitest.fragment.LiveBlurFragment;
+import at.favre.lib.dali.Dali;
 import at.favre.lib.dali.builder.nav.DaliBlurDrawerToggle;
+import at.favre.lib.dali.builder.nav.NavigationDrawerListener;
 
 
 public class NavigationDrawerActivity extends AppCompatActivity {
@@ -57,21 +59,18 @@ public class NavigationDrawerActivity extends AppCompatActivity {
 
 		final String mTitle = getTitle().toString();
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-		mDrawerToggle = new DaliBlurDrawerToggle(this, mDrawerLayout,
-                toolbar, R.string.drawer_open, R.string.drawer_close) {
-
-			/** Called when a drawer has settled in a completely closed state. */
+		mDrawerToggle = Dali.create(this).constructNavToggle(this, mDrawerLayout,
+				toolbar, R.string.drawer_open, R.string.drawer_close, new NavigationDrawerListener() {
+			@Override
 			public void onDrawerClosed(View view) {
-				super.onDrawerClosed(view);
 				invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
 			}
 
 			/** Called when a drawer has settled in a completely open state. */
 			public void onDrawerOpened(View drawerView) {
-				super.onDrawerOpened(drawerView);
 				invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
 			}
-		};
+		});
 		mDrawerToggle.setDrawerIndicatorEnabled(true);
 		// Set the drawer toggle as the DrawerListener
 		mDrawerLayout.addDrawerListener(mDrawerToggle);
@@ -116,7 +115,6 @@ public class NavigationDrawerActivity extends AppCompatActivity {
 			return true;
 		}
 		// Handle your other action bar items...
-
 		return super.onOptionsItemSelected(item);
 	}
 

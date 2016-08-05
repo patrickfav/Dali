@@ -1,7 +1,12 @@
 package at.favre.lib.dali;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.support.annotation.Nullable;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
@@ -18,159 +23,172 @@ import at.favre.lib.dali.builder.ImageReference;
 import at.favre.lib.dali.builder.TwoLevelCache;
 import at.favre.lib.dali.builder.blur.BlurBuilder;
 import at.favre.lib.dali.builder.live.LiveBlurBuilder;
+import at.favre.lib.dali.builder.nav.DaliBlurDrawerToggle;
+import at.favre.lib.dali.builder.nav.NavigationDrawerListener;
 import at.favre.lib.dali.util.Precondition;
 
 public class Dali {
-	private static final String TAG = Dali.class.getSimpleName();
+    public static final int NO_RESID = -1;
+    private static final String TAG = Dali.class.getSimpleName();
+    private static TwoLevelCache DISK_CACHE_MANAGER;
+    private static ExecutorManager EXECUTOR_MANAGER;
+    private static Config GLOBAL_CONFIG = new Config();
+    private ContextWrapper contextWrapper;
 
-	public static final int NO_RESID = -1;
+    private Dali(Context ctx) {
+        contextWrapper = new ContextWrapper(ctx);
+    }
 
-	private static TwoLevelCache DISK_CACHE_MANAGER;
-	private static ExecutorManager EXECUTOR_MANAGER;
-	private static Config GLOBAL_CONFIG = new Config();
+    public static Config getConfig() {
+        return GLOBAL_CONFIG;
+    }
 
+    /**
+     * Sets a new config and clears the previous cache
+     */
+    public synchronized static void resetAndSetNewConfig(Context ctx, Config config) {
+        GLOBAL_CONFIG = config;
 
-	public final static class Config {
-		public boolean debugMode = false;
-		public boolean globalUseMemoryCache = true;
-		public boolean globalUseDiskCache = true;
-		public int diskCacheSizeBytes = 1024*1024*10;
-		public int memoryCacheSizeBytes = (int) Runtime.getRuntime().maxMemory() / 10;
-		public String diskCacheFolderName = "dali_diskcache";
-		public int maxBlurWorkerThreads = 4;
-		public String logTag=Dali.class.getSimpleName();
-	}
+        if (DISK_CACHE_MANAGER != null) {
+            DISK_CACHE_MANAGER.clear();
+            DISK_CACHE_MANAGER = null;
+            createCache(ctx);
+        }
 
-	public static Config getConfig() {
-		return GLOBAL_CONFIG;
-	}
+        if (EXECUTOR_MANAGER != null) {
+            EXECUTOR_MANAGER.shutDown();
+            EXECUTOR_MANAGER = null;
+        }
+        Log.i(TAG, "New config set");
+    }
 
-	/**
-	 * Sets a new config and clears the previous cache
-	 */
-	public synchronized static void resetAndSetNewConfig(Context ctx, Config config) {
-		GLOBAL_CONFIG = config;
+    public static void setDebugMode(boolean debugMode) {
+        GLOBAL_CONFIG.debugMode = debugMode;
+    }
 
-		if(DISK_CACHE_MANAGER != null) {
-			DISK_CACHE_MANAGER.clear();
-			DISK_CACHE_MANAGER=null;
-			createCache(ctx);
-		}
+    public static Dali create(Context ctx) {
+        Precondition.checkNotNull("Provided context must not be null", ctx);
 
-		if(EXECUTOR_MANAGER != null) {
-			EXECUTOR_MANAGER.shutDown();
-			EXECUTOR_MANAGER = null;
-		}
-		Log.i(TAG,"New config set");
-	}
+        createCache(ctx);
 
-	public static void setDebugMode(boolean debugMode) {
-		GLOBAL_CONFIG.debugMode = debugMode;
-	}
+        Log.i(TAG, "Dali debug mode: " + GLOBAL_CONFIG.debugMode);
 
-	public static Dali create(Context ctx) {
-		Precondition.checkNotNull("Provided context must not be null",ctx);
+        return new Dali(ctx.getApplicationContext());
+    }
 
-		createCache(ctx);
+    private static TwoLevelCache createCache(Context ctx) {
+        if (DISK_CACHE_MANAGER == null) {
+            DISK_CACHE_MANAGER = new TwoLevelCache(ctx, GLOBAL_CONFIG.globalUseMemoryCache, GLOBAL_CONFIG.globalUseDiskCache, GLOBAL_CONFIG.diskCacheSizeBytes,
+                    GLOBAL_CONFIG.diskCacheFolderName, GLOBAL_CONFIG.memoryCacheSizeBytes, GLOBAL_CONFIG.debugMode);
+        }
+        return DISK_CACHE_MANAGER;
+    }
 
-		Log.i(TAG,"Dali debug mode: "+GLOBAL_CONFIG.debugMode);
+    public static ExecutorManager getExecutorManager() {
+        if (EXECUTOR_MANAGER == null) {
+            EXECUTOR_MANAGER = new ExecutorManager(GLOBAL_CONFIG.maxBlurWorkerThreads);
+        }
+        return EXECUTOR_MANAGER;
+    }
 
-		return new Dali(ctx.getApplicationContext());
-	}
-
-	private static TwoLevelCache createCache(Context ctx) {
-		if(DISK_CACHE_MANAGER == null) {
-			DISK_CACHE_MANAGER = new TwoLevelCache(ctx,GLOBAL_CONFIG.globalUseMemoryCache,GLOBAL_CONFIG.globalUseDiskCache,GLOBAL_CONFIG.diskCacheSizeBytes,
-					GLOBAL_CONFIG.diskCacheFolderName,GLOBAL_CONFIG.memoryCacheSizeBytes,GLOBAL_CONFIG.debugMode);
-		}
-		return DISK_CACHE_MANAGER;
-	}
-
-	public static ExecutorManager getExecutorManager() {
-		if(EXECUTOR_MANAGER == null) {
-			EXECUTOR_MANAGER = new ExecutorManager(GLOBAL_CONFIG.maxBlurWorkerThreads);
-		}
-		return EXECUTOR_MANAGER;
-	}
-
-	public static void logD(String localTag,String msg) {
-		if(getConfig().debugMode) {
-			Log.d(getConfig().logTag,"["+localTag+"] "+msg);
-		}
-	}
-	public static void logV(String localTag,String msg){
-		if(getConfig().debugMode) {
-			Log.v(getConfig().logTag,"["+localTag+"] "+msg);
-		}
-	}
+    public static void logD(String localTag, String msg) {
+        if (getConfig().debugMode) {
+            Log.d(getConfig().logTag, "[" + localTag + "] " + msg);
+        }
+    }
 
 
 
 	/* NON STATIC CLASS ************************************************************************* */
 
-	private ContextWrapper contextWrapper;
+    public static void logV(String localTag, String msg) {
+        if (getConfig().debugMode) {
+            Log.v(getConfig().logTag, "[" + localTag + "] " + msg);
+        }
+    }
 
-	private Dali(Context ctx) {
-		contextWrapper = new ContextWrapper(ctx);
-	}
+    public BlurBuilder load(Bitmap bitmap) {
+        return new BlurBuilder(contextWrapper, new ImageReference(bitmap), DISK_CACHE_MANAGER);
+    }
 
-	public BlurBuilder load(Bitmap bitmap) {
-		return new BlurBuilder(contextWrapper, new ImageReference(bitmap),DISK_CACHE_MANAGER);
-	}
+    public BlurBuilder load(Bitmap bitmap, String cacheKey) {
+        return new BlurBuilder(contextWrapper, new ImageReference(bitmap, cacheKey), DISK_CACHE_MANAGER);
+    }
 
-	public BlurBuilder load(int resId) {
-		return new BlurBuilder(contextWrapper, new ImageReference(resId),DISK_CACHE_MANAGER);
-	}
+    public BlurBuilder load(BitmapDrawable drawable) {
+        return new BlurBuilder(contextWrapper, new ImageReference(drawable.getBitmap()), DISK_CACHE_MANAGER);
+    }
 
-	public BlurBuilder load(InputStream inputStream) {
-		return new BlurBuilder(contextWrapper, new ImageReference(inputStream),DISK_CACHE_MANAGER);
-	}
+    public BlurBuilder load(int resId) {
+        return new BlurBuilder(contextWrapper, new ImageReference(resId), DISK_CACHE_MANAGER);
+    }
 
-	public BlurBuilder load(View view) {
-		return new BlurBuilder(contextWrapper, new ImageReference(view),DISK_CACHE_MANAGER);
-	}
+    public BlurBuilder load(InputStream inputStream) {
+        return new BlurBuilder(contextWrapper, new ImageReference(inputStream), DISK_CACHE_MANAGER);
+    }
 
-	public BlurBuilder load(File file) {
-		checkFile(file);
-		return new BlurBuilder(contextWrapper, new ImageReference(file),DISK_CACHE_MANAGER);
-	}
+    public BlurBuilder load(View view) {
+        return new BlurBuilder(contextWrapper, new ImageReference(view), DISK_CACHE_MANAGER);
+    }
 
-	public BlurBuilder load(File file, String cacheKey) {
-		checkFile(file);
-		return new BlurBuilder(contextWrapper, new ImageReference(file,cacheKey),DISK_CACHE_MANAGER);
-	}
+    public BlurBuilder load(File file) {
+        checkFile(file);
+        return new BlurBuilder(contextWrapper, new ImageReference(file), DISK_CACHE_MANAGER);
+    }
 
-	public BlurBuilder load(URI uri) {
-		return load(new File(uri));
-	}
+    public BlurBuilder load(File file, String cacheKey) {
+        checkFile(file);
+        return new BlurBuilder(contextWrapper, new ImageReference(file, cacheKey), DISK_CACHE_MANAGER);
+    }
 
-	public BlurBuilder load(String path) {
-		return load(new File(path));
-	}
+    public BlurBuilder load(URI uri) {
+        return load(new File(uri));
+    }
 
-	private void checkFile(File file) {
-		String errMsg = null;
-		if(file == null) {
-			errMsg = "file object is null";
-		} else if(!file.exists()) {
-			errMsg = "file does not exist";
-		} else if(!file.isFile()) {
-			errMsg = "is not a file";
-		}
+    public BlurBuilder load(String path) {
+        return load(new File(path));
+    }
 
-		if(errMsg != null) {
-			throw new IllegalArgumentException("Could not load file "+file+": "+errMsg);
-		}
-	}
+    private void checkFile(File file) {
+        String errMsg = null;
+        if (file == null) {
+            errMsg = "file object is null";
+        } else if (!file.exists()) {
+            errMsg = "file does not exist";
+        } else if (!file.isFile()) {
+            errMsg = "is not a file";
+        }
 
-	public LiveBlurBuilder liveBlur(View unblurredContentView, View blurOntoView, View... blurOntoViewMore) {
-		List<View> viewList = new ArrayList<View>();
-		viewList.add(blurOntoView);
-		viewList.addAll(Arrays.asList(blurOntoViewMore));
-		return new LiveBlurBuilder(contextWrapper,unblurredContentView,viewList);
-	}
+        if (errMsg != null) {
+            throw new IllegalArgumentException("Could not load file " + file + ": " + errMsg);
+        }
+    }
 
-	public ContextWrapper getContextWrapper() {
-		return contextWrapper;
-	}
+    public LiveBlurBuilder liveBlur(View unblurredContentView, View blurOntoView, View... blurOntoViewMore) {
+        List<View> viewList = new ArrayList<View>();
+        viewList.add(blurOntoView);
+        viewList.addAll(Arrays.asList(blurOntoViewMore));
+        return new LiveBlurBuilder(contextWrapper, unblurredContentView, viewList);
+    }
+
+    public DaliBlurDrawerToggle constructNavToggle(Activity activity, DrawerLayout drawerLayout,
+                                                   Toolbar toolbar, int openDrawerContentDescRes,
+                                                   int closeDrawerContentDescRes,@Nullable NavigationDrawerListener listener) {
+        return new DaliBlurDrawerToggle(activity, drawerLayout, toolbar, openDrawerContentDescRes, closeDrawerContentDescRes, listener);
+    }
+
+    public ContextWrapper getContextWrapper() {
+        return contextWrapper;
+    }
+
+    public final static class Config {
+        public boolean debugMode = false;
+        public boolean globalUseMemoryCache = true;
+        public boolean globalUseDiskCache = true;
+        public int diskCacheSizeBytes = 1024 * 1024 * 10;
+        public int memoryCacheSizeBytes = (int) Runtime.getRuntime().maxMemory() / 10;
+        public String diskCacheFolderName = "dali_diskcache";
+        public int maxBlurWorkerThreads = 4;
+        public String logTag = Dali.class.getSimpleName();
+    }
 }

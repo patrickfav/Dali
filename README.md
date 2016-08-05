@@ -1,27 +1,38 @@
 # Dali
 
-Dali is a image blur library for Android, but also enabling any other kind of image filter. There are
-several modules for either static blurring, live blurring and animations.
+Dali is an image blur library for Android. It is easy to use, fast and extensible.
+Dali contains several modules for either static blurring, live blurring and animations.
 It uses RenderScript internally (although different implementations can be chosen) and is heavily
-cached to be fast and keeps small footprint. It features a lot of additional image filters and may be
+cached to be fast and keeps small memory footprint. It features a lot of additional image filters and may be
 easily extended and pretty every configuration can be changed.
 
 ![Gallery](https://github.com/patrickfav/Dali/blob/master/misc/gallery1.png?raw=true)
 
-*Note: This library is in prototype state and currently not maintained or developed. It is mostly
+*Note: This library is in prototype state and not ready for prime time. It is mostly
 feature complete (except for the animation module) although bugs are to be expected.*
+
+# Usage
+
+Add the lib as gradle dependency either by using the provided `.aar` file (see releases)
+[as local dependency](http://stackoverflow.com/questions/24506648/adding-local-aar-files-to-gradle-build-using-flatdirs-is-not-working)
+or use the maven dependency:
+
+    TODO: add to maven central
+
+The quickest way to discover possible features is to see what builder methods `Dali.create(context)` contains.
 
 ## Static Blur
 
-Dali uses the builder pattern easy and readable configuration. A very simple example would be:
+Static blur refers to blurring images that do not change dynamically in the UI (e.g. a static background image).
+Dali uses the builder pattern for easy and readable configuration. A very simple example would be:
 
     Dali.create(context).load(R.drawable.test_img1).blurRadius(12).into(imageView);
 
-which would blur given image in the background and set it to the ImageView. Dali also supports additional
-image manipulation filters: brightness, contrast and color.
+which would blur given image in a background thread and set it to the `ImageView`. Dali also supports additional
+image manipulation filters i.e. brightness, contrast and color.
 
-Most of them use RenderScript so they should be fast. For details on the filter implementation see the
-`at.favre.lib.dali.builder.processor` package.
+Most of them use RenderScript so they should be reasonably fast, although check compatibility.
+For details on the filter implementation see the `at.favre.lib.dali.builder.processor` package.
 
 Any other manipulation filter can be implemented through the `IBitmapProcessor` and `.addPreProcessor`
 on a builder.
@@ -156,6 +167,15 @@ quality.
 [See his Google+ blog post for more info.](https://plus.google.com/+RomanNurik/posts/2sTQ1X2Cb2Z)
 
 _Note: This module is not feature complete and has still terrible bugs, so use at your own risk._
+
+## Advanced
+
+# Caching
+
+## TODO
+
+* add proguard settings
+* fix animations
 
 ## Licences
 
