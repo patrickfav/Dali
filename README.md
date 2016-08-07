@@ -186,7 +186,7 @@ _Note: This module is not feature complete and has still terrible bugs, so use a
 
 ## Advanced
 
-# Caching
+### Caching
 
 ## TODO
 
@@ -194,7 +194,7 @@ _Note: This module is not feature complete and has still terrible bugs, so use a
 * fix animations
 * add tests
 
-## Licences
+# Licences
 
 Copyright 2016 Patrick Favre-Bulle
 
