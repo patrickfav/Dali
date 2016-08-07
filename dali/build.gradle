@@ -1,15 +1,50 @@
 apply plugin: 'com.android.library'
 
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'dali'
+
+    publishedGroupId = 'at.favre.lib'
+    libraryName = 'Dali'
+    artifact = 'dali'
+
+    libraryDescription = 'Dali is an image blur library for Android. It is easy to use, fast and extensible. Dali contains several modules for either static blurring, live blurring and animations.'
+
+    siteUrl = 'https://github.com/patrickfav/Dali'
+    gitUrl = 'https://github.com/patrickfav/Dali.git'
+
+    libraryVersion = rootProject.ext.versionName
+
+    developerId = 'patrickfav'
+    developerName = 'Patrick Favre-Bulle'
+    developerEmail = 'patrick.favrebulle@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
+def Properties localProps = getSigningProperties()
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
 
+    signingConfigs {
+        release {
+            storeFile file(localProps.getProperty('RELEASE_KEYSTORE_PATH','fillhere'))
+            storePassword localProps.getProperty('RELEASE_KEYSTORE_PW','')
+            keyAlias localProps.getProperty('RELEASE_KEY_ALIAS','')
+            keyPassword localProps.getProperty('RELEASE_KEY_PW','')
+        }
+    }
+
     defaultConfig {
-        minSdkVersion 10
+        minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "0.1"
-        renderscriptTargetApi 19
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
+        renderscriptTargetApi rootProject.ext.renderscriptTargetApi
         renderscriptSupportModeEnabled true
     }
     buildTypes {
@@ -18,11 +53,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
-    compile 'com.jakewharton:disklrucache:2.+'
+    compile 'com.jakewharton:disklrucache:2.0.2'
     compile 'com.android.support:appcompat-v7:24.1.1'
     compile 'com.android.support:recyclerview-v7:24.1.1'
-    compile fileTree(dir: 'libs', include: ['*.jar'])
 }
+
+//apply from: '../gradle/install.gradle'
+//apply from: '../gradle/publish.gradle'

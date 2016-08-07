@@ -19,7 +19,21 @@ or use the maven dependency:
 
     TODO: add to maven central
 
+Then add the following to your build.gradle
+    
+    android {
+       ...
+       renderscriptTargetApi 19
+       renderscriptSupportModeEnabled true
+    }
+
 The quickest way to discover possible features is to see what builder methods `Dali.create(context)` contains.
+
+## Download Test App
+
+[![App Icon](http://developer.android.com/images/brand/en_app_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=at.favre.app.dalitest)
+
+The test app is in the playstore, you can get it here [Dali Test App](https://play.google.com/store/apps/details?id=at.favre.app.dalitest).
 
 ## Static Blur
 
@@ -176,6 +190,7 @@ _Note: This module is not feature complete and has still terrible bugs, so use a
 
 * add proguard settings
 * fix animations
+* add tests
 
 ## Licences
 

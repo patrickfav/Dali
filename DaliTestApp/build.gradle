@@ -1,30 +1,48 @@
 apply plugin: 'com.android.application'
 
+def Properties localProps = getSigningProperties()
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
 
+    signingConfigs {
+        release {
+            storeFile file(localProps.getProperty('RELEASE_KEYSTORE_PATH','fillhere'))
+            storePassword localProps.getProperty('RELEASE_KEYSTORE_PW','')
+            keyAlias localProps.getProperty('RELEASE_KEY_ALIAS','')
+            keyPassword localProps.getProperty('RELEASE_KEY_PW','')
+        }
+    }
+
     defaultConfig {
-        minSdkVersion 10
+        minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "0.1"
-        renderscriptTargetApi 19
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
+        renderscriptTargetApi rootProject.ext.renderscriptTargetApi
         renderscriptSupportModeEnabled true
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            signingConfig signingConfigs.release
         }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+    lintOptions {
+        abortOnError false
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:24.1.1'
     compile 'com.android.support:appcompat-v7:24.1.1'
     compile 'com.squareup.picasso:picasso:2.5.+'
 
-    compile project (':dali')
+    compile project(':dali')
 }

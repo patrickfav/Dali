@@ -8,7 +8,7 @@ import android.support.v8.renderscript.ScriptIntrinsicConvolve3x3;
 
 /**
  * This will change the brightness of a bitmap. It utilizes
- * a convolve matrix algorithm powered by renderscript (=native & fast)
+ * a convolve matrix algorithm powered by renderscript (=native and fast)
  *
  * Brightness values are from -100 (black) to 1000 and more
  */

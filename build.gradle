@@ -1,22 +1,39 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-
 buildscript {
     repositories {
         mavenCentral()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.1.2'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.3'
     }
+}
+
+plugins {
+    id "com.jfrog.bintray" version "1.7"
 }
 
 allprojects {
     repositories {
-        mavenCentral()
+        jcenter()
     }
 }
 
 ext {
+    versionName = "0.2"
+    versionCode = 2
     compileSdkVersion = 23
     buildToolsVersion = "23.0.3"
     targetSdkVersion = 23
+    minSdkVersion = 10
+    renderscriptTargetApi = 19
+}
+
+def getSigningProperties() {
+    def Properties props = new Properties()
+    try {
+        props.load(new FileInputStream(file('signing.properties')))
+    }catch (Exception e) {//just load any file to not get error
+        props.load(new FileInputStream(file('local.properties')))
+    }
+    return props
 }

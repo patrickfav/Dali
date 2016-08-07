@@ -14,7 +14,7 @@ import at.favre.lib.dali.blur.IBlur;
 public class BoxBlur implements IBlur {
     @Override
     public Bitmap blur(int radius, Bitmap bmp) {
-        assert (radius & 1) == 0 : "Range must be odd.";
+        if((radius & 1) == 0 ) throw new IllegalArgumentException("Range must be odd.");
 
         Bitmap blurred = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(),
                 Bitmap.Config.ARGB_8888);

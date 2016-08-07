@@ -1,5 +1,6 @@
 package at.favre.lib.dali.builder.blur;
 
+import android.annotation.TargetApi;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -8,6 +9,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -62,7 +64,8 @@ public class BlurBuilder extends ABuilder {
 		public int placeholder = Dali.NO_RESID;
 	}
 
-	public BlurBuilder(ContextWrapper contextWrapper, ImageReference imageReference, TwoLevelCache diskCacheManager) {
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public BlurBuilder(ContextWrapper contextWrapper, ImageReference imageReference, TwoLevelCache diskCacheManager) {
 		data = new BlurData();
 		data.imageReference = imageReference;
 		data.contextWrapper = contextWrapper;
@@ -100,7 +103,7 @@ public class BlurBuilder extends ABuilder {
 	 * performance enhancement and less memory usage
 	 * sacrificing image quality.
 	 *
-	 * @param scaleInSample value > 1 will scale the image width/height, so 2 will getFromDiskCache you 1/4
+	 * @param scaleInSample value greater than 1 will scale the image width/height, so 2 will getFromDiskCache you 1/4
 	 *                      of the original size and 4 will getFromDiskCache you 1/16 of the original size - this just sets
 	 *                      the inSample size in {@link android.graphics.BitmapFactory.Options#inSampleSize } and
 	 *                      behaves exactly the same, so keep the value 2^n for least scaling artifacts
@@ -207,7 +210,7 @@ public class BlurBuilder extends ABuilder {
 	}
 
 	/**
-	 * Skips the cache (lookup & save). This will also delete all
+	 * Skips the cache (lookup and save). This will also delete all
 	 * saved caches for this configuration. Use this if you only
 	 * use this image once or want to purge the cache for this.
 	 */

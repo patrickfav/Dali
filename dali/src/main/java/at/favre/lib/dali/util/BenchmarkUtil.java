@@ -10,9 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-/**
- * Created by PatrickF on 16.04.2014.
- */
+
 public class BenchmarkUtil {
 	private static final DecimalFormat format = new DecimalFormat("#.0");
 	private static final String fileSeperator = ";";
@@ -69,7 +67,7 @@ public class BenchmarkUtil {
 	}
 
 	public static String getCurrentTime() {
-		SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss.SSS");
+		SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss.SSS", Locale.getDefault());
 		return sdf.format(new Date());
 	}
 }

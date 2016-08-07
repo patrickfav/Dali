@@ -9,10 +9,10 @@ import at.favre.lib.dali.blur.IBlur;
  * Stack BlurUtil v1.0 from
  http://www.quasimondo.com/StackBlurForCanvas/StackBlurDemo.html
 
- Java Author: Mario Klingemann <mario at quasimondo.com>
+ Java Author: Mario Klingemann (mario at quasimondo.com)
  http://incubator.quasimondo.com
  created Feburary 29, 2004
- Android port : Yahel Bouaziz <yahel at kayenko.com>
+ Android port : Yahel Bouaziz (yahel at kayenko.com)
  http://www.kayenko.com
  ported april 5th, 2012
 
@@ -32,7 +32,7 @@ import at.favre.lib.dali.blur.IBlur;
  If you are using this algorithm in your code please add
  the following line:
 
- Stack BlurUtil Algorithm by Mario Klingemann <mario@quasimondo.com>
+ Stack BlurUtil Algorithm by Mario Klingemann (mario@quasimondo.com)
 */
 
 public class StackBlur implements IBlur {

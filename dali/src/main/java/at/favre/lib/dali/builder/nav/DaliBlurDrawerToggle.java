@@ -16,7 +16,7 @@ import at.favre.lib.dali.util.LegacySDKUtil;
 /**
  * This is a {@link android.support.v7.app.ActionBarDrawerToggle} that
  * will blur the content behind when the nav drawer is opened. It uses
- * a third layer over the content layer that alpha transitions in & out.
+ * a third layer over the content layer that alpha transitions in and out.
  * <p/>
  * It features 2 Cachemodes: {@link at.favre.lib.dali.builder.nav.DaliBlurDrawerToggle.CacheMode#AUTO} and {@link at.favre.lib.dali.builder.nav.DaliBlurDrawerToggle.CacheMode#MANUAL}
  * The difference is, that in AUTO mode the blurview will be redrawn everytime
