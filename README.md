@@ -17,9 +17,20 @@ Add the lib as gradle dependency either by using the provided `.aar` file (see r
 [as local dependency](http://stackoverflow.com/questions/24506648/adding-local-aar-files-to-gradle-build-using-flatdirs-is-not-working)
 or use the maven dependency:
 
-    TODO: add to maven central
+        compile 'at.favre.lib:dali:0.2'
 
-Then add the following to your build.gradle
+Currently the lib is not on jcenter or maven central yet, therefore you need to add my maven repo in your root build.gradle:
+
+    allprojects {
+        repositories {
+            jcenter()
+            maven {
+                url 'https://dl.bintray.com/patrickfav/maven/'
+            }
+        }
+    }
+
+Then add the following to your app's build.gradle to get Renderscript to work
     
     android {
        ...
