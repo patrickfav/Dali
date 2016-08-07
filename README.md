@@ -35,6 +35,8 @@ The quickest way to discover possible features is to see what builder methods `D
 
 The test app is in the playstore, you can get it here [Dali Test App](https://play.google.com/store/apps/details?id=at.favre.app.dalitest).
 
+# Features
+
 ## Static Blur
 
 Static blur refers to blurring images that do not change dynamically in the UI (e.g. a static background image).
