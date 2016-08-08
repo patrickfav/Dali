@@ -197,6 +197,14 @@ _Note: This module is not feature complete and has still terrible bugs, so use a
 
 ## Advanced
 
+### How to build
+
+Assemble the lib with the following command line call:
+
+    gradlew :dali:assemble
+
+The .aar files can be found in the `/dali/build/outputs/aar` folder
+
 ### Caching
 
 ## TODO
@@ -205,7 +213,7 @@ _Note: This module is not feature complete and has still terrible bugs, so use a
 * fix animations
 * add tests
 
-# Licence
+# License
 
 Copyright 2016 Patrick Favre-Bulle
 
