@@ -1,3 +1,4 @@
+
 # Dali
 
 Dali is an image blur library for Android. It is easy to use, fast and extensible.
@@ -8,8 +9,7 @@ easily extended and pretty every configuration can be changed.
 
 ![Gallery](https://github.com/patrickfav/Dali/blob/master/misc/gallery1.png?raw=true)
 
-*Note: This library is in prototype state and not ready for prime time. It is mostly
-feature complete (except for the animation module) although bugs are to be expected.*
+*Note: This library is in prototype state and not ready for prime time. It is mostly feature complete (except for the animation module) although bugs are to be expected.*
 
 # Usage
 
@@ -38,13 +38,13 @@ Then add the following to your app's build.gradle to get Renderscript to work
        renderscriptSupportModeEnabled true
     }
 
-The quickest way to discover possible features is to see what builder methods `Dali.create(context)` contains.
+The quickest way to discover possible features, is to see what builder methods `Dali.create(context)` contains.
 
 ## Download Test App
 
 [![App Icon](http://developer.android.com/images/brand/en_app_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=at.favre.app.dalitest)
 
-The test app is in the playstore, you can get it here [Dali Test App](https://play.google.com/store/apps/details?id=at.favre.app.dalitest).
+The test app is in the Playstore, you can get it here [Dali Test App](https://play.google.com/store/apps/details?id=at.favre.app.dalitest).
 
 # Features
 
@@ -70,11 +70,11 @@ A more complex example including filters would be:
         .downScale(2).colorFilter(Color.parseColor("#ffccdceb")).concurrent().reScale().into(iv3)
 
 This will blur, color filter a downscaled version of given image on a concurrent thread pool and rescales it
-the target (the imageView) this case and will set a placeholder until the opartions are finished.
+the target (the imageView) this case and will set a placeholder until the operations are finished.
 
-_Do note that `Dali.create(context)` will always create a new instace so it may be advisable to keep the reference._
+_Do note that `Dali.create(context)` will always create a new instance, so it may be advisable to keep the reference._
 
-For more examples see `SimpleBlurFragment.java` and `SimpleBlurBrightnessFragment.java`
+For more examples, see `SimpleBlurFragment.java` and `SimpleBlurBrightnessFragment.java`
 
 ### Blur any View
 
@@ -84,11 +84,11 @@ and blurs its drawingCache into the target view.
    		Dali.create(context).load(rootView.findViewById(R.id.blurTemplateView)).blurRadius(20)
    		    .downScale(2).concurrent().reScale().skipCache().into(imageView);
 
-For more examples see `ViewBlurFragment.java`
+For more examples, see `ViewBlurFragment.java`
 
 ### Skip blurring
 
-If you want to utilize Dali's features, without bluring the image you could do:
+If you want to utilize Dali's features, without blurring the image you could do:
 
     Dali.create(context).load(R.drawable.test_img1).algorithm(EBlurAlgorithm.NONE).brightness(70).concurrent().into(iv);
 
@@ -116,7 +116,7 @@ A very simple example with a ViewPager would be:
 A full example can be found in the test app's `LiveBlurFragment.java`
 
 The idea is basically to hook up to the scrollable view and every scroll event the blur has to be updated with
-`blurWorker.updateBlurView()`. Many of the views do not offer these features therefore there are simple implementations
+`blurWorker.updateBlurView()`. Many of the views do not offer these features, therefore there are simple implementations
 for some views (see package `at.favre.lib.dali.view.Observable*`)
 
 
@@ -228,3 +228,4 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
