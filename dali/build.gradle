@@ -1,29 +1,5 @@
 apply plugin: 'com.android.library'
 
-ext {
-    bintrayRepo = 'maven'
-    bintrayName = 'dali'
-
-    publishedGroupId = 'at.favre.lib'
-    libraryName = 'Dali'
-    artifact = 'dali'
-
-    libraryDescription = 'Dali is an image blur library for Android. It is easy to use, fast and extensible. Dali contains several modules for either static blurring, live blurring and animations.'
-
-    siteUrl = 'https://github.com/patrickfav/Dali'
-    gitUrl = 'https://github.com/patrickfav/Dali.git'
-
-    libraryVersion = rootProject.ext.versionName
-
-    developerId = 'patrickfav'
-    developerName = 'Patrick Favre-Bulle'
-    developerEmail = 'patrick.favrebulle@gmail.com'
-
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
-}
-
 def Properties localProps = getSigningProperties()
 
 android {
@@ -69,5 +45,4 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.1.0'
 }
 
-//apply from: '../gradle/install.gradle'
-//apply from: '../gradle/publish.gradle'
+apply from: "$rootDir/publish.gradle"

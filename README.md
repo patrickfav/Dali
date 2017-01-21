@@ -11,29 +11,14 @@ easily extended and pretty every configuration can be changed.
 
 *Note: This library is in prototype state and not ready for prime time. It is mostly feature complete (except for the animation module) although bugs are to be expected.*
 
-# Usage
+# Install
 
-Add the lib as gradle dependency either by using the provided `.aar` file (see releases)
-[as local dependency](http://stackoverflow.com/questions/24506648/adding-local-aar-files-to-gradle-build-using-flatdirs-is-not-working)
-or use the maven dependency:
+Add the following to your dependencies  ([add jcenter to your repositories](https://developer.android.com/studio/build/index.html#top-level) if you haven't)
 
 ```gradle
    dependencies {
-        compile 'at.favre.lib:dali:0.2'
+        compile 'at.favre.lib:dali:0.3.0'
    }
-```
-
-Currently the lib is not on jcenter or maven central yet, therefore you need to add my maven repo in your root build.gradle:
-
-```gradle
-    allprojects {
-        repositories {
-            jcenter()
-            maven {
-                url 'https://dl.bintray.com/patrickfav/maven/'
-            }
-        }
-    }
 ```
 
 Then add the following to your app's build.gradle to get Renderscript to work

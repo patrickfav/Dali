@@ -1,0 +1,10 @@
+# Releases
+
+## v0.3.0
+* first version in jcenter
+* updates renderscriptTargetApi to 20
+* updates target sdk and build tools to 25
+* adds debug view in app
+
+## v0.2.0
+ initial release

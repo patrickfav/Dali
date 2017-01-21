@@ -1,26 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="at.favre.app.dalitest" >
+<manifest package="at.favre.app.dalitest"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
+        android:name=".DaliTestApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:name=".DaliTestApplication"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".activity.MainMenuActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.GenericActivity"
-                  android:windowSoftInputMode="stateHidden"/>
+        <activity
+            android:name=".activity.GenericActivity"
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".activity.NavigationDrawerActivity"/>
+        <activity
+            android:name=".activity.DebugActivity"
+            android:label="Debug View"
+            android:theme="@style/HoodThemeDark"/>
     </application>
-
 </manifest>

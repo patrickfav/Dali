@@ -1,0 +1,107 @@
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+def siteUrl = 'https://github.com/patrickfav/Dali'      // Homepage URL of the library
+def gitUrl = 'https://github.com/patrickfav/Dali.git'   // Git repository URL
+def descriptionText = 'Dali is an image blur library for Android. It is easy to use, fast and extensible. Dali contains several modules for either static blurring, live blurring and animations.'
+group = "at.favre.lib"                      // Maven Group ID for the artifact
+
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            version rootProject.ext.versionName
+            project {
+                packaging 'aar'
+                // Add your description here
+                description descriptionText
+                url siteUrl
+
+                // Set your license
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'pfavre'
+                        name 'Patrick Favre-Bulle'
+                        email 'patrick.favrebulle@gmail.com'
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    failOnError false
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+// https://github.com/bintray/gradle-bintray-plugin
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+
+    configurations = ['archives']
+
+    dryRun = false
+    publish = true //Whether version should be auto published after an upload
+    override = false //[Default: false] Whether to override version artifacts already published
+
+    pkg {
+        repo = "maven"
+        // it is the name that appears in bintray when logged
+        name = project.buildDir.getParentFile().name
+        desc = descriptionText
+        issueTrackerUrl = 'https://github.com/patrickfav/Dali/issues'
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = ["Apache-2.0"]
+        githubRepo = 'patrickfav/Dali'
+        githubReleaseNotesFile = 'CHANGELOG'
+        labels = ['android', 'debugging', 'noop', 'debug-view']
+        version {
+            name = rootProject.ext.versionName
+            vcsTag = rootProject.ext.versionName
+            released = new Date()
+            gpg {
+                sign = true //Determines whether to GPG sign the files. The default is false
+                passphrase = properties.getProperty("bintray.gpg.password")
+            }
+//            mavenCentralSync {
+//                sync = true //Optional (true by default). Determines whether to sync the version to Maven Central.
+//                user = properties.getProperty("bintray.oss.user") //OSS user token
+//                password = properties.getProperty("bintray.oss.password") //OSS user password
+//                close = '1' //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
+//            }
+        }
+    }
+}
