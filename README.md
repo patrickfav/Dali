@@ -17,10 +17,15 @@ Add the lib as gradle dependency either by using the provided `.aar` file (see r
 [as local dependency](http://stackoverflow.com/questions/24506648/adding-local-aar-files-to-gradle-build-using-flatdirs-is-not-working)
 or use the maven dependency:
 
+```gradle
+   dependencies {
         compile 'at.favre.lib:dali:0.2'
+   }
+```
 
 Currently the lib is not on jcenter or maven central yet, therefore you need to add my maven repo in your root build.gradle:
 
+```gradle
     allprojects {
         repositories {
             jcenter()
@@ -29,15 +34,17 @@ Currently the lib is not on jcenter or maven central yet, therefore you need to 
             }
         }
     }
+```
 
 Then add the following to your app's build.gradle to get Renderscript to work
-    
+
+```gradle
     android {
        ...
-       renderscriptTargetApi 19
+       renderscriptTargetApi 20
        renderscriptSupportModeEnabled true
     }
-
+```
 The quickest way to discover possible features, is to see what builder methods `Dali.create(context)` contains.
 
 ## Download Test App
@@ -52,9 +59,9 @@ The test app is in the Playstore, you can get it here [Dali Test App](https://pl
 
 Static blur refers to blurring images that do not change dynamically in the UI (e.g. a static background image).
 Dali uses the builder pattern for easy and readable configuration. A very simple example would be:
-
+```java
     Dali.create(context).load(R.drawable.test_img1).blurRadius(12).into(imageView);
-
+```
 which would blur given image in a background thread and set it to the `ImageView`. Dali also supports additional
 image manipulation filters i.e. brightness, contrast and color.
 
@@ -65,10 +72,10 @@ Any other manipulation filter can be implemented through the `IBitmapProcessor` 
 on a builder.
 
 A more complex example including filters would be:
-
+```java
     Dali.create(context).load(R.drawable.test_img1).placeholder(R.drawable.test_img1).blurRadius(12)
         .downScale(2).colorFilter(Color.parseColor("#ffccdceb")).concurrent().reScale().into(iv3)
-
+```
 This will blur, color filter a downscaled version of given image on a concurrent thread pool and rescales it
 the target (the imageView) this case and will set a placeholder until the operations are finished.
 
@@ -80,18 +87,18 @@ For more examples, see `SimpleBlurFragment.java` and `SimpleBlurBrightnessFragme
 
 Apart from resource ids, bitmaps, files and InputStreams `.load(anyAndroidView)` method also loads any View as source
 and blurs its drawingCache into the target view.
-
+```java
    		Dali.create(context).load(rootView.findViewById(R.id.blurTemplateView)).blurRadius(20)
    		    .downScale(2).concurrent().reScale().skipCache().into(imageView);
-
+```
 For more examples, see `ViewBlurFragment.java`
 
 ### Skip blurring
 
 If you want to utilize Dali's features, without blurring the image you could do:
-
+```java
     Dali.create(context).load(R.drawable.test_img1).algorithm(EBlurAlgorithm.NONE).brightness(70).concurrent().into(iv);
-
+```
 
 ## Live Blur
 
@@ -101,7 +108,7 @@ a `ViewPager`, `Scrollview`, `RecyclerView`, etc.
 ![Live Blur Animation](https://github.com/patrickfav/Dali/blob/master/misc/viewpager_anim.gif?raw=true)
 
 A very simple example with a ViewPager would be:
-
+```java
     blurWorker = Dali.create(getActivity()).liveBlur(rootViewPagerWrapperView,topBlurView,bottomBlurView).downScale(8).assemble(true);
 
     mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -112,7 +119,7 @@ A very simple example with a ViewPager would be:
         @Override public void onPageSelected(int position) {}
 		@Override public void onPageScrollStateChanged(int state) {}
     });
-
+```
 A full example can be found in the test app's `LiveBlurFragment.java`
 
 The idea is basically to hook up to the scrollable view and every scroll event the blur has to be updated with
@@ -125,7 +132,7 @@ for some views (see package `at.favre.lib.dali.view.Observable*`)
 A specialized version of live blur is blurring the background of a `NavigationDrawer`:
 
 ![Blur Nav Animation](https://github.com/patrickfav/Dali/blob/master/misc/blur_nav.gif?raw=true)
-
+```java
     protected void onCreate(Bundle savedInstanceState) {
         ...
 		mDrawerToggle = new DaliBlurDrawerToggle(this, mDrawerLayout,
@@ -164,7 +171,7 @@ A specialized version of live blur is blurring the background of a `NavigationDr
 		boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
 		return super.onPrepareOptionsMenu(menu);
 	}
-
+```
 
 A full example can be found in the test app's `NavigationDrawerActivity.java`
 
@@ -172,17 +179,17 @@ A full example can be found in the test app's `NavigationDrawerActivity.java`
 
 A simple framework for animating a static image from sharp to blur. It uses a keyframes to configure
 the animation:
-
+```java
     BlurKeyFrameManager man = new BlurKeyFrameManager();
     man.addKeyFrame(new BlurKeyFrame(2,4,0,300));
     man.addKeyFrame(new BlurKeyFrame(2,8,0,300));
     ...
-
+```
 then an `ImageView` can be animated:
-
+```java
     BlurKeyFrameTransitionAnimation animation = new BlurKeyFrameTransitionAnimation(getActivity(),man);
     animation.start(imageView);
-
+```
 ![Blur Animation](https://github.com/patrickfav/Dali/blob/master/misc/blur_anim.gif?raw=true)
 
 A full example can be found in the test app's `SimpleAnimationFragment.java`

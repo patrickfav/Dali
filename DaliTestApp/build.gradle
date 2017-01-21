@@ -40,8 +40,8 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:24.1.1'
-    compile 'com.android.support:appcompat-v7:24.1.1'
+    compile 'com.android.support:appcompat-v7:25.1.0'
+    compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.squareup.picasso:picasso:2.5.+'
 
     compile 'at.favre.lib:dali:0.2'
