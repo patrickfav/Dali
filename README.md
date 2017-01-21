@@ -1,3 +1,4 @@
+[ ![Download](https://api.bintray.com/packages/patrickfav/maven/dali/images/download.svg) ](https://bintray.com/patrickfav/maven/dali/_latestVersion)
 
 # Dali
 
