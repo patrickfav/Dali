@@ -45,5 +45,5 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
 
     compile 'at.favre.lib:dali:0.3.0'
-    compile 'at.favre.lib.hood:hood-extended:0.2.3'
+    compile 'at.favre.lib.hood:hood-extended:0.3.0'
 }
