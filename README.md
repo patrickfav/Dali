@@ -207,11 +207,8 @@ The .aar files can be found in the `/dali/build/outputs/aar` folder
 
 ## TODO
 
-* add proguard settings
 * fix animations
 * add tests
-
-
 
 # License
 
