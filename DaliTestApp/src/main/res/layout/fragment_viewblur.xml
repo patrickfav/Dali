@@ -1,118 +1,125 @@
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context="at.favre.app.dalitest.activity.GenericActivity$PlaceholderFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context=".activity.GenericActivity">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin">
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:id="@+id/blurTemplateView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="#ffff8800">
-            
-            <TextView
-                android:layout_margin="4dp"
-                android:padding="4dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="24dp"
-                android:background="#ff669900"
-                android:text="This is a test for blur"/>
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
 
-            <TextView
-                android:layout_margin="4dp"
+            <LinearLayout
+                android:id="@+id/blurTemplateView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="24dp"
-                android:padding="4dp"
-                android:background="#ff0099cc"
-                android:text="Second Line"/>
+                android:background="#ffff8800"
+                android:orientation="vertical">
 
-            <TextView
-                android:layout_margin="4dp"
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:background="#ff669900"
+                    android:padding="4dp"
+                    android:text="This is a test for blur"
+                    android:textSize="24dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:background="#ff0099cc"
+                    android:padding="4dp"
+                    android:text="Second Line"
+                    android:textSize="24dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:background="#ffaa66cc"
+                    android:padding="4dp"
+                    android:text="More More More"
+                    android:textSize="24dp"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="24dp"/>
+
+            <ImageView
+                android:id="@+id/blurView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="24dp"/>
+
+            <LinearLayout
+                android:id="@+id/blurTemplateView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="24dp"
-                android:padding="4dp"
-                android:background="#ffaa66cc"
-                android:text="More More More"/>
+                android:background="#eee"
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+
+                <SeekBar
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="10"/>
+
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="4dp">
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="fake1"/>
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="fake2"/>
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="fake3"/>
+                </RadioGroup>
+
+                <Button
+                    android:id="@+id/btn_rerender"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Rerender Blur"
+                    />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="24dp"/>
+
+            <ImageView
+                android:id="@+id/blurView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="24dp"/>
-
-        <ImageView
-            android:id="@+id/blurView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="24dp"/>
-
-        <LinearLayout
-            android:id="@+id/blurTemplateView2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="#eee"
-            android:padding="4dp">
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
-            <SeekBar
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:max="10"/>
-            <RadioGroup
-                android:padding="4dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="fake1"/>
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="fake2"/>
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="fake3"/>
-            </RadioGroup>
-            <Button
-                android:layout_marginTop="16dp"
-                android:id="@+id/btn_rerender"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Rerender Blur"
-                />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="24dp"/>
-
-        <ImageView
-            android:id="@+id/blurView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
-</ScrollView>
-
+    </ScrollView>
+</layout>

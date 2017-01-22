@@ -7,4 +7,10 @@
         <item name="colorAccent">@color/accent</item>
     </style>
 
+    <style name="MainMenuButton" parent="Base.Widget.AppCompat.Button.Colored">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:minWidth">220dp</item>
+    </style>
 </resources>

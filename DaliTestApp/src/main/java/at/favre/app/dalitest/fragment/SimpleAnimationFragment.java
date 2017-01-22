@@ -1,5 +1,6 @@
 package at.favre.app.dalitest.fragment;
 
+import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -11,32 +12,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import at.favre.app.dalitest.R;
+import at.favre.app.dalitest.databinding.FragmentSimpleBlurBinding;
 import at.favre.lib.dali.Dali;
 import at.favre.lib.dali.builder.ImageReference;
 import at.favre.lib.dali.builder.animation.BlurKeyFrame;
 import at.favre.lib.dali.builder.animation.BlurKeyFrameManager;
 import at.favre.lib.dali.builder.animation.BlurKeyFrameTransitionAnimation;
 
-/**
- * Created by PatrickF on 31.05.2014.
- */
 public class SimpleAnimationFragment extends Fragment{
 
-	public SimpleAnimationFragment() {
-	}
+    private FragmentSimpleBlurBinding binding;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-							 Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_simple_blur, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_simple_blur, container, false);
 
 		Dali dali = Dali.create(getActivity());
 
-		final ImageView iv = (ImageView) rootView.findViewById(R.id.image);
-		dali.load(R.drawable.test_img1).blurRadius(24).into(iv);
+        final ImageView iv = binding.image;
+        dali.load(R.drawable.test_img1).blurRadius(24).into(iv);
 
 		final Bitmap original = new ImageReference(R.drawable.test_img1).synchronouslyLoadBitmap(getResources());
 
@@ -54,13 +50,11 @@ public class SimpleAnimationFragment extends Fragment{
 				animation.start(iv);
 			}
 		});
-		((TextView) rootView.findViewById(R.id.subtitle1)).setText(man.toString());
+        binding.subtitle1.setText(man.toString());
 
 
-
-
-		final ImageView iv2 = (ImageView) rootView.findViewById(R.id.image2);
-		dali.load(R.drawable.test_img1).blurRadius(24).brightness(0).noFade().into(iv2);
+        final ImageView iv2 = binding.image2;
+        dali.load(R.drawable.test_img1).blurRadius(24).brightness(0).noFade().into(iv2);
 
 		BlurKeyFrameManager man2 = BlurKeyFrameManager.createLinearKeyFrames(8,700,4,20,95);
 
@@ -73,13 +67,11 @@ public class SimpleAnimationFragment extends Fragment{
 			}
 		});
 
-		((TextView) rootView.findViewById(R.id.subtitle2)).setText(man2.toString());
+        binding.subtitle2.setText(man2.toString());
 
 
-
-
-		final ImageView iv3 = (ImageView) rootView.findViewById(R.id.image3);
-		dali.load(R.drawable.test_img1).blurRadius(12).downScale(2).reScale().into(iv3);
+        final ImageView iv3 = binding.image3;
+        dali.load(R.drawable.test_img1).blurRadius(12).downScale(2).reScale().into(iv3);
 
 		BlurKeyFrameManager man3 = BlurKeyFrameManager.createLinearKeyFrames(4,1000,4,20,-80);
 
@@ -92,10 +84,10 @@ public class SimpleAnimationFragment extends Fragment{
 			}
 		});
 
-		((TextView) rootView.findViewById(R.id.subtitle3)).setText(man3.toString());
+        binding.subtitle3.setText(man3.toString());
 
 
-		final ImageView iv4 = (ImageView) rootView.findViewById(R.id.image4);
+        final ImageView iv4 = binding.image4;
 //		Dali.create(getActivity()).load(R.drawable.test_img1).blurRadius(12).downScale(3).reScale().into(iv4);
 //
 //		BlurKeyFrameManager man4 = BlurKeyFrameManager.createLinearKeyFrames(2,10000,4,20,-80);
@@ -109,7 +101,7 @@ public class SimpleAnimationFragment extends Fragment{
 //			}
 //		});
 //
-//		((TextView) rootView.findViewById(R.id.subtitle4)).setText(man4.toString());
+//		binding.subtitle4.setText(man4.toString());
 
 
 		new Thread(new Runnable() {
@@ -121,8 +113,6 @@ public class SimpleAnimationFragment extends Fragment{
 //				animation4.prepareAnimation(original);
 			}
 		}).start();
-
-
 
 
 		// Create red and green bitmaps to cross-fade between
@@ -166,6 +156,6 @@ public class SimpleAnimationFragment extends Fragment{
 		});
 
 
-		return rootView;
-	}
+        return binding.getRoot();
+    }
 }

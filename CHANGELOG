@@ -1,5 +1,8 @@
 # Releases
 
+## v0.3.1
+* adds consumer proguard rules in lib
+
 ## v0.3.0
 * first version in jcenter
 * updates renderscriptTargetApi to 20

@@ -1,72 +1,73 @@
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context="at.favre.app.dalitest.activity.GenericActivity$PlaceholderFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:gravity="center">
+        android:layout_height="match_parent"
+        tools:context="at.favre.app.dalitest.activity.GenericActivity$PlaceholderFragment">
 
-        <ImageView
-            android:id="@+id/image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:padding="16dp"
-            android:id="@+id/subtitle1"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:typeface="monospace"
-            android:text="Lorem ipsum"/>
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="16dp">
 
-        <ImageView
-            android:id="@+id/image2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
-        <TextView
-            android:padding="16dp"
-            android:id="@+id/subtitle2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:typeface="monospace"
-            android:text="Lorem ipsum"/>
+            <TextView
+                android:id="@+id/subtitle1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="Lorem ipsum"
+                android:textSize="14sp"
+                android:typeface="monospace"/>
 
-        <ImageView
-            android:id="@+id/image3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            <ImageView
+                android:id="@+id/image2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
-        <TextView
-            android:padding="16dp"
-            android:id="@+id/subtitle3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:typeface="monospace"
-            android:text="Lorem ipsum"/>
+            <TextView
+                android:id="@+id/subtitle2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="Lorem ipsum"
+                android:textSize="14sp"
+                android:typeface="monospace"/>
 
-        <ImageView
-            android:id="@+id/image4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            <ImageView
+                android:id="@+id/image3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
-        <TextView
-            android:padding="16dp"
-            android:id="@+id/subtitle4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:typeface="monospace"
-            android:text="Lorem ipsum"/>
-    </LinearLayout>
-</ScrollView>
+            <TextView
+                android:id="@+id/subtitle3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="Lorem ipsum"
+                android:textSize="14sp"
+                android:typeface="monospace"/>
 
+            <ImageView
+                android:id="@+id/image4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/subtitle4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="Lorem ipsum"
+                android:textSize="14sp"
+                android:typeface="monospace"/>
+        </LinearLayout>
+    </ScrollView>
+</layout>

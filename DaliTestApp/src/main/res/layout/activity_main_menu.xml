@@ -1,87 +1,71 @@
-<LinearLayout android:id="@+id/container"
-              xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              tools:context="at.favre.app.dalitest.activity.GenericActivity"
-              tools:ignore="MergeRootFrame">
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
 
-    <include layout="@layout/inc_toolbar"/>
-
-    <Button
-        android:id="@+id/btn_blur1"
+    <FrameLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Simple Blur"/>
+        android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/btn_blur2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Simple Blur (Brightness)"/>
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/inc_toolbar"/>
 
-    <Button
-        android:id="@+id/btn_blur_misc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Simple Blur (Misc)"/>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/btn_liveblur1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Live Blur ViewPager"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="80dp"
+                tools:context="at.favre.app.dalitest.activity.GenericActivity"
+                tools:ignore="MergeRootFrame">
 
-    <Button
-        android:id="@+id/btn_viewblur"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        android:text="View Blur"/>
+                <Button
+                    android:id="@+id/btn_blur1"
+                    style="@style/MainMenuButton"
+                    android:text="Simple Blur"/>
 
-    <Button
-        android:id="@+id/btn_animation1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Simple Animations"/>
+                <Button
+                    android:id="@+id/btn_blur2"
+                    style="@style/MainMenuButton"
+                    android:text="Simple Blur (Brightness)"/>
+
+                <Button
+                    android:id="@+id/btn_blur_misc"
+                    style="@style/MainMenuButton"
+                    android:text="Simple Blur (Misc)"/>
+
+                <Button
+                    android:id="@+id/btn_liveblur1"
+                    style="@style/MainMenuButton"
+                    android:text="Live Blur ViewPager"/>
+
+                <Button
+                    android:id="@+id/btn_viewblur"
+                    style="@style/MainMenuButton"
+                    android:text="View Blur"/>
+
+                <Button
+                    android:id="@+id/btn_animation1"
+                    style="@style/MainMenuButton"
+                    android:text="Simple Animations"/>
 
 
-    <Button
-        android:id="@+id/btn_navdrawer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Navigation Drawer Blur"/>
+                <Button
+                    android:id="@+id/btn_navdrawer"
+                    style="@style/MainMenuButton"
+                    android:text="Navigation Drawer Blur"/>
 
 
-    <Button
-        android:id="@+id/btn_clear_cache"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Clear Cache"
-        android:textColor="#ffcc0000"/>
-
-</LinearLayout>
+                <Button
+                    android:id="@+id/btn_clear_cache"
+                    style="@style/MainMenuButton"
+                    android:backgroundTint="#5a5a5a"
+                    android:text="Clear Cache"/>
+            </LinearLayout>
+        </ScrollView>
+    </FrameLayout>
+</layout>

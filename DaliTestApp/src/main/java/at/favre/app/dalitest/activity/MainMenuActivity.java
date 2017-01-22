@@ -2,12 +2,14 @@ package at.favre.app.dalitest.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import at.favre.app.dalitest.R;
+import at.favre.app.dalitest.databinding.ActivityMainMenuBinding;
 import at.favre.lib.dali.Dali;
 import at.favre.lib.hood.Hood;
 import at.favre.lib.hood.interfaces.actions.ManagerControl;
@@ -20,25 +22,25 @@ public class MainMenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_menu);
+        ActivityMainMenuBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main_menu);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        findViewById(R.id.btn_blur1).setOnClickListener(new StartActivityListener(this, 0));
-        findViewById(R.id.btn_liveblur1).setOnClickListener(new StartActivityListener(this, 1));
-        findViewById(R.id.btn_animation1).setOnClickListener(new StartActivityListener(this, 2));
-        findViewById(R.id.btn_viewblur).setOnClickListener(new StartActivityListener(this, 3));
-        findViewById(R.id.btn_blur2).setOnClickListener(new StartActivityListener(this, 4));
-        findViewById(R.id.btn_blur_misc).setOnClickListener(new StartActivityListener(this, 5));
-        findViewById(R.id.btn_navdrawer).setOnClickListener(new View.OnClickListener() {
+        binding.btnBlur1.setOnClickListener(new StartActivityListener(this, 0));
+        binding.btnLiveblur1.setOnClickListener(new StartActivityListener(this, 1));
+        binding.btnAnimation1.setOnClickListener(new StartActivityListener(this, 2));
+        binding.btnViewblur.setOnClickListener(new StartActivityListener(this, 3));
+        binding.btnBlur2.setOnClickListener(new StartActivityListener(this, 4));
+        binding.btnBlurMisc.setOnClickListener(new StartActivityListener(this, 5));
+        binding.btnNavdrawer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainMenuActivity.this, NavigationDrawerActivity.class));
             }
         });
 
-        findViewById(R.id.btn_clear_cache).setOnClickListener(new View.OnClickListener() {
+        binding.btnClearCache.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Dali.resetAndSetNewConfig(MainMenuActivity.this, new Dali.Config());

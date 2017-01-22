@@ -188,6 +188,11 @@ quality.
 
 _Note: This module is not feature complete and has still terrible bugs, so use at your own risk._
 
+## Proguard
+
+Since v0.3.1 the lib includes it's own proguard consumer rules and should
+work out of the box with obfuscated builds.
+
 ## Advanced
 
 ### How to build
@@ -205,6 +210,8 @@ The .aar files can be found in the `/dali/build/outputs/aar` folder
 * add proguard settings
 * fix animations
 * add tests
+
+
 
 # License
 
