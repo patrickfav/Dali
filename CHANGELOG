@@ -2,6 +2,7 @@
 
 ## v0.3.1
 * adds consumer proguard rules in lib
+* live blur now renders a couple of frames after the last update was done
 
 ## v0.3.0
 * first version in jcenter

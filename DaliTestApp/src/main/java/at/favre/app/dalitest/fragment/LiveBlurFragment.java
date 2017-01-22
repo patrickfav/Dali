@@ -130,14 +130,12 @@ public class LiveBlurFragment extends Fragment {
                         blurWorker.updateBlurView();
                     }
                 });
-                Picasso.with(getActivity()).load(R.drawable.photo1_med).into((ImageView) scrollViewLayout.findViewById(R.id.photo1));
-                Picasso.with(getActivity()).load(R.drawable.photo2_med).into((ImageView) scrollViewLayout.findViewById(R.id.photo2));
             }
             return scrollViewLayout;
         }
 
         /**
-         * Creates a ListView with a scrollListener that updates the blurview
+         * Creates a ListView with a scrollListener that updates the blur view
          */
         public View createListView() {
             if (listViewLayout == null) {

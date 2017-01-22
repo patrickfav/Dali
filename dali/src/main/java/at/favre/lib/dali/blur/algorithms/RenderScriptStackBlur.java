@@ -6,7 +6,6 @@ import android.support.v8.renderscript.Allocation;
 import android.support.v8.renderscript.Element;
 import android.support.v8.renderscript.RenderScript;
 
-import at.favre.lib.dali.R;
 import at.favre.lib.dali.ScriptC_stackblur;
 import at.favre.lib.dali.blur.IBlur;
 
@@ -29,9 +28,8 @@ public class RenderScriptStackBlur implements IBlur {
 		int width = blurred.getWidth();
 		int height = blurred.getHeight();
 
-		ScriptC_stackblur blurScript = new ScriptC_stackblur(_rs, ctx.getResources(), R.raw.stackblur);
-
-		Allocation inAllocation = Allocation.createFromBitmap(_rs, blurred);
+        ScriptC_stackblur blurScript = new ScriptC_stackblur(_rs);
+        Allocation inAllocation = Allocation.createFromBitmap(_rs, blurred);
 
 		blurScript.set_gIn(inAllocation);
 		blurScript.set_width(width);

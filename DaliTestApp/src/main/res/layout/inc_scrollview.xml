@@ -5,13 +5,12 @@
              android:layout_height="match_parent"
              android:orientation="vertical"
              android:background="#fff">
-
     <at.favre.lib.dali.view.ObservableScrollView
         android:id="@+id/scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <LinearLayout
+            android:background="@drawable/wallpaper"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -19,24 +18,19 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 android:text="Scroll View"
-                android:textSize="22dp"
+                android:textSize="48dp"
+                android:fontFamily="sans-serif-thin"
                 android:padding="8dp"/>
-            <ImageView
-                android:id="@+id/photo1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="A Photo"
-                android:textSize="22dp"
+                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur viverra metus erat. Fusce commodo, dui ac imperdiet lobortis, magna augue vestibulum magna, at tristique libero elit id arcu. Sed vel malesuada odio. Sed pharetra imperdiet eros, non mattis metus euismod sit amet. Cras cursus, nisi lobortis accumsan blandit, magna elit fringilla risus, eu imperdiet nisl nunc sed felis. Nam maximus eu est nec efficitur. Fusce lorem dui, dignissim ac metus nec, commodo fermentum nibh. Donec laoreet turpis et mollis eleifend. Sed ut maximus nisl. Etiam nec tincidunt odio. Donec vitae ornare ipsum. Sed eget lorem in nibh cursus fringilla eget quis tortor. Mauris bibendum tincidunt lorem. Vivamus pellentesque risus erat, id consectetur felis lobortis nec.
+
+Suspendisse iaculis eros vel ligula ornare, at semper urna sagittis. Etiam nec lorem ut eros finibus bibendum. Aliquam ipsum lectus, vestibulum id ipsum vitae, euismod ultricies enim. Etiam blandit lacus eget lorem fermentum, ac rhoncus enim cursus. Integer sed quam justo. Mauris mattis diam et felis feugiat molestie a in nibh. Integer ut malesuada enim. Mauris eu imperdiet augue. Phasellus tristique sem mollis dui faucibus blandit. Mauris sed ligula eget justo auctor ultrices. Quisque maximus velit sit amet dolor porta, eu viverra nibh maximus. Interdum et malesuada fames ac ante ipsum primis in faucibus. In fringilla, ipsum placerat fermentum sollicitudin, felis erat pulvinar erat, ac posuere arcu ligula sollicitudin turpis. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Maecenas feugiat magna nec massa dignissim fermentum. Nunc scelerisque accumsan finibus."
+                android:textSize="18dp"
                 android:padding="8dp"/>
-            <ImageView
-                android:id="@+id/photo2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
         </LinearLayout>
     </at.favre.lib.dali.view.ObservableScrollView>
 </FrameLayout>

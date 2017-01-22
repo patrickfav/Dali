@@ -6,7 +6,6 @@ import android.support.v8.renderscript.Allocation;
 import android.support.v8.renderscript.RSRuntimeException;
 import android.support.v8.renderscript.RenderScript;
 
-import at.favre.lib.dali.R;
 import at.favre.lib.dali.ScriptC_brightness;
 
 /**
@@ -31,7 +30,7 @@ public class RenderscriptBrightnessProcessor implements IBitmapProcessor {
             try {
                 Allocation input = Allocation.createFromBitmap(rs, bitmapOriginal);
                 final Allocation output = Allocation.createTyped(rs, input.getType());
-                ScriptC_brightness mScript = new ScriptC_brightness(rs,res, R.raw.brightness);
+                ScriptC_brightness mScript = new ScriptC_brightness(rs);
                 mScript.invoke_setBright(brightness);
                 mScript.forEach_brightness(input, output);
                 output.copyTo(bitmapOriginal);
