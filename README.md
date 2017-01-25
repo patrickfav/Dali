@@ -35,7 +35,7 @@ The quickest way to discover possible features, is to see what builder methods `
 
 ## Download Test App
 
-[![Get it on Google Play](https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png)](https://play.google.com/store/apps/details?id=at.favre.app.dalitest&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1)
+[![Get it on Google Play](misc/playstore_badge_new.png)](https://play.google.com/store/apps/details?id=at.favre.app.dalitest&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1)
 
 The test app is in the Playstore, you can get it here [Dali Test App](https://play.google.com/store/apps/details?id=at.favre.app.dalitest).
 
