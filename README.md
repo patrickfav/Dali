@@ -6,9 +6,11 @@ It uses RenderScript internally (although different implementations can be chose
 cached to be fast and keeps small memory footprint. It features a lot of additional image filters and may be
 easily extended and pretty every configuration can be changed.
 
+[![Download](https://api.bintray.com/packages/patrickfav/maven/dali/images/download.svg) ](https://bintray.com/patrickfav/maven/dali/_latestVersion)
+[![Build Status](https://travis-ci.org/patrickfav/Dali.svg?branch=master)](https://travis-ci.org/patrickfav/Dali)
+
 ![Gallery](https://github.com/patrickfav/Dali/blob/master/misc/gallery1.png?raw=true)
 
-[![Download](https://api.bintray.com/packages/patrickfav/maven/dali/images/download.svg) ](https://bintray.com/patrickfav/maven/dali/_latestVersion)
 
 *Note: This library is in prototype state and not ready for prime time. It is mostly feature complete (except for the animation module) although bugs are to be expected.*
 
