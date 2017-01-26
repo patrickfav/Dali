@@ -23,7 +23,7 @@ ext {
     versionName = "0.3.1"
     versionCode = 6
     compileSdkVersion = 25
-    buildToolsVersion = "25.0.1"
+    buildToolsVersion = "25.0.2"
     targetSdkVersion = 24
     minSdkVersion = 10
     renderscriptTargetApi = 20
@@ -32,9 +32,8 @@ ext {
 def getSigningProperties() {
     def Properties props = new Properties()
     try {
-        props.load(new FileInputStream(file('signing.properties')))
-    }catch (Exception e) {//just load any file to not get error
         props.load(new FileInputStream(file('local.properties')))
+    } catch (Exception e) {//just load any file to not get error
     }
     return props
 }
