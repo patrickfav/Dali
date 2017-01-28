@@ -19,21 +19,14 @@ allprojects {
     }
 }
 
+apply from: "$rootDir/gradle/common-build.gradle"
+
 ext {
     versionName = "0.3.1"
-    versionCode = 6
+    versionCode = getCiBuildNumber()
     compileSdkVersion = 25
     buildToolsVersion = "25.0.2"
     targetSdkVersion = 24
     minSdkVersion = 10
     renderscriptTargetApi = 20
-}
-
-def getSigningProperties() {
-    def Properties props = new Properties()
-    try {
-        props.load(new FileInputStream(file('local.properties')))
-    } catch (Exception e) {//just load any file to not get error
-    }
-    return props
 }

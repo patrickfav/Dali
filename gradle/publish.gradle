@@ -72,7 +72,7 @@ bintray {
 
     configurations = ['archives']
 
-    dryRun = false
+    dryRun = true
     publish = true //Whether version should be auto published after an upload
     override = false //[Default: false] Whether to override version artifacts already published
 

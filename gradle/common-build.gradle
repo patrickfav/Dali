@@ -1,0 +1,64 @@
+ext {
+    getGitRev = this.&getGitRev
+    getGitCommitDate = this.&getGitCommitDate
+    getGitBranch = this.&getGitBranch
+    getSigningProperties = this.&getSigningProperties
+    isCiBuild = this.&isCiBuild
+    getCiBuildNumber = this.&getCiBuildNumber
+}
+
+def String getGitRev() {
+    def git_rev = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'log', '-1', '--format=%H'
+        standardOutput = git_rev
+    }
+    git_rev = git_rev.toString().trim()
+    return git_rev
+}
+
+def String getGitCommitDate() {
+    def git_date = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'log', '-1', '--format=%cI'
+        standardOutput = git_date
+    }
+    git_date = git_date.toString().trim()
+    return git_date
+}
+
+def String getGitBranch() {
+    def git_branch = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'rev-parse', '--abbrev-ref', 'HEAD'
+        standardOutput = git_branch
+        ignoreExitValue = true
+    }
+    git_branch = git_branch.toString().trim()
+    return git_branch
+}
+
+def getSigningProperties() {
+    def Properties props = new Properties()
+    try {
+        props.load(new FileInputStream(file("$rootDir/local.properties")))
+    } catch (Exception e) {
+    }
+    return props
+}
+
+static def boolean isCiBuild() {
+    def ciBuild = false;
+    if (System.getenv().CI != null) {
+        ciBuild = Boolean.valueOf(System.getenv().CI)
+    }
+    return ciBuild;
+}
+
+static def Integer getCiBuildNumber() {
+    def buildNumber = 1;
+    if (System.getenv().TRAVIS_BUILD_NUMBER != null) {
+        buildNumber = System.getenv().TRAVIS_BUILD_NUMBER
+    }
+    return Integer.valueOf(buildNumber);
+}

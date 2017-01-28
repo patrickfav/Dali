@@ -22,7 +22,10 @@ android {
         versionName rootProject.ext.versionName
         renderscriptTargetApi rootProject.ext.renderscriptTargetApi
         renderscriptSupportModeEnabled true
+
+        buildConfigField "String", "BUILD_NUMBER", "\"" + getCiBuildNumber() + "\""
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -45,4 +48,4 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.1.0'
 }
 
-apply from: "$rootDir/publish.gradle"
+apply from: "$rootDir/gradle/publish.gradle"

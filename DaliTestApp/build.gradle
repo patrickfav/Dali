@@ -26,7 +26,14 @@ android {
         versionName rootProject.ext.versionName
         renderscriptTargetApi rootProject.ext.renderscriptTargetApi
         renderscriptSupportModeEnabled true
+
+        buildConfigField "String", "GIT_REV", "\"" + getGitRev() + "\""
+        buildConfigField "String", "GIT_BRANCH", "\"" + getGitBranch() + "\""
+        buildConfigField "String", "GIT_DATE", "\"" + getGitCommitDate() + "\""
+        buildConfigField "String", "BUILD_NUMBER", "\"" + getCiBuildNumber() + "\""
+        buildConfigField "boolean", "IS_CI_BUILD", "${isCiBuild()}"
     }
+
     buildTypes {
         release {
             minifyEnabled true
@@ -50,6 +57,6 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
 
     compile 'at.favre.lib:dali:0.3.1'
-    compile 'at.favre.lib.hood:hood-extended:0.3.0'
+    compile 'at.favre.lib.hood:hood-extended:0.4.1'
 //    compile project(path: ':dali')
 }
