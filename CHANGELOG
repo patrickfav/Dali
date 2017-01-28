@@ -1,5 +1,9 @@
 # Releases
 
+## v0.3.2
+* updates demo app launcher icon
+* adds build number to build config
+
 ## v0.3.1
 * adds consumer proguard rules in lib
 * live blur now renders a couple of frames after the last update was done
