@@ -22,7 +22,7 @@ allprojects {
 apply from: "$rootDir/gradle/common-build.gradle"
 
 ext {
-    versionName = "0.3.2"
+    versionName = "0.3.3"
     versionCode = getCiBuildNumber()
     compileSdkVersion = 25
     buildToolsVersion = "25.0.2"

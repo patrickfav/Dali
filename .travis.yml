@@ -41,9 +41,10 @@ deploy:
   - provider: releases
     api_key:
       secure: "rNHcudueUGQXYSipzXU0DjebDrvSAHU3hlH8Z6YExqFOOL+yUTdUE74Qh3V85W73al5i5g1sQrdO63zGpHAXhK/LQx2w6LjtLxgjF2+dDByD+xm8P0BwpPr6GWJ/qisS9M9betp1K61MxXDeBHLUhCQ383sNXNeVa4cZCXtMB8W9ojAjpJzaOub3SGRg327p0ZTc4FqiIm4EJjK2eQWHEbLvBkC4h/qmB0rC0PgmROazfYVSDpyqaqcBYNDiHnpM3QN37QukTLJIwR8QxIdvqnv9zuhW6IlJN2c0NE1htMJMxN/6VQ+EAhkqrrzkSQb2U5jy5uML5is0gu4OCHvK6vxMAgeHMPnlG86WQDsZRxrXtCxEj1AihRIBfZlMveCCdBPXvWUPzK38k8a7FdUiYsCzAcy0ck5UiQqNWxQ9t0vwJsfWkjI1gDZvBvzmZYyYSgIjNuT2TYF9vZpsmwZDeoIls8ruLBXIunb0kAsxBhJBIOrYgfqj+Wejri0BMJVfPwbCAnEibM1fdqK/HZmJxGvfJJkrx1khwct8R+cYlha3L65wOrrj03G2n/IqTZCrW2oCfCVcTupVlncH+95kgMhZdDg66S0pnfXQYUdnB4n1rz0uHbpVa0aaiR8jm3C0i4ioSvLKWmLlArcOP5txk4if2WvDXTwt3XSpMe1bsLI="
+    file_glob: true
     file:
-     - 'DaliTestApp/build/outputs/apk/DaliTestApp-release.apk'
-     - 'dali/build/outputs/aar/dali-release.aar'
+     - 'app/build/outputs/apk/app-release-*.apk'
+     - 'dali/build/outputs/aar/dali-release-*.aar'
     skip_cleanup: true
     on:
       branch: master

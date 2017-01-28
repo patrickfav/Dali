@@ -8,10 +8,10 @@ android {
 
     signingConfigs {
         release {
-            storeFile file(localProps.getProperty('RELEASE_KEYSTORE_PATH','fillhere'))
-            storePassword localProps.getProperty('RELEASE_KEYSTORE_PW','')
-            keyAlias localProps.getProperty('RELEASE_KEY_ALIAS','')
-            keyPassword localProps.getProperty('RELEASE_KEY_PW','')
+            storeFile file(localProps.getProperty('RELEASE_KEYSTORE_PATH', 'fillhere'))
+            storePassword localProps.getProperty('RELEASE_KEYSTORE_PW', '')
+            keyAlias localProps.getProperty('RELEASE_KEY_ALIAS', '')
+            keyPassword localProps.getProperty('RELEASE_KEY_PW', '')
         }
     }
 
@@ -24,6 +24,7 @@ android {
         renderscriptSupportModeEnabled true
 
         buildConfigField "String", "BUILD_NUMBER", "\"" + getCiBuildNumber() + "\""
+        buildConfigField "String", "BUILD_DATE", "\"" + getBuildTime() + "\""
     }
 
     buildTypes {
@@ -33,12 +34,22 @@ android {
             signingConfig signingConfigs.release
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
+
     lintOptions {
         abortOnError false
+    }
+
+    libraryVariants.all { variant ->
+        variant.outputs.each { output ->
+            output.outputFile = new File(
+                    output.outputFile.parent,
+                    output.outputFile.name.replace((".aar"), "-${version}.aar"))
+        }
     }
 }
 
