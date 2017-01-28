@@ -25,6 +25,6 @@
         <activity
             android:name=".activity.DebugActivity"
             android:label="Debug View"
-            android:theme="@style/HoodThemeDark"/>
+            android:theme="@style/DebugActivityTheme"/>
     </application>
 </manifest>

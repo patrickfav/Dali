@@ -13,4 +13,10 @@
         <item name="android:layout_gravity">center</item>
         <item name="android:minWidth">220dp</item>
     </style>
+
+    <style name="DebugActivityTheme" parent="HoodThemeDark">
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorPrimaryDark">@color/color_primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+    </style>
 </resources>

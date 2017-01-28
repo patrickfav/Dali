@@ -5,6 +5,7 @@ ext {
     getSigningProperties = this.&getSigningProperties
     isCiBuild = this.&isCiBuild
     getCiBuildNumber = this.&getCiBuildNumber
+    getBuildTime = this.&getBuildTime
 }
 
 def String getGitRev() {
@@ -25,6 +26,10 @@ def String getGitCommitDate() {
     }
     git_date = git_date.toString().trim()
     return git_date
+}
+
+def String getBuildTime() {
+    return new Date().toString();
 }
 
 def String getGitBranch() {
