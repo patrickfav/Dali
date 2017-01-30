@@ -21,14 +21,14 @@ def String getGitRev() {
 def String getGitCommitDate() {
     def git_date = new ByteArrayOutputStream()
     exec {
-        commandLine 'git', 'log', '-1', '--format=%cI'
+        commandLine 'git', 'log', '-1', '--format=%ci'
         standardOutput = git_date
     }
     git_date = git_date.toString().trim()
     return git_date
 }
 
-def String getBuildTime() {
+def static String getBuildTime() {
     return new Date().toString();
 }
 

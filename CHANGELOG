@@ -1,5 +1,10 @@
 # Releases
 
+## v0.3.3
+* fixes build script to auto upload to maven central
+* fixes gradle git command to get commit date
+* fixes debug view
+
 ## v0.3.2
 * updates demo app launcher icon
 * adds build number to build config

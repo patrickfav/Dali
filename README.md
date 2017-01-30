@@ -8,6 +8,8 @@ easily extended and pretty every configuration can be changed.
 
 [![Download](https://api.bintray.com/packages/patrickfav/maven/dali/images/download.svg) ](https://bintray.com/patrickfav/maven/dali/_latestVersion)
 [![Build Status](https://travis-ci.org/patrickfav/Dali.svg?branch=master)](https://travis-ci.org/patrickfav/Dali)
+[![Javadocs](https://www.javadoc.io/badge/at.favre.lib/dali.svg)](https://www.javadoc.io/doc/at.favre.lib/dali)
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Dali-yellowgreen.svg?style=flat)](https://android-arsenal.com/details/1/5130)
 
 ![Gallery](https://github.com/patrickfav/Dali/blob/master/misc/gallery1.png?raw=true)
 
@@ -20,7 +22,7 @@ Add the following to your dependencies  ([add jcenter to your repositories](http
 
 ```gradle
    dependencies {
-        compile 'at.favre.lib:dali:0.3.1'
+        compile 'at.favre.lib:dali:0.3.4'
    }
 ```
 
