@@ -22,7 +22,7 @@ Add the following to your dependencies  ([add jcenter to your repositories](http
 
 ```gradle
    dependencies {
-        compile 'at.favre.lib:dali:0.3.3'
+        compile 'at.favre.lib:dali:0.3.4'
    }
 ```
 

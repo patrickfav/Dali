@@ -22,11 +22,24 @@ allprojects {
 apply from: "$rootDir/gradle/common-build.gradle"
 
 ext {
-    versionName = "0.3.3"
+    versionName = "0.3.4"
     versionCode = getCiBuildNumber()
     compileSdkVersion = 25
     buildToolsVersion = "25.0.2"
     targetSdkVersion = 24
     minSdkVersion = 10
     renderscriptTargetApi = 20
+
+    dependencies = [
+            support: "25.1.1"
+    ]
+}
+
+configurations.all {
+    resolutionStrategy {
+        force group: 'com.android.support', name: 'support-v4', version: rootProject.ext.dependencies.support
+        force group: 'com.android.support', name: 'appcompat-v7', version: rootProject.ext.dependencies.support
+        force group: 'com.android.support', name: 'support-annotations', version: rootProject.ext.dependencies.support
+        force group: 'com.android.support', name: 'recyclerview', version: rootProject.ext.dependencies.support
+    }
 }

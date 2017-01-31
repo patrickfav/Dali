@@ -1,5 +1,8 @@
 # Releases
 
+## v0.3.4
+* updates support lib version to 25.1.1
+
 ## v0.3.3
 * fixes build script to auto upload to maven central
 * fixes gradle git command to get commit date

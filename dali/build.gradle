@@ -55,8 +55,8 @@ android {
 
 dependencies {
     compile 'com.jakewharton:disklrucache:2.0.2'
-    compile 'com.android.support:appcompat-v7:25.1.0'
-    compile 'com.android.support:recyclerview-v7:25.1.0'
+    compile "com.android.support:appcompat-v7:$rootProject.ext.dependencies.support"
+    compile "com.android.support:recyclerview-v7:$rootProject.ext.dependencies.support"
 }
 
 apply from: "$rootDir/gradle/publish.gradle"
