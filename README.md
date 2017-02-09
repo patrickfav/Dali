@@ -29,11 +29,14 @@ Add the following to your dependencies  ([add jcenter to your repositories](http
 Then add the following to your app's build.gradle to get Renderscript to work
 
 ```gradle
-    android {
-       ...
-       renderscriptTargetApi 20
-       renderscriptSupportModeEnabled true
+android {
+    ...
+    defaultConfig {
+        ...
+        renderscriptTargetApi 20
+        renderscriptSupportModeEnabled true
     }
+}
 ```
 The quickest way to discover possible features, is to see what builder methods `Dali.create(context)` contains.
 
