@@ -59,7 +59,7 @@ android {
 
     applicationVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "${project.name}-${variant.flavorName}-${variant.buildType.name}-${variant.versionName}.apk"
+            outputFileName = "${project.name}-${variant.name}-${variant.versionName}.apk"
         }
     }
 }
