@@ -60,16 +60,17 @@ public class BlurKeyFrameAnimationBuilder {
     public BlurKeyFrameManager build() {
         BlurKeyFrameManager man = new BlurKeyFrameManager();
 
-//		int durationPerFrame = (int) ((float) durationOfWholeAnimationMs / (float) framesCount);
-//		int radiusDownScalePerFrame = endDownSample -startDownSample *endBlurRadius;
-//		int radiusIncrement = (int) ((float) endBlurRadius / (float) keyFrames);
-//		int brightnessIncrement = 0;
-//		if(endBrightness != 0) {
-//			brightnessIncrement = (int) ((float) endBrightness / (float) keyFrames);;
-//		}
-//		for (int i = 0; i < keyFrames; i++) {
-//			man.addKeyFrame(new BlurKeyFrame(inSampleSize,radiusIncrement*(i+1),brightnessIncrement*(i+1),durationPerFrame));
-//		}
+//        int durationPerFrame = (int) ((float) durationOfWholeAnimationMs / (float) framesCount);
+//        int radiusDownScalePerFrame = endDownSample - startDownSample * endBlurRadius;
+//        int radiusIncrement = (int) ((float) endBlurRadius / (float) keyFrames);
+//        int brightnessIncrement = 0;
+//        if (endBrightness != 0) {
+//            brightnessIncrement = (int) ((float) endBrightness / (float) keyFrames);
+//            ;
+//        }
+//        for (int i = 0; i < keyFrames; i++) {
+//            man.addKeyFrame(new BlurKeyFrame(inSampleSize, radiusIncrement * (i + 1), brightnessIncrement * (i + 1), durationPerFrame));
+//        }
 
         return man;
     }

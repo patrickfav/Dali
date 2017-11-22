@@ -63,7 +63,7 @@ public class MainMenuActivity extends AppCompatActivity {
         control.stop();
     }
 
-    private static class StartActivityListener implements View.OnClickListener {
+    private static final class StartActivityListener implements View.OnClickListener {
         private int fragmentId;
         private Activity activity;
 

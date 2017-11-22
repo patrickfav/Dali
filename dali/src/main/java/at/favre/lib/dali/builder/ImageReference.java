@@ -22,7 +22,9 @@ import at.favre.lib.dali.util.LegacySDKUtil;
 public class ImageReference {
     private static final String CACHE_KEY_PREFIX = "cachekey_";
 
-    public enum SourceType {RES_ID, INPUT_STREAM, BITMAP, FILE, VIEW, UNKNOWN}
+    public enum SourceType {
+        RES_ID, INPUT_STREAM, BITMAP, FILE, VIEW, UNKNOWN
+    }
 
     private Integer resId;
     private InputStream inputStream;
@@ -164,7 +166,7 @@ public class ImageReference {
             BitmapFactory.decodeStream(inputStream, null, justBoundsOptions);
             try {
                 inputStream.reset();
-            } catch (IOException e) {
+            } catch (IOException ignored) {
             }
         } else if (view != null) {
             return new Point(view.getWidth(), view.getHeight());

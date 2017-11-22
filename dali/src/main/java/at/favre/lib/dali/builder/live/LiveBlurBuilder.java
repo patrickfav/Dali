@@ -17,7 +17,7 @@ import at.favre.lib.dali.util.BuilderUtil;
  * Builder for creating a {@link at.favre.lib.dali.builder.live.LiveBlurWorker}
  */
 public class LiveBlurBuilder extends ABuilder {
-    private final static String TAG = BlurBuilder.class.getSimpleName();
+    private static final String TAG = BlurBuilder.class.getSimpleName();
 
     private LiveBlurData data;
 

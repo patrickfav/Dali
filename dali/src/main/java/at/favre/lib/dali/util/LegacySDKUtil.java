@@ -9,10 +9,7 @@ import android.os.Environment;
 import android.view.View;
 import android.widget.ImageView;
 
-/**
- * Created by PatrickF on 30.05.2014.
- */
-public class LegacySDKUtil {
+public final class LegacySDKUtil {
 
     private LegacySDKUtil() {
     }

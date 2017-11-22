@@ -151,5 +151,7 @@ public class DaliBlurDrawerToggle extends ActionBarDrawerToggle {
         if (listener != null) listener.onDrawerClosed(drawerView);
     }
 
-    public enum CacheMode {AUTO, MANUAL}
+    public enum CacheMode {
+        AUTO, MANUAL
+    }
 }

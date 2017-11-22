@@ -27,7 +27,7 @@ import at.favre.lib.dali.builder.nav.DaliBlurDrawerToggle;
 import at.favre.lib.dali.builder.nav.NavigationDrawerListener;
 import at.favre.lib.dali.util.Precondition;
 
-public class Dali {
+public final class Dali {
     public static final int NO_RESID = -1;
     private static final String TAG = Dali.class.getSimpleName();
     private static TwoLevelCache DISK_CACHE_MANAGER;
@@ -46,7 +46,7 @@ public class Dali {
     /**
      * Sets a new config and clears the previous cache
      */
-    public synchronized static void resetAndSetNewConfig(Context ctx, Config config) {
+    public static synchronized void resetAndSetNewConfig(Context ctx, Config config) {
         GLOBAL_CONFIG = config;
 
         if (DISK_CACHE_MANAGER != null) {
@@ -99,7 +99,7 @@ public class Dali {
 
 
 
-	/* NON STATIC CLASS ************************************************************************* */
+    /* NON STATIC CLASS ************************************************************************* */
 
     public static void logV(String localTag, String msg) {
         if (getConfig().debugMode) {
@@ -181,7 +181,7 @@ public class Dali {
         return contextWrapper;
     }
 
-    public final static class Config {
+    public static final class Config {
         public boolean debugMode = false;
         public boolean globalUseMemoryCache = true;
         public boolean globalUseDiskCache = true;

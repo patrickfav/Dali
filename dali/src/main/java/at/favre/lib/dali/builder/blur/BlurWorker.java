@@ -25,7 +25,7 @@ import at.favre.lib.dali.util.LegacySDKUtil;
  * contains all the business logic for processing the image.
  */
 public class BlurWorker implements Callable<BlurWorker.Result> {
-    private final static String TAG = BlurWorker.class.getSimpleName();
+    private static final String TAG = BlurWorker.class.getSimpleName();
 
     private final String id = UUID.randomUUID().toString();
     private BlurWorkerListener listener;
@@ -94,7 +94,7 @@ public class BlurWorker implements Callable<BlurWorker.Result> {
                 profiler.endTask(-2);
             }
 
-//			Thread.sleep(1000);
+//            Thread.sleep(1000);
 
             int width = 0, height = 0;
             if (builderData.options.inSampleSize > 1 && builderData.rescaleIfDownscaled) {
@@ -108,7 +108,9 @@ public class BlurWorker implements Callable<BlurWorker.Result> {
             profiler.startTask(0, "load image");
             builderData.imageReference.setDecoderOptions(builderData.options);
             Bitmap bitmapToWorkWith = builderData.imageReference.synchronouslyLoadBitmap(builderData.contextWrapper.getResources());
-            profiler.endTask(0, "source: " + builderData.imageReference.getSourceType() + ", insample: " + builderData.options.inSampleSize + ", height:" + bitmapToWorkWith.getHeight() + ", width:" + bitmapToWorkWith.getWidth() + ", memory usage " + BenchmarkUtil.getScalingUnitByteSize(LegacySDKUtil.byteSizeOf(bitmapToWorkWith)));
+            profiler.endTask(0, "source: " + builderData.imageReference.getSourceType() + ", insample: "
+                    + builderData.options.inSampleSize + ", height:" + bitmapToWorkWith.getHeight() + ", width:" + bitmapToWorkWith.getWidth() +
+                    ", memory usage " + BenchmarkUtil.getScalingUnitByteSize(LegacySDKUtil.byteSizeOf(bitmapToWorkWith)));
 
             if (builderData.copyBitmapBeforeBlur) {
                 profiler.startTask(1, "copy bitmap");

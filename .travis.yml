@@ -27,9 +27,8 @@ before_install:
   - tar xvf credentials.tar
 
 script:
-    - ./gradlew clean
-    - ./gradlew assemble --stacktrace
-    - ./gradlew lint --stacktrace
+    - ./gradlew clean assemble --stacktrace
+    - ./gradlew checkstyle lint --stacktrace
 
 deploy:
   - provider: script

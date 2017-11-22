@@ -21,7 +21,7 @@ import at.favre.lib.dali.util.BuilderUtil;
  * It is optimized to reuse resources for fast and continuous re-blurring.
  */
 public class LiveBlurWorker {
-    private final static String TAG = LiveBlurWorker.class.getSimpleName();
+    private static final String TAG = LiveBlurWorker.class.getSimpleName();
     private static final int BLUR_ROUNDS_PER_UPDATE = 75;
 
     private AtomicBoolean isWorking = new AtomicBoolean(false);

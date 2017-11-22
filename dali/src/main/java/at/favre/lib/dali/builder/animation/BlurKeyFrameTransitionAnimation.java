@@ -14,11 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-/**
- * Created by PatrickF on 29.05.2014.
- */
 public class BlurKeyFrameTransitionAnimation {
-    private final static String TAG = BlurKeyFrameTransitionAnimation.class.getSimpleName();
+    private static final String TAG = BlurKeyFrameTransitionAnimation.class.getSimpleName();
 
     private List<TransitionDrawable> transitionDrawables = new ArrayList<TransitionDrawable>();
     private Context ctx;

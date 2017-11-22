@@ -1,9 +1,6 @@
 package at.favre.lib.dali.util;
 
-/**
- * Created by PatrickF on 30.05.2014.
- */
-public class Precondition {
+public final class Precondition {
     private Precondition() {
     }
 

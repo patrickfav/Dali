@@ -41,7 +41,7 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
-//		mDrawerLayout.setScrimColor(getResources().getColor(R.color.bright_blue_transparent));
+//      mDrawerLayout.setScrimColor(getResources().getColor(R.color.bright_blue_transparent));
         mDrawerList = findViewById(R.id.left_drawer);
 
         // Set the adapter for the list view

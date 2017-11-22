@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class BenchmarkUtil {
+public final class BenchmarkUtil {
     private static final DecimalFormat format = new DecimalFormat("#.0");
     private static final String fileSeperator = ";";
 
@@ -26,7 +26,7 @@ public class BenchmarkUtil {
         if (Build.VERSION.SDK_INT >= 17) {
             return SystemClock.elapsedRealtimeNanos();
         }
-        return SystemClock.elapsedRealtime() * 1000000l;
+        return SystemClock.elapsedRealtime() * 1000000L;
     }
 
     public static String formatNum(double number) {

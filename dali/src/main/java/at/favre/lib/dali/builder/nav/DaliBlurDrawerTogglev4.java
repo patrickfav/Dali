@@ -16,6 +16,7 @@ import at.favre.lib.dali.util.LegacySDKUtil;
 /**
  * This is a {@link ActionBarDrawerToggle} version of the {@link DaliBlurDrawerToggle}. It is deprecated and
  * you should use {@link DaliBlurDrawerToggle} instead. This is only for backwards compatibility.
+ * @deprecated DaliBlurDrawerToggle instead
  */
 @Deprecated
 public class DaliBlurDrawerTogglev4 extends ActionBarDrawerToggle {
@@ -131,5 +132,7 @@ public class DaliBlurDrawerTogglev4 extends ActionBarDrawerToggle {
         forceRedraw = true;
     }
 
-    public enum CacheMode {AUTO, MANUAL}
+    public enum CacheMode {
+        AUTO, MANUAL
+    }
 }

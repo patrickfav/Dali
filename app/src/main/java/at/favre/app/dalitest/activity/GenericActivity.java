@@ -15,7 +15,7 @@ import at.favre.app.dalitest.fragment.SimpleBlurPlaygroundFragment;
 import at.favre.app.dalitest.fragment.ViewBlurFragment;
 
 public class GenericActivity extends AppCompatActivity {
-    public final static String FRAGMENT_ID = "FRAGMENT_ID";
+    public static final String FRAGMENT_ID = "FRAGMENT_ID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,5 +59,4 @@ public class GenericActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(menuItem);
     }
-
 }

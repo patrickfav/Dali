@@ -13,7 +13,7 @@ import at.favre.lib.dali.util.BenchmarkUtil;
  * This will use nano seconds (if possible with SDK)
  */
 public class PerformanceProfiler {
-    private final static String TAG = PerformanceProfiler.class.getSimpleName();
+    private static final String TAG = PerformanceProfiler.class.getSimpleName();
 
     private String description;
     private List<Duration> durations;

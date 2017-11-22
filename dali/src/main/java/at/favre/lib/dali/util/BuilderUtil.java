@@ -25,10 +25,7 @@ import at.favre.lib.dali.builder.ContextWrapper;
 import at.favre.lib.dali.builder.blur.BlurBuilder;
 import at.favre.lib.dali.builder.processor.IBitmapProcessor;
 
-/**
- * Created by PatrickF on 29.05.2014.
- */
-public class BuilderUtil {
+public final class BuilderUtil {
 
     private BuilderUtil() {
     }

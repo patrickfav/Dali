@@ -15,13 +15,12 @@ import at.favre.lib.dali.Dali;
 import at.favre.lib.dali.builder.blur.BlurWorker;
 import at.favre.lib.dali.util.BuilderUtil;
 
-/**
- * Created by PatrickF on 31.05.2014.
- */
 public class ExecutorManager {
     private static final int MAX_QUEUE = 25;
 
-    public enum ThreadPoolType {SERIAL, CONCURRENT}
+    public enum ThreadPoolType {
+        SERIAL, CONCURRENT
+    }
 
     private ThreadPoolExecutor serialThreadPool;
     private ThreadPoolExecutor concurrentThreadPool;

@@ -85,20 +85,20 @@ public class SimpleAnimationFragment extends Fragment {
         binding.subtitle3.setText(man3.toString());
 
         final ImageView iv4 = binding.image4;
-//		Dali.create(getActivity()).load(R.drawable.test_img1).blurRadius(12).downScale(3).reScale().into(iv4);
+//        Dali.create(getActivity()).load(R.drawable.test_img1).blurRadius(12).downScale(3).reScale().into(iv4);
 //
-//		BlurKeyFrameManager man4 = BlurKeyFrameManager.createLinearKeyFrames(2,10000,4,20,-80);
+//        BlurKeyFrameManager man4 = BlurKeyFrameManager.createLinearKeyFrames(2, 10000, 4, 20, -80);
 //
-//		final BlurKeyFrameTransitionAnimation animation4 = new BlurKeyFrameTransitionAnimation(getActivity(),man4);
+//        final BlurKeyFrameTransitionAnimation animation4 = new BlurKeyFrameTransitionAnimation(getActivity(), man4);
 //
-//		iv4.setOnClickListener(new View.OnClickListener() {
-//			@Override
-//			public void onClick(View view) {
-//				animation4.start(iv4);
-//			}
-//		});
+//        iv4.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                animation4.start(iv4);
+//            }
+//        });
 //
-//		binding.subtitle4.setText(man4.toString());
+//        binding.subtitle4.setText(man4.toString());
 
         new Thread(new Runnable() {
             @Override
@@ -106,7 +106,7 @@ public class SimpleAnimationFragment extends Fragment {
                 animation.prepareAnimation(original);
                 animation2.prepareAnimation(original);
                 animation3.prepareAnimation(original);
-//				animation4.prepareAnimation(original);
+//              animation4.prepareAnimation(original);
             }
         }).start();
 
@@ -117,35 +117,35 @@ public class SimpleAnimationFragment extends Fragment {
         canvas.drawColor(Color.BLUE);
         canvas = new Canvas(bitmap1);
         canvas.drawColor(Color.BLACK);
-        BitmapDrawable drawables[] = new BitmapDrawable[2];
+        BitmapDrawable[] drawables = new BitmapDrawable[2];
         drawables[1] = new BitmapDrawable(getResources(), dali.load(R.drawable.test_img1).brightness(0).copyBitmapBeforeProcess().blurRadius(2).skipCache().get().getBitmap());
         drawables[0] = new BitmapDrawable(getResources(), dali.load(R.drawable.test_img1).brightness(-70).copyBitmapBeforeProcess().blurRadius(2).skipCache().get().getBitmap());
 
-//		BitmapDrawable drawables[] = new BitmapDrawable[2];
-//		drawables[0] = new BitmapDrawable(getResources(), bitmap0);
-//		drawables[1] = new BitmapDrawable(getResources(), bitmap1);
+//        BitmapDrawable drawables[] = new BitmapDrawable[2];
+//        drawables[0] = new BitmapDrawable(getResources(), bitmap0);
+//        drawables[1] = new BitmapDrawable(getResources(), bitmap1);
 
-        // Add the red/green bitmap drawables to a TransitionDrawable. They are layered
-        // in the transition drawalbe. The cross-fade effect happens by fading one out and the
-        // other in.
+//        Add the red / green bitmap drawables to a TransitionDrawable.They are layered
+//        in the transition drawalbe.The cross -fade effect happens by fading one out and the
+//        other in.
         final TransitionDrawable crossfader = new TransitionDrawable(drawables);
         iv4.setImageDrawable(crossfader);
         crossfader.setCrossFadeEnabled(false);
-        // Clicking on the drawable will cause the cross-fade effect to run. Depending on
-        // which drawable is currently being shown, we either 'start' or 'reverse' the
-        // transition, which determines which drawable is faded out/in during the transition.
+//        Clicking on the drawable will cause the cross -fade effect to run.Depending on
+//        which drawable is currently being shown, we either 'start' or 'reverse' the
+//        transition, which determines which drawable is faded out/in during the transition.
         iv4.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 crossfader.reverseTransition(1);
                 crossfader.startTransition(1800);
-//				new Handler().postDelayed(new Runnable() {
-//					@Override
-//					public void run() {
-//						crossfader.resetTransition();
-//					}
-//				},1800);
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        crossfader.resetTransition();
+//                    }
+//                }, 1800);
             }
         });
 

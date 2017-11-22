@@ -13,10 +13,7 @@ import android.util.Log;
 import java.io.File;
 import java.io.FileOutputStream;
 
-/**
- * Created by PatrickF on 26.05.2014.
- */
-public class BitmapUtil {
+public final class BitmapUtil {
     private static final String TAG = BitmapUtil.class.getSimpleName();
 
     private BitmapUtil() {
@@ -96,13 +93,12 @@ public class BitmapUtil {
      * @return new bitmap
      */
     public static Bitmap changeBitmapContrastBrightness(Bitmap bmp, float contrast, float brightness) {
-        ColorMatrix cm = new ColorMatrix(new float[]
-                {
-                        contrast, 0, 0, 0, brightness,
-                        0, contrast, 0, 0, brightness,
-                        0, 0, contrast, 0, brightness,
-                        0, 0, 0, 1, 0
-                });
+        ColorMatrix cm = new ColorMatrix(new float[]{
+                contrast, 0, 0, 0, brightness,
+                0, contrast, 0, 0, brightness,
+                0, 0, contrast, 0, brightness,
+                0, 0, 0, 1, 0
+        });
 
         Bitmap ret = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), bmp.getConfig());
 

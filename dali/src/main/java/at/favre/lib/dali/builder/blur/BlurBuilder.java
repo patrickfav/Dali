@@ -41,8 +41,8 @@ import at.favre.lib.dali.util.BuilderUtil;
  * Created by PatrickF on 26.05.2014.
  */
 public class BlurBuilder extends ABuilder {
-    private final static String TAG = BlurBuilder.class.getSimpleName();
-    private final static int FADE_IN_MS = 200;
+    private static final String TAG = BlurBuilder.class.getSimpleName();
+    private static final int FADE_IN_MS = 200;
 
     private BlurData data;
     private Handler uiThreadHandler = new Handler(Looper.getMainLooper());
@@ -264,7 +264,7 @@ public class BlurBuilder extends ABuilder {
         return this;
     }
 
-	/* GETTER METHODS ************************************************************************* */
+    /* GETTER METHODS ************************************************************************* */
 
     public JobDescription into(final ImageView imageView) {
         if (data.placeholder != Dali.NO_RESID) {

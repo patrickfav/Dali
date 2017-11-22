@@ -5,7 +5,10 @@ package at.favre.lib.dali.blur;
  *
  * @author pfavre
  */
-public interface BlurKernels {
+public final class BlurKernels {
+    private BlurKernels() {
+    }
+
     float[] GAUSSIAN_5x5 = new float[]{
             0.0030f, 0.0133f, 0.0219f, 0.0133f, 0.0030f,
             0.0133f, 0.0596f, 0.0983f, 0.0596f, 0.0133f,
