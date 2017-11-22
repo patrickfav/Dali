@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 
-def Properties localProps = getSigningProperties()
+Properties localProps = getSigningProperties()
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -45,8 +45,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     lintOptions {
@@ -54,19 +54,17 @@ android {
     }
 
     applicationVariants.all { variant ->
-        variant.outputs.each { output ->
-            output.outputFile = new File(
-                    output.outputFile.parent,
-                    output.outputFile.name.replace(".apk", "-${variant.versionName}.apk"))
+        variant.outputs.all {
+            outputFileName = "${project.name}-${variant.flavorName}-${variant.buildType.name}-${variant.versionName}.apk"
         }
     }
 }
 
 dependencies {
-    compile "com.android.support:appcompat-v7:$rootProject.ext.dependencies.support"
-    compile 'com.squareup.picasso:picasso:2.5.2'
+    implementation "com.android.support:appcompat-v7:$rootProject.ext.dependencies.support"
+    implementation 'com.squareup.picasso:picasso:2.5.2'
 
-    compile 'at.favre.lib:dali:0.3.+'
-    compile 'at.favre.lib.hood:hood-extended:0.5.+'
+    implementation 'at.favre.lib:dali:0.3.+'
+    implementation 'at.favre.lib.hood:hood-extended:0.5.1'
 //    compile project(path: ':dali')
 }

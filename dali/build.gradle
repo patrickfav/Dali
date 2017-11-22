@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 
-def Properties localProps = getSigningProperties()
+Properties localProps = getSigningProperties()
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -25,19 +25,20 @@ android {
 
         buildConfigField "String", "BUILD_NUMBER", "\"" + getCiBuildNumber() + "\""
         buildConfigField "String", "BUILD_DATE", "\"" + getBuildTime() + "\""
+
+        consumerProguardFiles 'proguard-rules.pro'
     }
 
     buildTypes {
         release {
             minifyEnabled false
-            consumerProguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     lintOptions {
@@ -45,18 +46,16 @@ android {
     }
 
     libraryVariants.all { variant ->
-        variant.outputs.each { output ->
-            output.outputFile = new File(
-                    output.outputFile.parent,
-                    output.outputFile.name.replace((".aar"), "-${version}.aar"))
+        variant.outputs.all {
+            outputFileName = "${project.name}-${variant.name}-${version}.aar"
         }
     }
 }
 
 dependencies {
-    compile 'com.jakewharton:disklrucache:2.0.2'
-    compile "com.android.support:appcompat-v7:$rootProject.ext.dependencies.support"
-    compile "com.android.support:recyclerview-v7:$rootProject.ext.dependencies.support"
+    implementation 'com.jakewharton:disklrucache:2.0.2'
+    implementation "com.android.support:appcompat-v7:$rootProject.ext.dependencies.support"
+    implementation "com.android.support:recyclerview-v7:$rootProject.ext.dependencies.support"
 }
 
 apply from: "$rootDir/gradle/publish.gradle"

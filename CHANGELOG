@@ -1,5 +1,10 @@
 # Releases
 
+## v0.3.5
+* update support lib version to 26.1.0
+* raise minSdk from 10 to 14 due to requirements by support-libs
+* all lib dependencies are now `implementation` i.e. cannot be seen by lib users
+
 ## v0.3.4
 * updates support lib version to 25.1.1
 
