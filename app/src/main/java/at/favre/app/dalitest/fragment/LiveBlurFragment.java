@@ -83,7 +83,6 @@ public class LiveBlurFragment extends Fragment {
             }
         }
 
-
         @Override
         public boolean isViewFromObject(View view, Object object) {
             return view == object;

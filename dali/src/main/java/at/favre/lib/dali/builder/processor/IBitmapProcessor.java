@@ -7,7 +7,7 @@ import android.graphics.Bitmap;
  */
 public interface IBitmapProcessor {
 
-	public Bitmap manipulate(Bitmap original);
+    Bitmap manipulate(Bitmap original);
 
-	public String getProcessorTag();
+    String getProcessorTag();
 }

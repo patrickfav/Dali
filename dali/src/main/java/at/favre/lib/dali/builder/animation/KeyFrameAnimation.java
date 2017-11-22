@@ -8,11 +8,11 @@ import java.util.List;
  * Created by PatrickF on 03.06.2014.
  */
 public class KeyFrameAnimation {
-	private List<KeyFrame> keyFrameList;
+    private List<KeyFrame> keyFrameList;
 
+    public interface KeyFrame {
+        long getDurationMs();
 
-	public static interface KeyFrame {
-		public long getDurationMs();
-		public Bitmap createBitmap();
-	}
+        Bitmap createBitmap();
+    }
 }

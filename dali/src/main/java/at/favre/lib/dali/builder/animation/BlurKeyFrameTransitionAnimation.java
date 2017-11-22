@@ -18,82 +18,83 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Created by PatrickF on 29.05.2014.
  */
 public class BlurKeyFrameTransitionAnimation {
-	private final static String TAG = BlurKeyFrameTransitionAnimation.class.getSimpleName();
+    private final static String TAG = BlurKeyFrameTransitionAnimation.class.getSimpleName();
 
-	private List<TransitionDrawable> transitionDrawables = new ArrayList<TransitionDrawable>();
-	private Context ctx;
-	private Handler handler = new Handler(Looper.getMainLooper());
-	private BlurKeyFrameManager manager;
+    private List<TransitionDrawable> transitionDrawables = new ArrayList<TransitionDrawable>();
+    private Context ctx;
+    private Handler handler = new Handler(Looper.getMainLooper());
+    private BlurKeyFrameManager manager;
 
-	private List<Runnable> runnables;
+    private List<Runnable> runnables;
 
-	private boolean running = false;
-	private boolean canceled = false;
-	private KeyFrameAnimationListener listener;
+    private boolean running = false;
+    private boolean canceled = false;
+    private KeyFrameAnimationListener listener;
 
+    public BlurKeyFrameTransitionAnimation(Context ctx, BlurKeyFrameManager manager) {
+        this.ctx = ctx;
+        this.manager = manager;
+        this.runnables = new CopyOnWriteArrayList<Runnable>();
+    }
 
-	public BlurKeyFrameTransitionAnimation(Context ctx, BlurKeyFrameManager manager) {
-		this.ctx = ctx;
-		this.manager = manager;
-		this.runnables= new CopyOnWriteArrayList<Runnable>();
-	}
+    public void prepareAnimation(Bitmap original) {
+        BlurKeyFrameManager.KeyFrameData data = manager.prepareFrames(ctx, original);
+        transitionDrawables = new ArrayList<TransitionDrawable>();
 
-	public void prepareAnimation(Bitmap original) {
-		BlurKeyFrameManager.KeyFrameData data = manager.prepareFrames(ctx,original);
-		transitionDrawables = new ArrayList<TransitionDrawable>();
+        for (int i = 0; i < data.getFrames().size(); i++) {
+            if (i + 1 < data.getFrames().size()) {
+                TransitionDrawable t = new TransitionDrawable(new Drawable[]{new BitmapDrawable(ctx.getResources(), data.getFrames().get(i)), new BitmapDrawable(ctx.getResources(), data.getFrames().get(i + 1))});
+                transitionDrawables.add(t);
+            }
+        }
+    }
 
-		for (int i = 0; i < data.getFrames().size(); i++) {
-			if(i+1 < data.getFrames().size()) {
-				TransitionDrawable t = new TransitionDrawable(new Drawable[]{new BitmapDrawable(ctx.getResources(),data.getFrames().get(i)),new BitmapDrawable(ctx.getResources(),data.getFrames().get(i+1))});
-				transitionDrawables.add(t);
-			}
-		}
-	}
+    public void start(final ImageView imageView) {
+        if (listener != null) {
+            listener.onAnimationStart();
+        }
+        long duration = 0;
+        for (int i = 0; i < transitionDrawables.size(); i++) {
+            final int iterator = i;
 
-	public void start(final ImageView imageView) {
-		if(listener != null) {
-			listener.onAnimationStart();
-		}
-		long duration = 0;
-		for (int i = 0; i < transitionDrawables.size(); i++) {
-			final int iterator = i;
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    TransitionDrawable t = transitionDrawables.get(iterator);
+                    t.startTransition(manager.getKeyFrames().get(iterator).getDuration());
+                    imageView.setImageDrawable(t);
+                    Log.d(TAG, "transition " + iterator);
+                }
+            }, duration);
+            duration += manager.getKeyFrames().get(i).getDuration();
+        }
 
-			handler.postDelayed(new Runnable() {
-				@Override
-				public void run() {
-					TransitionDrawable t = transitionDrawables.get(iterator);
-					t.startTransition(manager.getKeyFrames().get(iterator).getDuration());
-					imageView.setImageDrawable(t);
-					Log.d(TAG,"transition "+iterator );
-				}
-			},duration);
-			duration += manager.getKeyFrames().get(i).getDuration();
-		}
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Log.d(TAG, "reset animation");
+                for (TransitionDrawable transitionDrawable : transitionDrawables) {
+                    transitionDrawable.resetTransition();
+                }
 
-		handler.postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				Log.d(TAG,"reset animation");
-				for (TransitionDrawable transitionDrawable : transitionDrawables) {
-					transitionDrawable.resetTransition();
-				}
+                if (listener != null) {
+                    listener.onAnimationEnd();
+                }
+            }
+        }, duration);
+    }
 
-				if(listener != null) {
-					listener.onAnimationEnd();
-				}
-			}
-		},duration);
-	}
+    public synchronized void cancel() {
+        this.canceled = true;
+        this.running = false;
+    }
 
-	public synchronized void cancel() {
-		this.canceled = true;
-		this.running = false;
-	}
+    public interface KeyFrameAnimationListener {
+        void onAnimationStart();
 
-	public static interface KeyFrameAnimationListener {
-		public void onAnimationStart();
-		public void onKeyFrameChange(int keyFrameNo);
-		public void onAnimationEnd();
-	}
+        void onKeyFrameChange(int keyFrameNo);
+
+        void onAnimationEnd();
+    }
 
 }

@@ -34,6 +34,7 @@ public class DaliBlurDrawerToggle extends ActionBarDrawerToggle {
     private boolean forceRedraw = false;
     private boolean enableBlur = true;
     private NavigationDrawerListener listener;
+
     public DaliBlurDrawerToggle(Activity activity, DrawerLayout drawerLayout, Toolbar toolbar,
                                 int openDrawerContentDescRes, int closeDrawerContentDescRes, NavigationDrawerListener listener) {
         super(activity, drawerLayout, toolbar, openDrawerContentDescRes, closeDrawerContentDescRes);

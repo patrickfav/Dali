@@ -9,7 +9,6 @@ import android.support.v8.renderscript.ScriptIntrinsicConvolve5x5;
 import at.favre.lib.dali.blur.BlurKernels;
 import at.favre.lib.dali.blur.IBlur;
 
-
 /**
  * This is a convolve matrix based blur algorithms powered by Renderscript's ScriptIntrinsicConvolve class. This uses a box kernel.
  * Instead of radius it uses passes, so a radius parameter of 16 makes the convolve algorithm applied 16 times onto the image.

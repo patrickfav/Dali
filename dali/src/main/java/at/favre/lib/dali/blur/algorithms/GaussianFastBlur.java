@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 
 import at.favre.lib.dali.blur.IBlur;
 
-
 /**
  * http://stackoverflow.com/a/13436737/774398
  * by gordi
@@ -17,9 +16,9 @@ public class GaussianFastBlur implements IBlur {
         int[] pix = new int[w * h];
         original.getPixels(pix, 0, w, 0, 0, w, h);
 
-        for(int r = radius; r >= 1; r /= 2) {
-            for(int i = r; i < h - r; i++) {
-                for(int j = r; j < w - r; j++) {
+        for (int r = radius; r >= 1; r /= 2) {
+            for (int i = r; i < h - r; i++) {
+                for (int j = r; j < w - r; j++) {
                     int tl = pix[(i - r) * w + j - r];
                     int tr = pix[(i - r) * w + j + r];
                     int tc = pix[(i - r) * w + j];

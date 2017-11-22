@@ -7,10 +7,10 @@ import at.favre.lib.dali.blur.IBlur;
  */
 public abstract class ABuilder {
 
-	public static class Data {
-		public int blurRadius = BuilderDefaults.BLUR_RADIUS;
-		public IBlur blurAlgorithm;
+    public static class Data {
+        public int blurRadius = BuilderDefaults.BLUR_RADIUS;
+        public IBlur blurAlgorithm;
 
-		public ContextWrapper contextWrapper;
-	}
+        public ContextWrapper contextWrapper;
+    }
 }

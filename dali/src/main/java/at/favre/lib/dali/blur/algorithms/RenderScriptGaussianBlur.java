@@ -8,7 +8,6 @@ import android.support.v8.renderscript.ScriptIntrinsicBlur;
 
 import at.favre.lib.dali.blur.IBlur;
 
-
 /**
  * Simple example of ScriptIntrinsicBlur Renderscript gaussion blur.
  * In production always use this algorithm as it is the fastest on Android.

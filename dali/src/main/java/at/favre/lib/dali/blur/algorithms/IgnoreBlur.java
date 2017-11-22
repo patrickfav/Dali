@@ -9,8 +9,8 @@ import at.favre.lib.dali.blur.IBlur;
  * the original bitmap
  */
 public class IgnoreBlur implements IBlur {
-	@Override
-	public Bitmap blur(int radius, Bitmap original) {
-		return original;
-	}
+    @Override
+    public Bitmap blur(int radius, Bitmap original) {
+        return original;
+    }
 }

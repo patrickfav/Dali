@@ -8,5 +8,6 @@ import android.view.View;
  */
 public interface NavigationDrawerListener {
     void onDrawerClosed(View view);
+
     void onDrawerOpened(View drawerView);
 }

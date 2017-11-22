@@ -173,7 +173,7 @@ public class Dali {
 
     public DaliBlurDrawerToggle constructNavToggle(Activity activity, DrawerLayout drawerLayout,
                                                    Toolbar toolbar, int openDrawerContentDescRes,
-                                                   int closeDrawerContentDescRes,@Nullable NavigationDrawerListener listener) {
+                                                   int closeDrawerContentDescRes, @Nullable NavigationDrawerListener listener) {
         return new DaliBlurDrawerToggle(activity, drawerLayout, toolbar, openDrawerContentDescRes, closeDrawerContentDescRes, listener);
     }
 

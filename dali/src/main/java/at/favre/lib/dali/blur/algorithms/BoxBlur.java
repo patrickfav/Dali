@@ -6,7 +6,6 @@ import android.graphics.Color;
 
 import at.favre.lib.dali.blur.IBlur;
 
-
 /**
  * http://stackoverflow.com/questions/8218438
  * by saarraz1
@@ -14,7 +13,7 @@ import at.favre.lib.dali.blur.IBlur;
 public class BoxBlur implements IBlur {
     @Override
     public Bitmap blur(int radius, Bitmap bmp) {
-        if((radius & 1) == 0 ) throw new IllegalArgumentException("Range must be odd.");
+        if ((radius & 1) == 0) throw new IllegalArgumentException("Range must be odd.");
 
         Bitmap blurred = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(),
                 Bitmap.Config.ARGB_8888);
@@ -72,7 +71,7 @@ public class BoxBlur implements IBlur {
                 }
             }
 
-			System.arraycopy(newColors, 0, pixels, index + 0, w);
+            System.arraycopy(newColors, 0, pixels, index + 0, w);
 
             index += w;
         }

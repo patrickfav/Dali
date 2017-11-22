@@ -20,36 +20,33 @@ import at.favre.lib.dali.Dali;
 import at.favre.lib.dali.builder.nav.DaliBlurDrawerToggle;
 import at.favre.lib.dali.builder.nav.NavigationDrawerListener;
 
-
 public class NavigationDrawerActivity extends AppCompatActivity {
 
-	private DrawerLayout mDrawerLayout;
-	private ListView mDrawerList;
-	private DaliBlurDrawerToggle mDrawerToggle;
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
+    private DaliBlurDrawerToggle mDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nav_drawer);
 
+        List<String> menuItems = new ArrayList<String>();
+        menuItems.add("Menu 1");
+        menuItems.add("Menu 2");
+        menuItems.add("Menu 3");
+        menuItems.add("Menu 4");
 
-		List<String> menuItems = new ArrayList<String>();
-		menuItems.add("Menu 1");
-		menuItems.add("Menu 2");
-		menuItems.add("Menu 3");
-		menuItems.add("Menu 4");
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
 //		mDrawerLayout.setScrimColor(getResources().getColor(R.color.bright_blue_transparent));
-		mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mDrawerList = findViewById(R.id.left_drawer);
 
-		// Set the adapter for the list view
-		mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, menuItems));
-
+        // Set the adapter for the list view
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, menuItems));
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
@@ -57,48 +54,50 @@ public class NavigationDrawerActivity extends AppCompatActivity {
                     .commit();
         }
 
-		final String mTitle = getTitle().toString();
-		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-		mDrawerToggle = Dali.create(this).constructNavToggle(this, mDrawerLayout,
-				toolbar, R.string.drawer_open, R.string.drawer_close, new NavigationDrawerListener() {
-			@Override
-			public void onDrawerClosed(View view) {
-				invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-			}
+        final String mTitle = getTitle().toString();
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        mDrawerToggle = Dali.create(this).constructNavToggle(this, mDrawerLayout,
+                toolbar, R.string.drawer_open, R.string.drawer_close, new NavigationDrawerListener() {
+                    @Override
+                    public void onDrawerClosed(View view) {
+                        invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                    }
 
-			/** Called when a drawer has settled in a completely open state. */
-			public void onDrawerOpened(View drawerView) {
-				invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-			}
-		});
-		mDrawerToggle.setDrawerIndicatorEnabled(true);
-		// Set the drawer toggle as the DrawerListener
-		mDrawerLayout.addDrawerListener(mDrawerToggle);
+                    /**
+                     * Called when a drawer has settled in a completely open state.
+                     */
+                    public void onDrawerOpened(View drawerView) {
+                        invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                    }
+                });
+        mDrawerToggle.setDrawerIndicatorEnabled(true);
+        // Set the drawer toggle as the DrawerListener
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
 
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		getSupportActionBar().setHomeButtonEnabled(true);
-	}
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+    }
 
-	@Override
-	protected void onPostCreate(Bundle savedInstanceState) {
-		super.onPostCreate(savedInstanceState);
-		// Sync the toggle state after onRestoreInstanceState has occurred.
-		mDrawerToggle.syncState();
-	}
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
 
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		super.onConfigurationChanged(newConfig);
-		mDrawerToggle.onConfigurationChanged(newConfig);
-	}
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
 
-	/* Called whenever we call invalidateOptionsMenu() */
-	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		// If the nav drawer is open, hide action items related to the content view
-		boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-		return super.onPrepareOptionsMenu(menu);
-	}
+    /* Called whenever we call invalidateOptionsMenu() */
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // If the nav drawer is open, hide action items related to the content view
+        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+        return super.onPrepareOptionsMenu(menu);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -106,16 +105,15 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         return true;
     }
 
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Pass the event to ActionBarDrawerToggle, if it returns
-		// true, then it has handled the app icon touch event
-		if (mDrawerToggle.onOptionsItemSelected(item)) {
-			return true;
-		}
-		// Handle your other action bar items...
-		return super.onOptionsItemSelected(item);
-	}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Pass the event to ActionBarDrawerToggle, if it returns
+        // true, then it has handled the app icon touch event
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        // Handle your other action bar items...
+        return super.onOptionsItemSelected(item);
+    }
 
 }

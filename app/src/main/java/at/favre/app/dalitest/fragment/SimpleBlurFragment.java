@@ -31,11 +31,9 @@ public class SimpleBlurFragment extends Fragment {
         BlurBuilder.JobDescription jobDescription2 = dali.load(R.drawable.test_img1).placeholder(R.drawable.test_img1).blurRadius(12).brightness(0).concurrent().into(iv2);
         binding.subtitle2.setText(jobDescription2.builderDescription);
 
-
         final ImageView iv3 = binding.image3;
         BlurBuilder.JobDescription jobDescription3 = dali.load(R.drawable.test_img1).placeholder(R.drawable.test_img1).blurRadius(12).downScale(1).colorFilter(Color.parseColor("#ffccdceb")).concurrent().reScale().into(iv3);
         binding.subtitle3.setText(jobDescription3.builderDescription);
-
 
         final ImageView iv4 = binding.image4;
         BlurBuilder.JobDescription jobDescription4 = dali.load(R.drawable.test_img1).placeholder(R.drawable.test_img1).blurRadius(8).downScale(4).brightness(-40).concurrent().reScale().into(iv4);

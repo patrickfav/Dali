@@ -13,83 +13,82 @@ import at.favre.lib.dali.Dali;
  */
 public class BlurKeyFrameManager {
 
-	public static BlurKeyFrameManager createLinearKeyFrames(int keyFrames,int duration, int inSampleSize, int endBlurRadius, int endBrightness) {
-		BlurKeyFrameManager man = new BlurKeyFrameManager();
+    public static BlurKeyFrameManager createLinearKeyFrames(int keyFrames, int duration, int inSampleSize, int endBlurRadius, int endBrightness) {
+        BlurKeyFrameManager man = new BlurKeyFrameManager();
 
-		int durationPerFrame = (int) ((float) duration / (float) keyFrames);
-		int radiusIncrement = (int) ((float) endBlurRadius / (float) keyFrames);
-		int brightnessIncrement = 0;
-		if(endBrightness != 0) {
-			brightnessIncrement = (int) ((float) endBrightness / (float) keyFrames);;
-		}
-		for (int i = 0; i < keyFrames; i++) {
-			man.addKeyFrame(new BlurKeyFrame(inSampleSize,radiusIncrement*(i+1),brightnessIncrement*(i+1),durationPerFrame));
-		}
+        int durationPerFrame = (int) ((float) duration / (float) keyFrames);
+        int radiusIncrement = (int) ((float) endBlurRadius / (float) keyFrames);
+        int brightnessIncrement = 0;
+        if (endBrightness != 0) {
+            brightnessIncrement = (int) ((float) endBrightness / (float) keyFrames);
+        }
+        for (int i = 0; i < keyFrames; i++) {
+            man.addKeyFrame(new BlurKeyFrame(inSampleSize, radiusIncrement * (i + 1), brightnessIncrement * (i + 1), durationPerFrame));
+        }
 
-		return man;
-	}
+        return man;
+    }
 
-	public static BlurKeyFrameManager createLowMemoryKeyframes(int keyFrames,int duration, int startInsampleSize, int endBlurRadius) {
-		BlurKeyFrameManager man = new BlurKeyFrameManager();
+    public static BlurKeyFrameManager createLowMemoryKeyframes(int keyFrames, int duration, int startInsampleSize, int endBlurRadius) {
+        BlurKeyFrameManager man = new BlurKeyFrameManager();
 
-		int durationPerFrame = (int) ((float) duration / (float) keyFrames);
-		int radiusIncrement = (int) ((float) endBlurRadius / (float) keyFrames);
-		for (int i = 0; i < keyFrames; i++) {
-			man.addKeyFrame(new BlurKeyFrame(startInsampleSize,radiusIncrement*(i+1),0,durationPerFrame));
-		}
+        int durationPerFrame = (int) ((float) duration / (float) keyFrames);
+        int radiusIncrement = (int) ((float) endBlurRadius / (float) keyFrames);
+        for (int i = 0; i < keyFrames; i++) {
+            man.addKeyFrame(new BlurKeyFrame(startInsampleSize, radiusIncrement * (i + 1), 0, durationPerFrame));
+        }
 
-		return man;
-	}
+        return man;
+    }
 
+    private List<BlurKeyFrame> keyFrames = new ArrayList<BlurKeyFrame>();
 
-	private List<BlurKeyFrame> keyFrames = new ArrayList<BlurKeyFrame>();
+    public BlurKeyFrameManager() {
+    }
 
-	public BlurKeyFrameManager() {
-	}
+    public void addKeyFrame(BlurKeyFrame frame) {
+        keyFrames.add(frame);
+    }
 
-	public void addKeyFrame(BlurKeyFrame frame) {
-		keyFrames.add(frame);
-	}
+    protected KeyFrameData prepareFrames(Context ctx, Bitmap original) {
+        return new KeyFrameData(ctx, original, keyFrames);
+    }
 
-	protected KeyFrameData prepareFrames(Context ctx, Bitmap original) {
-		return new KeyFrameData(ctx, original, keyFrames);
-	}
+    public List<BlurKeyFrame> getKeyFrames() {
+        return keyFrames;
+    }
 
-	public List<BlurKeyFrame> getKeyFrames() {
-		return keyFrames;
-	}
+    public static class KeyFrameData {
+        private Bitmap original;
+        private List<Bitmap> frames = new ArrayList<Bitmap>();
+        private List<BlurKeyFrame> keyFrameConfigList;
 
-	public static class KeyFrameData {
-		private Bitmap original;
-		private List<Bitmap> frames = new ArrayList<Bitmap>();
-		private List<BlurKeyFrame> keyFrameConfigList;
+        public KeyFrameData(Context ctx, Bitmap original, List<BlurKeyFrame> keyFrames) {
+            this.original = original;
+            this.keyFrameConfigList = keyFrames;
 
-		public KeyFrameData(Context ctx, Bitmap original,List<BlurKeyFrame> keyFrames) {
-			this.original = original;
-			this.keyFrameConfigList = keyFrames;
+            Dali dali = Dali.create(ctx);
+            frames.add(original);
+            for (BlurKeyFrame keyFrame : keyFrames) {
+                frames.add(keyFrame.prepareFrame(original, dali));
+            }
+        }
 
-			Dali dali = Dali.create(ctx);
-			frames.add(original);
-			for (BlurKeyFrame keyFrame : keyFrames) {
-				frames.add(keyFrame.prepareFrame(original,dali));
-			}
-		}
+        public List<BlurKeyFrame> getKeyFrameConfigList() {
+            return keyFrameConfigList;
+        }
 
-		public List<BlurKeyFrame> getKeyFrameConfigList() {
-			return keyFrameConfigList;
-		}
+        public List<Bitmap> getFrames() {
+            return frames;
+        }
 
-		public List<Bitmap> getFrames() {
-			return frames;
-		}
+        public Bitmap getOriginal() {
+            return original;
+        }
+    }
 
-		public Bitmap getOriginal() {
-			return original;
-		}
-	}
-
-	@Override
-	public String toString() {
-		return keyFrames.toString();
-	}
+    @Override
+    public String toString() {
+        return keyFrames.toString();
+    }
 }

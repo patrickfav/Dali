@@ -14,7 +14,6 @@ import at.favre.lib.dali.Dali;
 import at.favre.lib.hood.Hood;
 import at.favre.lib.hood.interfaces.actions.ManagerControl;
 
-
 public class MainMenuActivity extends AppCompatActivity {
     private ManagerControl control;
 
@@ -24,7 +23,7 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ActivityMainMenuBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main_menu);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         binding.btnBlur1.setOnClickListener(new StartActivityListener(this, 0));
