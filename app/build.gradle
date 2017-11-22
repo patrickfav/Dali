@@ -36,6 +36,10 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField "String", "BUILD_DATE", "\"\""
+        }
+
         release {
             minifyEnabled true
             shrinkResources true
