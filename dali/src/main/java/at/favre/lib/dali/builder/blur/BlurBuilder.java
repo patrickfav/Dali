@@ -8,6 +8,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
 import android.os.Handler;
@@ -287,8 +288,14 @@ public class BlurBuilder extends ABuilder {
                             if (data.alphaFadeIn) {
                                 //use what is currently in the imageview to fade
                                 Drawable placeholder;
-                                if (imageView.getDrawable() != null) {
-                                    placeholder = imageView.getDrawable();
+                                Drawable oldDrawable = imageView.getDrawable();
+                                if (oldDrawable != null) {
+                                    if (oldDrawable instanceof LayerDrawable) {
+                                        LayerDrawable oldLayerDrawable = (LayerDrawable) oldDrawable;
+                                        placeholder = oldLayerDrawable.getDrawable(0);
+                                    } else {
+                                        placeholder = imageView.getDrawable();
+                                    }
                                 } else {
                                     placeholder = new ColorDrawable(Color.parseColor("#00FFFFFF"));
                                 }
