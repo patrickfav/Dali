@@ -4,9 +4,9 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+        classpath 'com.android.tools.build:gradle:3.1.1'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0'
     }
 }
 
@@ -24,16 +24,16 @@ allprojects {
 apply from: "$rootDir/gradle/common-build.gradle"
 
 ext {
-    versionName = "0.3.5"
+    versionName = "0.3.6"
     versionCode = getCiBuildNumber()
-    compileSdkVersion = 26
-    buildToolsVersion = "26.0.2"
-    targetSdkVersion = 26
+    compileSdkVersion = 27
+    buildToolsVersion = "27.0.3"
+    targetSdkVersion = 27
     minSdkVersion = 14
     renderscriptTargetApi = 20
 
     dependencies = [
-            support: "26.1.0"
+            support: "27.1.1"
     ]
 }
 

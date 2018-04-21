@@ -1,5 +1,10 @@
 # Releases
 
+## v0.3.6
+* update support lib version to 27.1.1
+* update Gradle to 4.7 and Android Gradle Plugin to 3.1.1
+* fix possible memory leak in placeholder transition drawable (thx @buptfarmer)
+
 ## v0.3.5
 * update support lib version to 26.1.0
 * raise minSdk from 10 to 14 due to requirements by support-libs

@@ -14,7 +14,7 @@ public class DebugActivity extends PopHoodActivity {
     @Override
     public Pages getPageData(@NonNull Pages emptyPages) {
         Page page = emptyPages.addNewPage();
-        page.add(DefaultProperties.createSectionSourceControlAndCI(BuildConfig.GIT_REV, BuildConfig.GIT_BRANCH, BuildConfig.GIT_DATE, BuildConfig.BUILD_NUMBER, null, BuildConfig.BUILD_DATE));
+//        page.add(DefaultProperties.createSectionSourceControlAndCI(BuildConfig.GIT_REV, BuildConfig.GIT_BRANCH, BuildConfig.GIT_DATE, BuildConfig.BUILD_NUMBER, null, BuildConfig.BUILD_DATE));
         page.add(DefaultProperties.createSectionBasicDeviceInfo());
         page.add(DefaultProperties.createDetailedDeviceInfo(this));
         page.add(DefaultProperties.createSectionAppVersionInfoFromBuildConfig(BuildConfig.class));
