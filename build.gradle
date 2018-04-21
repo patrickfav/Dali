@@ -30,7 +30,7 @@ ext {
     buildToolsVersion = "27.0.3"
     targetSdkVersion = 27
     minSdkVersion = 14
-    renderscriptTargetApi = 20
+    renderscriptTargetApi = 21
 
     dependencies = [
             support: "27.1.1"
