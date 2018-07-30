@@ -10,6 +10,7 @@ easily extended and pretty every configuration can be changed.
 [![Build Status](https://travis-ci.org/patrickfav/Dali.svg?branch=master)](https://travis-ci.org/patrickfav/Dali)
 [![Javadocs](https://www.javadoc.io/badge/at.favre.lib/dali.svg)](https://www.javadoc.io/doc/at.favre.lib/dali)
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Dali-yellowgreen.svg?style=flat)](https://android-arsenal.com/details/1/5130)
+[![Maintainability](https://api.codeclimate.com/v1/badges/bc29814415f63a85c62d/maintainability)](https://codeclimate.com/github/patrickfav/Dali/maintainability)
 
 ![Gallery](https://github.com/patrickfav/Dali/blob/master/misc/gallery1.png?raw=true)
 
