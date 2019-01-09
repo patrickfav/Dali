@@ -201,13 +201,6 @@ _Note: This module is not feature complete and has still terrible bugs, so use a
 Since v0.3.1 the lib includes it's own proguard consumer rules and should
 work out of the box with obfuscated builds.
 
-If using Androidx this rules are needed
-
-	-keepclasseswithmembernames class * {
-	native <methods>;
-	}
-	-keep class androidx.renderscript.** { *; }
-
 ## Advanced
 
 ### How to build
