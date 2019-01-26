@@ -1,5 +1,8 @@
 # Releases
 
+## v0.3.7
+* add androidx proguard rules
+
 ## v0.3.6
 * update support lib version to 27.1.1
 * update Gradle to 4.7 and Android Gradle Plugin to 3.1.1
