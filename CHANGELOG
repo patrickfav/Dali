@@ -1,5 +1,8 @@
 # Releases
 
+## v0.3.8
+* update renderscript target to 24 to support 64bit #16
+
 ## v0.3.7
 * add androidx proguard rules
 
