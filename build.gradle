@@ -24,13 +24,13 @@ allprojects {
 apply from: "$rootDir/gradle/common-build.gradle"
 
 ext {
-    versionName = "0.3.7"
+    versionName = "0.3.8"
     versionCode = getCiBuildNumber()
     compileSdkVersion = 28
     buildToolsVersion = "28.0.3"
     targetSdkVersion = 28
     minSdkVersion = 14
-    renderscriptTargetApi = 21
+    renderscriptTargetApi = 24
 
     dependencies = [
             support: "27.1.1"
