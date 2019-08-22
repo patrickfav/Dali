@@ -4,7 +4,7 @@
 # git update-index --chmod=+x gradlew //http://stackoverflow.com/questions/33820638/travis-yml-gradlew-permission-denied
 
 language: android
-jdk: oraclejdk8
+dist: trusty
 
 android:
 
