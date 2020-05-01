@@ -21,7 +21,7 @@ easily extended and pretty every configuration can be changed.
 
 Add the following to your dependencies  ([add jcenter to your repositories](https://developer.android.com/studio/build/index.html#top-level) if you haven't)
 
-```gradle
+```groovy
    dependencies {
         compile 'at.favre.lib:dali:0.3.5'
    }
@@ -29,7 +29,7 @@ Add the following to your dependencies  ([add jcenter to your repositories](http
 
 Then add the following to your app's build.gradle to get Renderscript to work
 
-```gradle
+```groovy
 android {
     ...
     defaultConfig {
