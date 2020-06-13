@@ -43,7 +43,7 @@ deploy:
     file_glob: true
     file:
       - 'app/build/outputs/apk/release/app-release-*.apk'
-     - 'dali/build/outputs/aar/dali-release-*.aar'
+      - 'dali/build/outputs/aar/dali-release-*.aar'
     skip_cleanup: true
     on:
       branch: master
