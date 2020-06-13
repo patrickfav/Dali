@@ -1,5 +1,11 @@
 # Releases
 
+## v0.4.0
+
+* migrate to AndroidX #14
+* update AGP to 4, Gradle to 6.5, update compile SDK to 29
+* **BREAKING**: Removed `DaliBlurDrawerTogglev4` since it is no longer supported since androidx.appcompat 1.1
+
 ## v0.3.8
 * update renderscript target to 24 to support 64bit #16
 
