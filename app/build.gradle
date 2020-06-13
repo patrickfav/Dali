@@ -65,8 +65,8 @@ android {
 }
 
 dependencies {
-    implementation "androidx.appcompat:appcompat:$rootProject.ext.dependencies.support"
-    implementation "com.google.android.material:material:$rootProject.ext.dependencies.support"
+    implementation "androidx.appcompat:appcompat:$rootProject.ext.dependencies.androidx"
+    implementation "com.google.android.material:material:$rootProject.ext.dependencies.androidx"
     implementation 'com.squareup.picasso:picasso:2.5.2'
 
 //    implementation 'at.favre.lib:dali:0.3.8'

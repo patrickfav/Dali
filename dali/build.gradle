@@ -55,8 +55,8 @@ android {
 
 dependencies {
     implementation 'com.jakewharton:disklrucache:2.0.2'
-    implementation "androidx.recyclerview:recyclerview:$rootProject.ext.dependencies.support"
-    implementation "androidx.appcompat:appcompat:$rootProject.ext.dependencies.support"
+    implementation "androidx.recyclerview:recyclerview:$rootProject.ext.dependencies.androidx"
+    implementation "androidx.appcompat:appcompat:$rootProject.ext.dependencies.androidx"
 }
 
 apply from: "$rootDir/gradle/publish.gradle"
