@@ -2,7 +2,8 @@ package at.favre.lib.dali.builder;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.support.v8.renderscript.RenderScript;
+
+import androidx.renderscript.RenderScript;
 
 /**
  * Created by PatrickF on 26.05.2014.

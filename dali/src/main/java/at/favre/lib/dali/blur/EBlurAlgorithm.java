@@ -1,6 +1,6 @@
 package at.favre.lib.dali.blur;
 
-import android.support.v8.renderscript.RenderScript;
+import androidx.renderscript.RenderScript;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v4.widget.DrawerLayout
-    android:id="@+id/drawer_layout"
+<androidx.drawerlayout.widget.DrawerLayout android:id="@+id/drawer_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -10,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <include layout="@layout/inc_toolbar" />
 
         <FrameLayout
@@ -27,5 +27,5 @@
         android:background="#aaff8800"
         android:choiceMode="singleChoice"
         android:divider="@android:color/transparent"
-        android:dividerHeight="0dp"/>
-</android.support.v4.widget.DrawerLayout>
+        android:dividerHeight="0dp" />
+</androidx.drawerlayout.widget.DrawerLayout>

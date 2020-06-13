@@ -5,9 +5,10 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v4.view.ViewCompat;
 import android.util.Log;
 import android.view.View;
+
+import androidx.core.view.ViewCompat;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;

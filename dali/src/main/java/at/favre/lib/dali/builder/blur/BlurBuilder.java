@@ -188,7 +188,7 @@ public class BlurBuilder extends ABuilder {
      * Sets the blur algorithm.
      * <p>
      * NOTE: this probably never is necessary to do except for testing purpose, the default
-     * algorithm, which uses Android's {@link android.support.v8.renderscript.ScriptIntrinsicBlur}
+     * algorithm, which uses Android's {@link androidx.renderscript.ScriptIntrinsicBlur}
      * which is the best and fastest you getFromDiskCache on Android suffices in nearly every situation
      *
      * @param algorithm

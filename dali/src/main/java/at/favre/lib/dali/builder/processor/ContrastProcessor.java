@@ -1,8 +1,9 @@
 package at.favre.lib.dali.builder.processor;
 
 import android.graphics.Bitmap;
-import android.support.v8.renderscript.Allocation;
-import android.support.v8.renderscript.RenderScript;
+
+import androidx.renderscript.Allocation;
+import androidx.renderscript.RenderScript;
 
 import at.favre.lib.dali.ScriptC_contrast;
 

@@ -1,12 +1,13 @@
 package at.favre.app.dalitest.fragment;
 
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 
 import at.favre.app.dalitest.R;
 import at.favre.app.dalitest.databinding.FragmentSimpleBlurBinding;

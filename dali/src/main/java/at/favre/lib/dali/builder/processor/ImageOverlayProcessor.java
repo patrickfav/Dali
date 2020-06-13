@@ -3,10 +3,11 @@ package at.favre.lib.dali.builder.processor;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.v8.renderscript.Allocation;
-import android.support.v8.renderscript.Element;
-import android.support.v8.renderscript.RenderScript;
-import android.support.v8.renderscript.ScriptIntrinsicBlend;
+
+import androidx.renderscript.Allocation;
+import androidx.renderscript.Element;
+import androidx.renderscript.RenderScript;
+import androidx.renderscript.ScriptIntrinsicBlend;
 
 import at.favre.lib.dali.R;
 

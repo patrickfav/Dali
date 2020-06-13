@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:tools="http://schemas.android.com/tools">
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <androidx.appcompat.widget.Toolbar android:id="@+id/toolbar"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
@@ -11,6 +10,5 @@
         android:elevation="4dp"
         android:minHeight="?attr/actionBarSize"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        tools:targetApi="lollipop">
-    </android.support.v7.widget.Toolbar>
+        tools:targetApi="lollipop"></androidx.appcompat.widget.Toolbar>
 </merge>

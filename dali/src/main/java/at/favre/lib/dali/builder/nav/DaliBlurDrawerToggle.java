@@ -1,20 +1,21 @@
 package at.favre.lib.dali.builder.nav;
 
 import android.app.Activity;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import at.favre.lib.dali.Dali;
 import at.favre.lib.dali.util.BuilderUtil;
 import at.favre.lib.dali.util.LegacySDKUtil;
 
 /**
- * This is a {@link android.support.v7.app.ActionBarDrawerToggle} that
+ * This is a {@link androidx.appcompat.app.ActionBarDrawerToggle} that
  * will blur the content behind when the nav drawer is opened. It uses
  * a third layer over the content layer that alpha transitions in and out.
  * <p/>
@@ -120,7 +121,7 @@ public class DaliBlurDrawerToggle extends ActionBarDrawerToggle {
 
     /**
      * If this is set to false, it will basically behave like a normal
-     * {@link android.support.v4.app.ActionBarDrawerToggle}. Use this
+     * {@link ActionBarDrawerToggle}. Use this
      * to deactivate the effect on slower devices.
      *
      * @param enableBlur

@@ -1,6 +1,6 @@
 package at.favre.app.dalitest.activity;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import at.favre.app.dalitest.BuildConfig;
 import at.favre.lib.hood.extended.PopHoodActivity;

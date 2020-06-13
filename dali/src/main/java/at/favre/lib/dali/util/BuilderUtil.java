@@ -4,10 +4,12 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.os.Looper;
-import android.support.v8.renderscript.RenderScript;
 import android.util.Log;
 import android.view.View;
 
+import androidx.renderscript.RenderScript;
+
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
 import at.favre.lib.dali.blur.EBlurAlgorithm;
@@ -101,7 +103,7 @@ public final class BuilderUtil {
     public static String sha1Hash(String text) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-1");
-            md.update(text.getBytes("iso-8859-1"), 0, text.length());
+            md.update(text.getBytes(StandardCharsets.ISO_8859_1), 0, text.length());
             byte[] sha1hash = md.digest();
             return convertToHex(sha1hash);
         } catch (Exception e) {
