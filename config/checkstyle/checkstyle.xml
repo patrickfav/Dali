@@ -1,24 +1,6 @@
-<?xml version="1.0" ?><!--
-  ~  Copyright 2016 Patrick Favre-Bulle
-  ~
-  ~  Licensed under the Apache License, Version 2.0 (the "License");
-  ~  you may not use this file except in compliance with the License.
-  ~  You may obtain a copy of the License at
-  ~
-  ~      http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
-
-<!DOCTYPE module PUBLIC
+<?xml version="1.0" ?><!DOCTYPE module PUBLIC
     "-//Puppy Crawl//DTD Check Configuration 1.2//EN"
     "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
-
-<!--This it the config for the main source code with more strict rules than e.g. testing -->
 
 <module name="Checker">
     <module name="NewlineAtEndOfFile" /> <!-- force newline, important for git merge and POSIX compatibility: http://checkstyle.sourceforge.net/config_misc.html#NewlineAtEndOfFile -->
@@ -30,13 +12,15 @@
     <module name="FileLength"><!-- max line length for single file: http://checkstyle.sourceforge.net/config_sizes.html#FileLength -->
         <property name="max" value="1500" />
     </module>
+    <module name="LineLength"><!-- max char length per line http://checkstyle.sourceforge.net/config_sizes.html#LineLength -->
+        <property name="max" value="300" />
+    </module>
 
     <module name="TreeWalker">
         <module name="SuppressionCommentFilter" /> <!-- use //CHECKSTYLE:OFF (...) //CHECKSTYLE:ON to disable checkstyle: http://checkstyle.sourceforge.net/config_filters.html#SuppressionCommentFilter -->
 
         <!-- Annotations -->
         <module name="MissingDeprecated"> <!-- if @deprecated and javadoc is there, must be explained in javadoc: http://checkstyle.sourceforge.net/config_annotation.html#MissingDeprecated -->
-            <property name="skipNoJavadoc" value="true" />
         </module>
         <module name="MissingOverride" /> <!-- if has @inheritDoc in javadoc must have @Override http://checkstyle.sourceforge.net/config_annotation.html#MissingOverride -->
         <module name="PackageAnnotation" /> <!-- must only be in package-info: http://checkstyle.sourceforge.net/config_annotation.html#PackageAnnotation -->
@@ -49,7 +33,7 @@
 
         <!-- Misc -->
         <module name="ArrayTypeStyle" /> <!-- e.g. int[] array is ok int array[] not: http://checkstyle.sourceforge.net/config_misc.html#ArrayTypeStyle -->
-        <module name="MutableException" /> <!-- e.g. int[] array is ok int array[] not: http://checkstyle.sourceforge.net/config_misc.html#ArrayTypeStyle -->
+        <module name="MutableException" /> <!-- exception classes must be immutable: http://checkstyle.sourceforge.net/config_design.html#MutableException -->
         <module name="UpperEll" /> <!-- long values must be postfixed with 'L' not 'l':  http://checkstyle.sourceforge.net/config_misc.html#UpperEll -->
         <module name="Indentation">  <!-- Checks correct indentation of Java code:  http://checkstyle.sourceforge.net/config_misc.html#Indentation -->
             <property name="basicOffset" value="4" />
@@ -69,9 +53,9 @@
 
         <!-- Classes -->
         <module name="FinalClass" /> <!-- class with only private constructor must be final: http://checkstyle.sourceforge.net/config_design.html#FinalClass -->
-        <module name="OneStatementPerLine" /> <!-- you cant write int i=1;int j=2; http://checkstyle.sourceforge.net/config_design.html#OneStatementPerLine -->
-        <module name="SimplifyBooleanReturn" /> <!-- directly return boolean doe not check and return http://checkstyle.sourceforge.net/config_design.html#SimplifyBooleanReturn -->
-        <module name="StringLiteralEquality" /> <!-- you cant write myString == "this" http://checkstyle.sourceforge.net/config_design.html#StringLiteralEquality -->
+        <module name="OneStatementPerLine" /> <!-- you can't write int i=1;int j=2; http://checkstyle.sourceforge.net/config_design.html#OneStatementPerLine -->
+        <module name="SimplifyBooleanReturn" /> <!-- directly return boolean does not check and return http://checkstyle.sourceforge.net/config_design.html#SimplifyBooleanReturn -->
+        <module name="StringLiteralEquality" /> <!-- you can't write myString == "this" http://checkstyle.sourceforge.net/config_design.html#StringLiteralEquality -->
         <module name="OneTopLevelClass" /> <!-- only one root class per file http://checkstyle.sourceforge.net/config_design.html#OneTopLevelClass -->
         <module name="ThrowsCount"> <!-- max 5 throws definitions per method: http://checkstyle.sourceforge.net/config_design.html#ThrowsCount -->
             <property name="max" value="5" />
@@ -80,27 +64,16 @@
         <module name="OuterTypeFilename" /> <!-- class Foo must be in Foo.java: http://checkstyle.sourceforge.net/config_misc.html#OuterTypeFilename -->
 
         <module name="HideUtilityClassConstructor" /> <!-- utility class constructor must be private: http://checkstyle.sourceforge.net/config_design.html#HideUtilityClassConstructor -->
-        <!--<module name="VisibilityModifier"> &lt;!&ndash; most members must be private http://checkstyle.sourceforge.net/config_design.html#VisibilityModifier &ndash;&gt;-->
-        <!--<property name="protectedAllowed" value="true" />-->
-        <!--<property name="packageAllowed" value="true" />-->
-        <!--<property name="allowPublicImmutableFields" value="true" />-->
-        <!--<property name="allowPublicFinalFields" value="true" />-->
-        <!--<property name="publicMemberPattern" value="^TAG$|^CREATOR$" />-->
-        <!--</module>-->
 
         <!-- Coding -->
         <module name="CovariantEquals" /> <!-- if you override equals with different type you must provide equals with same type: http://checkstyle.sourceforge.net/config_coding.html#CovariantEquals -->
         <module name="DefaultComesLast" /> <!-- in switch case default must be the last elem: http://checkstyle.sourceforge.net/config_coding.html#DefaultComesLast -->
         <module name="EmptyStatement" /> <!-- basically an empty semicolon: http://checkstyle.sourceforge.net/config_coding.html#EmptyStatement -->
         <module name="EqualsHashCode" /> <!-- if you implement equals, you must implement hashcode and vice versa: http://checkstyle.sourceforge.net/config_coding.html#EqualsHashCode -->
-        <module name="NoFinalizer" /> <!-- Verifies there are no finalize() methods defined in a class: http://checkstyle.sourceforge.net/config_coding.html#NoFinalizer -->
         <module name="FallThrough" /> <!-- switch fallthrough with statement not allowed http://checkstyle.sourceforge.net/config_coding.html#FallThrough -->
         <module name="IllegalInstantiation" /> <!-- Must not use const of certain types (Activity, Fragment): http://checkstyle.sourceforge.net/config_coding.html#IllegalInstantiation -->
 
         <!-- Size Limitiations -->
-        <module name="LineLength"><!-- max char length per line http://checkstyle.sourceforge.net/config_sizes.html#LineLength -->
-            <property name="max" value="300" />
-        </module>
         <module name="MethodLength"><!-- max line length for single method http://checkstyle.sourceforge.net/config_sizes.html#MethodLength -->
             <property name="max" value="200" />
         </module>

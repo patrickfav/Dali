@@ -98,8 +98,6 @@ public final class Dali {
         }
     }
 
-
-
     /* NON STATIC CLASS ************************************************************************* */
 
     public static void logV(String localTag, String msg) {
