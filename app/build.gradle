@@ -69,7 +69,7 @@ dependencies {
     implementation "com.android.support:design:$rootProject.ext.dependencies.support"
     implementation 'com.squareup.picasso:picasso:2.5.2'
 
-    implementation 'at.favre.lib:dali:0.3.4'
+//    implementation 'at.favre.lib:dali:0.3.8'
     implementation 'at.favre.lib.hood:hood-extended:0.6.0'
-//    compile project(path: ':dali')
+    compile project(path: ':dali')
 }
