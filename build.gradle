@@ -33,15 +33,6 @@ ext {
     renderscriptTargetApi = 24
 
     dependencies = [
-            support: "28.0.0"
+            androidx: "1.1.0"
     ]
-}
-
-configurations.all {
-    resolutionStrategy {
-        force group: 'com.android.support', name: 'support-v4', version: rootProject.ext.dependencies.support
-        force group: 'com.android.support', name: 'appcompat-v7', version: rootProject.ext.dependencies.support
-        force group: 'com.android.support', name: 'support-annotations', version: rootProject.ext.dependencies.support
-        force group: 'com.android.support', name: 'recyclerview', version: rootProject.ext.dependencies.support
-    }
 }
