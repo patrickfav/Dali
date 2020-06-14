@@ -23,7 +23,7 @@ Add the following to your dependencies  ([add jcenter to your repositories](http
 
 ```groovy
    dependencies {
-        compile 'at.favre.lib:dali:0.3.5'
+        compile 'at.favre.lib:dali:0.4.0'
    }
 ```
 
@@ -34,7 +34,7 @@ android {
     ...
     defaultConfig {
         ...
-        renderscriptTargetApi 20
+        renderscriptTargetApi 24
         renderscriptSupportModeEnabled true
     }
 }
