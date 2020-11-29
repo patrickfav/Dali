@@ -7,7 +7,7 @@ cached to be fast and keeps small memory footprint. It features a lot of additio
 easily extended and pretty every configuration can be changed.
 
 [![Download](https://api.bintray.com/packages/patrickfav/maven/dali/images/download.svg) ](https://bintray.com/patrickfav/maven/dali/_latestVersion)
-[![Build Status](https://travis-ci.org/patrickfav/Dali.svg?branch=master)](https://travis-ci.org/patrickfav/Dali)
+[![Build Status](https://travis-ci.com/patrickfav/Dali.svg?branch=master)](https://travis-ci.com/patrickfav/Dali)
 [![Javadocs](https://www.javadoc.io/badge/at.favre.lib/dali.svg)](https://www.javadoc.io/doc/at.favre.lib/dali)
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Dali-yellowgreen.svg?style=flat)](https://android-arsenal.com/details/1/5130)
 [![Maintainability](https://api.codeclimate.com/v1/badges/bc29814415f63a85c62d/maintainability)](https://codeclimate.com/github/patrickfav/Dali/maintainability)
