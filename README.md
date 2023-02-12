@@ -12,7 +12,7 @@ easily extended and pretty every configuration can be changed.
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Dali-yellowgreen.svg?style=flat)](https://android-arsenal.com/details/1/5130)
 [![Maintainability](https://api.codeclimate.com/v1/badges/bc29814415f63a85c62d/maintainability)](https://codeclimate.com/github/patrickfav/Dali/maintainability)
 
-![Gallery](https://github.com/patrickfav/Dali/blob/master/misc/gallery1.png?raw=true)
+![Gallery](https://github.com/patrickfav/Dali/blob/main/misc/gallery1.png?raw=true)
 
 
 *Note: This library is in prototype state and not ready for prime time. It is mostly feature complete (except for the animation module) although bugs are to be expected.*
@@ -99,7 +99,7 @@ If you want to utilize Dali's features, without blurring the image you could do:
 Live blur refers to an effect where it a portion of the view blurs what's behind it. It can be used with e.g.
 a `ViewPager`, `Scrollview`, `RecyclerView`, etc.
 
-![Live Blur Animation](https://github.com/patrickfav/Dali/blob/master/misc/viewpager_anim.gif?raw=true)
+![Live Blur Animation](https://github.com/patrickfav/Dali/blob/main/misc/viewpager_anim.gif?raw=true)
 
 A very simple example with a ViewPager would be:
 ```java
@@ -125,7 +125,7 @@ for some views (see package `at.favre.lib.dali.view.Observable*`)
 
 A specialized version of live blur is blurring the background of a `NavigationDrawer`:
 
-![Blur Nav Animation](https://github.com/patrickfav/Dali/blob/master/misc/blur_nav.gif?raw=true)
+![Blur Nav Animation](https://github.com/patrickfav/Dali/blob/main/misc/blur_nav.gif?raw=true)
 ```java
     protected void onCreate(Bundle savedInstanceState) {
         ...
@@ -184,7 +184,7 @@ then an `ImageView` can be animated:
     BlurKeyFrameTransitionAnimation animation = new BlurKeyFrameTransitionAnimation(getActivity(),man);
     animation.start(imageView);
 ```
-![Blur Animation](https://github.com/patrickfav/Dali/blob/master/misc/blur_anim.gif?raw=true)
+![Blur Animation](https://github.com/patrickfav/Dali/blob/main/misc/blur_anim.gif?raw=true)
 
 A full example can be found in the test app's `SimpleAnimationFragment.java`
 
