@@ -6,7 +6,7 @@ It uses RenderScript internally (although different implementations can be chose
 cached to be fast and keeps small memory footprint. It features a lot of additional image filters and may be
 easily extended and pretty every configuration can be changed.
 
-[![Download](https://api.bintray.com/packages/patrickfav/maven/dali/images/download.svg) ](https://bintray.com/patrickfav/maven/dali/_latestVersion)
+[![Maven Central](https://img.shields.io/maven-central/v/at.favre.lib/dali)](https://mvnrepository.com/artifact/at.favre.lib/dali)
 [![Build Status](https://travis-ci.com/patrickfav/Dali.svg?branch=master)](https://travis-ci.com/patrickfav/Dali)
 [![Javadocs](https://www.javadoc.io/badge/at.favre.lib/dali.svg)](https://www.javadoc.io/doc/at.favre.lib/dali)
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Dali-yellowgreen.svg?style=flat)](https://android-arsenal.com/details/1/5130)
